@@ -240,42 +240,36 @@ extension StandbyVC3: StandbyInformation {
             $0.leading.equalTo(self.firstUserImageButton.snp.leading)
             $0.height.equalTo(49)
             $0.bottom.equalTo(self.firstUserImageButton.snp.top).offset(-8)
-            $0.width.equalTo(127)
         }
         
         self.secondInfoView.snp.makeConstraints {
             $0.leading.equalTo(self.secondUserImageButton.snp.leading)
             $0.height.equalTo(49)
             $0.bottom.equalTo(self.secondUserImageButton.snp.top).offset(-8)
-            $0.width.equalTo(127)
         }
         
         self.thirdInfoView.snp.makeConstraints {
             $0.trailing.equalTo(self.thirdUserImageButton.snp.trailing)
             $0.height.equalTo(49)
             $0.bottom.equalTo(self.thirdUserImageButton.snp.top).offset(-8)
-            $0.width.equalTo(127)
         }
         
         self.fourthInfoView.snp.makeConstraints {
             $0.leading.equalTo(self.fourthUserImageButton.snp.leading)
             $0.height.equalTo(49)
             $0.top.equalTo(self.fourthUserNameLabel.snp.bottom).offset(8)
-            $0.width.equalTo(127)
         }
         
         self.fifthInfoView.snp.makeConstraints {
             $0.trailing.equalTo(self.fifthUserImageButton.snp.trailing)
             $0.height.equalTo(49)
             $0.top.equalTo(self.fifthUserNameLabel.snp.bottom).offset(8)
-            $0.width.equalTo(127)
         }
         
         self.sixthInfoView.snp.makeConstraints {
             $0.trailing.equalTo(self.sixthUserImageButton.snp.trailing)
             $0.height.equalTo(49)
             $0.top.equalTo(self.sixthUserNameLabel.snp.bottom).offset(8)
-            $0.width.equalTo(127)
         }
         
         

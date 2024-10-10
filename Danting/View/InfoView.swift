@@ -34,9 +34,11 @@ final class InfoView: UIView {
         $0.distribution = .fillEqually
     }
     
-    private let emptyView = UIView()
+    private let leftEmptyView = UIView()
     
-    private lazy var infoStackView = UIStackView(arrangedSubviews: [emptyView, nameMajorStackView]).then {
+    private let rightEmptyView = UIView()
+    
+    private lazy var infoStackView = UIStackView(arrangedSubviews: [leftEmptyView, nameMajorStackView, rightEmptyView]).then {
         $0.axis = .horizontal
         $0.distribution = .fill
         $0.alignment = .fill
@@ -64,12 +66,13 @@ extension InfoView {
         self.addSubviews(self.infoStackView)
         
         self.infoStackView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(13)
-            $0.trailing.equalToSuperview().inset(13)
+            $0.leading.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
             $0.height.equalTo(33)
             
         }
         
+        self.leftEmptyView.snp.makeConstraints { $0.width.equalTo(13) }
+        self.rightEmptyView.snp.makeConstraints { $0.width.equalTo(13)}
     }
 }

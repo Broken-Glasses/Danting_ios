@@ -188,28 +188,24 @@ extension StandbyVC2: StandbyInformation {
             $0.leading.equalTo(self.firstUserImageButton.snp.leading)
             $0.height.equalTo(49)
             $0.bottom.equalTo(self.firstUserImageButton.snp.top).offset(-8)
-            $0.width.equalTo(127)
         }
         
         self.secondInfoView.snp.makeConstraints {
             $0.trailing.equalTo(self.secondUserImageButton.snp.trailing)
             $0.height.equalTo(49)
             $0.bottom.equalTo(self.secondUserImageButton.snp.top).offset(-8)
-            $0.width.equalTo(127)
         }
         
         self.thirdInfoView.snp.makeConstraints {
             $0.leading.equalTo(self.thirdUserImageButton.snp.leading)
             $0.height.equalTo(49)
             $0.top.equalTo(self.thirdUserNameLabel.snp.bottom).offset(8)
-            $0.width.equalTo(127)
         }
         
         self.fourthInfoView.snp.makeConstraints {
             $0.trailing.equalTo(self.fourthUserImageButton.snp.trailing)
             $0.height.equalTo(49)
             $0.top.equalTo(self.fourthUserNameLabel.snp.bottom).offset(8)
-            $0.width.equalTo(127)
         }
         
     }

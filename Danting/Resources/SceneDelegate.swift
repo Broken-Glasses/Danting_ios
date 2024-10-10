@@ -19,20 +19,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
         
-        let splahVC = SplashViewControlloer()
+        let splahVC = StandbyVC2()
         window.rootViewController = splahVC
         window.makeKeyAndVisible()
         
         self.window = window
         
-        let rootVC = LoginViewController()
-                
-                // 스플래시 화면 3초 노출
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    let navigationController = UINavigationController(rootViewController: rootVC)
-                    
-                    self.window?.rootViewController = navigationController
-                }
+//        let rootVC = LoginViewController()
+//                
+//                // 스플래시 화면 3초 노출
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//                    let navigationController = UINavigationController(rootViewController: rootVC)
+//                    
+//                    self.window?.rootViewController = navigationController
+//                }
 
     }
 
