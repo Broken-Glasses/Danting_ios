@@ -16,11 +16,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
             
-        window = UIWindow(windowScene: windowScene)
+        let window = UIWindow(windowScene: windowScene)
+        let rootViewController = RoomListViewController()
+        
+        let navigationController = UINavigationController(rootViewController: rootViewController)
+        
+        window.rootViewController = navigationController
+        self.window = window
 //        window?.rootViewController = StandbyViewController()
-        window?.rootViewController = StandbyVC4()
-
-        window?.makeKeyAndVisible()
+        window.makeKeyAndVisible()
 
     }
 
