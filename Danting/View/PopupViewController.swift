@@ -9,7 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-final class PopupViewController: UIViewController {
+class PopupViewController: UIViewController {
     //MARK: - Properties
     private let backgroundView = UIView().then {
         $0.backgroundColor = UIColor(hexCode: "#B6B6B6").withAlphaComponent(0.49)
