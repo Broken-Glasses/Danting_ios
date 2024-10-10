@@ -23,15 +23,17 @@ class SplashViewControlloer: UIViewController {
         //로고 사진
         self.view.addSubview(LogoImage)
         LogoImage.snp.makeConstraints{ (make) in
-            make.center.equalTo(self.view)
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(343)
         }
         LogoImage.image = UIImage(named: "logo_wdanting1.png")
 
        //로고 이름
         self.view.addSubview(LogoName)
         LogoName.snp.makeConstraints { (make) in
-            make.top.equalTo(LogoImage.snp.bottom).offset(25)
-                    make.centerX.equalTo(self.view)
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(430)
+                    
                 }
         LogoName.image = UIImage(named: "logo_wdanting2.png")
         
@@ -39,15 +41,15 @@ class SplashViewControlloer: UIViewController {
         //하단 로고
         self.view.addSubview(BottomLogo1)
         BottomLogo1.snp.makeConstraints { (make) in
-            make.top.equalTo(LogoName.snp.bottom).offset(210)
-                    make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(752)
+            make.centerX.equalTo(self.view)
                 }
         BottomLogo1.image = UIImage(named: "logo_with.png")
         
         self.view.addSubview(BottomLogo2)
         BottomLogo2.snp.makeConstraints { (make) in
-            make.top.equalTo(LogoName.snp.bottom).offset(240)
-                    make.centerX.equalTo(self.view)
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(self.view).offset(782)
                 }
         BottomLogo2.image = UIImage(named: "logo_dankook.png")
         
