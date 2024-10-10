@@ -18,7 +18,7 @@ class SplashViewControlloer: UIViewController {
         super.viewDidLoad()
         
         //배경
-        activateBackgroundGradient()
+        self.activateBackgroundGradient()
         
         //로고 사진
         self.view.addSubview(LogoImage)
