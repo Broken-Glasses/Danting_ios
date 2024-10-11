@@ -80,7 +80,7 @@ class StandbyViewController: UIViewController {
     
     
     @objc func readyButtonDidTapped(_ sender: UIButton) {
-        let popupVC = OpenKakaoViewController()
+        let popupVC = AttendingViewController()
         popupVC.modalPresentationStyle = .overFullScreen
         self.present(popupVC, animated: false)
         // 준비완료시 서버로 상태 전달

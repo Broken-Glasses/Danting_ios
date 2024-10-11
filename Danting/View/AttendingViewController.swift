@@ -57,11 +57,13 @@ final class AttendingViewController: PopupViewController {
         $0.font = UIFont(name: "Pretendard-Light", size: 12)
     }
     
+    private let participantsView = ParticipantsView()
+    
     private lazy var attendButton = UIButton().then {
         $0.setTitle("참가하기", for: .normal)
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = UIColor(hexCode: "#FBE400")
+        $0.backgroundColor = UIColor(hexCode: "#5A80FD")
         $0.setTitleColor(.white, for: .normal)
         $0.addTarget(self, action: #selector(attendButtonDidTapped), for: .touchUpInside)
     }
@@ -69,7 +71,9 @@ final class AttendingViewController: PopupViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.participantsView.meetingType = .threeBythree
         self.configureAttendingVC()
+        
      
     }
     
@@ -88,15 +92,17 @@ extension AttendingViewController {
         
         self.view.backgroundColor = .clear
         
-        self.view.addSubviews(self.popupView, self.logobaseView,
-                              self.titleLabel, self.descriptionLabel,
-                              self.attendButton)
+        self.view.addSubviews(self.popupView, self.logobaseView)
+        
+        self.popupView.addSubviews(self.heartImageView1, self.titleLabel,
+                                   self.heartImageView2, self.descriptionLabel,
+                                   self.participantsView, self.attendButton)
                 
         self.logobaseView.addSubview(self.logoImageView)
         
         self.popupView.snp.makeConstraints {
             $0.width.equalTo(319)
-            $0.height.equalTo(216)
+            $0.height.equalTo(303)
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(300)
         }
@@ -112,28 +118,48 @@ extension AttendingViewController {
             $0.width.height.equalTo(63)
         }
 
-        
+        self.heartImageView1.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(15)
+            $0.top.equalToSuperview().offset(40)
+            $0.height.equalTo(20)
+            $0.width.equalTo(20)
+        }
         
         self.titleLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(popupView.snp.top).offset(61)
-            $0.width.equalTo(260)
-            $0.height.equalTo(19)
+            $0.leading.equalTo(self.heartImageView1.snp.trailing).offset(10)
+            $0.centerY.equalTo(self.heartImageView1.snp.centerY)
+            $0.height.equalTo(22)
+        }
+        
+        self.heartImageView2.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(15)
+            $0.top.equalTo(self.heartImageView1.snp.bottom).offset(20)
+            $0.height.equalTo(20)
+            $0.width.equalTo(20)
         }
         
         self.descriptionLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.width.equalTo(260)
-            $0.height.equalTo(40)
+            $0.top.equalTo(self.heartImageView2.snp.top)
+            $0.leading.equalTo(self.heartImageView2.snp.trailing).offset(10)
+            $0.width.equalTo(240)
+            $0.height.equalTo(44)
         }
         
         self.attendButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(descriptionLabel.snp.bottom).offset(10)
+            $0.bottom.equalToSuperview().offset(-21)
             $0.width.equalTo(273)
             $0.height.equalTo(45)
             
         }
+        
+        self.participantsView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(35)
+            $0.trailing.equalToSuperview().inset(35)
+            $0.top.equalTo(self.descriptionLabel.snp.bottom).offset(15)
+            $0.bottom.equalTo(self.attendButton.snp.top).offset(-15)
+        }
+        
+       
     }
 }
