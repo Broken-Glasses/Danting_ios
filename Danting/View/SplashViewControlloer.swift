@@ -1,24 +1,22 @@
 //
-//  ViewController.swift
+//  SplashViewControlloer.swift
 //  Danting
 //
-//  Created by 김은상 on 10/5/24.
+//  Created by 임세윤 on 10/9/24.
 //
 
 import UIKit
 import SnapKit
 
-class LoginViewController: UIViewController {
+class SplashViewControlloer: UIViewController {
     var LogoImage = UIImageView()
     var LogoName = UIImageView()
-    var Login = UIImageView()
     var BottomLogo1 = UIImageView()
     var BottomLogo2 = UIImageView()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //배경
         self.activateBackgroundGradient()
         
@@ -26,52 +24,42 @@ class LoginViewController: UIViewController {
         self.view.addSubview(LogoImage)
         LogoImage.snp.makeConstraints{ (make) in
             make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(235)
+            make.top.equalTo(self.view).offset(343)
         }
         LogoImage.image = UIImage(named: "logo_wdanting1.png")
-        
-        //로고 이름
+
+       //로고 이름
         self.view.addSubview(LogoName)
         LogoName.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(315)
-            
-        }
+            make.top.equalTo(self.view).offset(430)
+                    
+                }
         LogoName.image = UIImage(named: "logo_wdanting2.png")
         
-        //중간 로고
-        self.view.addSubview(Login)
-        Login.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(521)
-            
-        }
-        Login.image = UIImage(named: "logo_login.png")
         
         //하단 로고
         self.view.addSubview(BottomLogo1)
         BottomLogo1.snp.makeConstraints { (make) in
             make.top.equalTo(self.view).offset(752)
             make.centerX.equalTo(self.view)
-        }
+                }
         BottomLogo1.image = UIImage(named: "logo_with.png")
         
         self.view.addSubview(BottomLogo2)
         BottomLogo2.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
             make.top.equalTo(self.view).offset(782)
-        }
+                }
         BottomLogo2.image = UIImage(named: "logo_dankook.png")
         
     }
     
     
-    private func configureLoginUI() {
-        
-        
-        
-    }
     
+}
+
+extension SplashViewControlloer {
     private func activateBackgroundGradient() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.view.bounds
@@ -82,11 +70,9 @@ class LoginViewController: UIViewController {
         gradientLayer.colors = colors
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-        
+
         
         self.view.layer.addSublayer(gradientLayer)
-        
+
     }
 }
-
-
