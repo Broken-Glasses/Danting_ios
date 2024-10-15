@@ -6,24 +6,25 @@
 //
 
 import UIKit
+import Then
 
-class RoomItemCell: UITableViewCell {
+final class RoomItemCell: UITableViewCell {
+    //MARK: - Properties
     
     let roomItemView = RoomItemView()
     
+    
+    //MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupCell()
-    }
-    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    //MARK: - Helpers
     private func setupCell() {
-        contentView.addSubview(roomItemView)
-        roomItemView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.roomItemView)
+        self.roomItemView.translatesAutoresizingMaskIntoConstraints = false
         
         // customItemView 레이아웃 설정
         NSLayoutConstraint.activate([
@@ -35,21 +36,84 @@ class RoomItemCell: UITableViewCell {
     }
 }
 
-class RoomItemView: UIView {
+final class RoomItemView: UIView {
+    //MARK: - Properties
+    let containerView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.systemBlue.cgColor
+        $0.layer.cornerRadius = 12
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.1
+        $0.layer.shadowRadius = 8
+        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let iconImageView = UIImageView().then {
+        $0.image = UIImage(named: "room_logo.svg") // 아이콘 이미지 설정
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let titleLabel = UILabel().then {
+        $0.text = "술 배틀 뛸 사람 들어와"
+        $0.font = UIFont(name: "Pretendard-Bold", size: 15)
+        $0.textColor = .black
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let subtitleLabel = UILabel().then {
+        $0.text = "공대에서 술 잘 마시는 여성분들 구합니다. 여성분들 자신있으면 아무나..."
+        $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+        $0.textColor = UIColor(hexCode: "B4C2DC")
+        $0.numberOfLines = 2
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let blueHeartButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "heart"), for: .normal)
+        $0.tintColor = .systemBlue
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let redHeartButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "heart"), for: .normal)
+        $0.tintColor = .systemRed
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let blueHeartLabel = UILabel().then {
+        $0.text = "3/3 명"
+        $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+        $0.textColor = UIColor(hexCode: "A8B1CE")
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    let redHeartLabel = UILabel().then {
+        $0.text = "1/3 명"
+        $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+        $0.textColor = UIColor(hexCode: "A8B1CE")
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
 
-    let containerView = UIView()
-    let iconImageView = UIImageView()
-    let titleLabel = UILabel()
-    let subtitleLabel = UILabel()
-    let blueHeartButton = UIButton()
-    let redHeartButton = UIButton()
-    let blueHeartLabel = UILabel()
-    let redHeartLabel = UILabel()
+    private lazy var blueHeartButtonStackView = UIStackView(arrangedSubviews: [blueHeartButton, blueHeartLabel]).then {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.spacing = 8
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    
+    private lazy var redHeartButtonStackView = UIStackView(arrangedSubviews: [redHeartButton, redHeartLabel]).then {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.spacing = 8
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    private lazy var labelStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel]).then {
+        $0.axis = .vertical
+        $0.alignment = .leading
+        $0.spacing = 4
+        $0.translatesAutoresizingMaskIntoConstraints = false
+    }
 
-    let blueHeartButtonStackView = UIStackView()
-    let redHeartButtonStackView = UIStackView()
-    let labelStackView = UIStackView()
-
+    
+    //MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -60,104 +124,17 @@ class RoomItemView: UIView {
     }
     
    
-
-    func setupView() {
-        // 컨테이너 뷰 설정
-        containerView.backgroundColor = .white
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.systemBlue.cgColor
-        containerView.layer.cornerRadius = 12
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.1
-        containerView.layer.shadowRadius = 8
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(containerView)
-
-        // 아이콘 이미지 설정
-        iconImageView.image = UIImage(named: "room_logo.svg") // 아이콘 이미지 설정
-        iconImageView.layer.cornerRadius = 8
-        iconImageView.clipsToBounds = true
-        iconImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        // 제목 레이블 설정
-        titleLabel.text = "술 배틀 뛸 사람 들어와"
-        titleLabel.font = UIFont(name: "Pretendard-Bold", size: 15)
-        titleLabel.textColor = .black
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        // 부제목 레이블 설정
-        subtitleLabel.text = "공대에서 술 잘 마시는 여성분들 구합니다. 여성분들 자신있으면 아무나..."
-        subtitleLabel.font = UIFont(name: "Pretendard-Regular", size: 12)
-        subtitleLabel.textColor = UIColor(hexCode: "B4C2DC")
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        // 파란색 하트 버튼 설정
-        blueHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        blueHeartButton.tintColor = .systemBlue
-        blueHeartButton.translatesAutoresizingMaskIntoConstraints = false
-
-        // 빨간색 하트 버튼 설정
-        redHeartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        redHeartButton.tintColor = .systemRed
-        redHeartButton.translatesAutoresizingMaskIntoConstraints = false
-
-        // 하트 버튼에 붙일 라벨 설정
-        blueHeartLabel.text = "3/3 명"
-        blueHeartLabel.font = UIFont(name: "Pretendard-Regular", size: 12)
-        blueHeartLabel.textColor = UIColor(hexCode: "A8B1CE")
-        blueHeartLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        redHeartLabel.text = "1/3 명"
-        redHeartLabel.font = UIFont(name: "Pretendard-Regular", size: 12)
-        redHeartLabel.textColor = UIColor(hexCode: "A8B1CE")
-        redHeartLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        // StackViews 설정
-        setupStackViews()
-
-        // 오토레이아웃 설정
-        setupConstraints()
-    }
-
-    func setupStackViews() {
-        // 레이블 스택뷰 (제목 + 부제목)
-        labelStackView.axis = .vertical
-        labelStackView.alignment = .leading
-        labelStackView.spacing = 4
-        labelStackView.addArrangedSubview(titleLabel)
-        labelStackView.addArrangedSubview(subtitleLabel)
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
-
-        // 하트 버튼 스택뷰 (파란 하트 + 빨간 하트)
-        redHeartButtonStackView.axis = .horizontal
-        redHeartButtonStackView.alignment = .center
-        redHeartButtonStackView.spacing = 8
-        redHeartButtonStackView.addArrangedSubview(redHeartButton)
-        redHeartButtonStackView.addArrangedSubview(redHeartLabel)
-        redHeartButtonStackView.translatesAutoresizingMaskIntoConstraints = false
+    //MARK: - Helpers
+    private func setupView() {
+        self.addSubview(self.containerView)
+        self.containerView.addSubviews(self.iconImageView,
+                                       self.labelStackView,
+                                       self.redHeartButtonStackView,
+                                       self.blueHeartButtonStackView)
         
-        blueHeartButtonStackView.axis = .horizontal
-        blueHeartButtonStackView.alignment = .center
-        blueHeartButtonStackView.spacing = 8
-        blueHeartButtonStackView.addArrangedSubview(blueHeartButton)
-        blueHeartButtonStackView.addArrangedSubview(blueHeartLabel)
-        blueHeartButtonStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        containerView.addSubview(iconImageView)
-        containerView.addSubview(labelStackView)
-        containerView.addSubview(redHeartButtonStackView)
-        containerView.addSubview(blueHeartButtonStackView)
-    }
-
-    func setupConstraints() {
         // containerView의 크기를 명시적으로 설정
         containerView.snp.makeConstraints { (make) in
-//            make.left.equalTo(self.snp.left).offset(20)
-//            make.right.equalTo(self.snp.right).offset(20)
-//            make.top.equalTo(self.snp.top).offset(10)
-//            make.bottom.equalTo(self.snp.bottom).offset(10)
             make.edges.equalToSuperview()
         }
 

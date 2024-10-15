@@ -57,7 +57,7 @@ final class RoomListViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoomItemCell", for: indexPath) as! RoomItemCell
-        
+        cell.selectionStyle = .none
         cell.roomItemView.titleLabel.text = items[indexPath.row].0
         cell.roomItemView.subtitleLabel.text = items[indexPath.row].1
         
@@ -67,6 +67,10 @@ final class RoomListViewController: UIViewController, UITableViewDelegate, UITab
     //MARK: - Actions
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected \(items[indexPath.row])")
+        let attendingVC = AttendingViewController()
+        attendingVC.modalPresentationStyle = .overFullScreen
+        self.present(attendingVC, animated: true, completion: nil)
+        
     }
 
 }
