@@ -116,7 +116,7 @@ final class RoomItemView: UIView {
     //MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        self.setupView()
     }
     
     required init?(coder: NSCoder) {

@@ -36,7 +36,7 @@ final class ParticipantsView: UIView {
     }
     
     private let girl1Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
+        $0.text = "24 | 커뮤니케이션디자인전공"
         
         
     }
@@ -97,12 +97,7 @@ final class ParticipantsView: UIView {
 
 extension ParticipantsView {
     private func configureUIWithType(meetingType: MeetingType) {
-        self.addSubview(self.heartImageView)
-        self.heartImageView.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-            $0.width.equalTo(18)
-            $0.height.equalTo(18)
-        }
+        
         
         switch meetingType {
         case .twoBytwo:
@@ -117,7 +112,8 @@ extension ParticipantsView {
     
     private func configure2by2() {
         self.addSubviews(self.man1Label, self.man2Label,
-                         self.girl1Label, self.girl2Label)
+                         self.girl1Label, self.girl2Label,
+                         self.heartImageView)
         
         self.man1Label.snp.makeConstraints {
             $0.leading.top.equalToSuperview()
@@ -125,24 +121,34 @@ extension ParticipantsView {
         }
         
         self.man2Label.snp.makeConstraints {
-            $0.leading.bottom.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.top.equalTo(man1Label.snp.bottom)
             $0.height.equalTo(22)
         }
         
         self.girl1Label.snp.makeConstraints {
-            $0.trailing.top.equalToSuperview()
+            $0.top.trailing.equalToSuperview()
             $0.height.equalTo(22)
         }
         
         self.girl2Label.snp.makeConstraints {
-            $0.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(girl1Label.snp.bottom)
+            $0.trailing.equalTo(girl1Label)
             $0.height.equalTo(22)
+        }
+        
+        self.heartImageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(18)
+            $0.height.equalTo(18)
+            $0.top.equalTo(man1Label.snp.bottom).offset(-11)
         }
     }
     
     private func configure3by3() {
         self.addSubviews(self.man1Label, self.man2Label, self.man3Label,
-                         self.girl1Label, self.girl2Label, self.girl3Label)
+                         self.girl1Label, self.girl2Label, self.girl3Label,
+                         self.heartImageView)
         
         
         self.man2Label.snp.makeConstraints {
@@ -163,7 +169,8 @@ extension ParticipantsView {
         }
         
         self.girl2Label.snp.makeConstraints {
-            $0.centerY.trailing.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.height.equalTo(22)
         }
         
@@ -179,23 +186,35 @@ extension ParticipantsView {
             $0.height.equalTo(22)
         }
         
+        self.heartImageView.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.equalTo(18)
+            $0.height.equalTo(18)
+        }
+        
     }
     
     private func configure4by4() {
         self.addSubviews(self.man1Label, self.man2Label,
                          self.man3Label, self.man4Label,
                          self.girl1Label, self.girl2Label,
-                         self.girl3Label, self.girl4Label)
+                         self.girl3Label, self.girl4Label,
+                         self.heartImageView)
+        self.heartImageView.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.equalTo(18)
+            $0.height.equalTo(18)
+        }
         
         self.man2Label.snp.makeConstraints {
             $0.leading.equalToSuperview()
-            $0.bottom.equalTo(self.heartImageView.snp.centerY).offset(-11)
+            $0.bottom.equalTo(self.heartImageView.snp.top).offset(+11)
             $0.height.equalTo(22)
         }
         
         self.man3Label.snp.makeConstraints {
             $0.leading.equalToSuperview()
-            $0.bottom.equalTo(self.heartImageView.snp.centerY).offset(+11)
+            $0.top.equalTo(self.heartImageView.snp.bottom).offset(-11)
             $0.height.equalTo(22)
         }
         
@@ -214,13 +233,13 @@ extension ParticipantsView {
         
         self.girl2Label.snp.makeConstraints {
             $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(self.heartImageView.snp.centerY).offset(-11)
+            $0.bottom.equalTo(self.heartImageView.snp.top).offset(+11)
             $0.height.equalTo(22)
         }
         
         self.girl3Label.snp.makeConstraints {
             $0.trailing.equalToSuperview()
-            $0.bottom.equalTo(self.heartImageView.snp.centerY).offset(+11)
+            $0.top.equalTo(self.heartImageView.snp.bottom).offset(-11)
             $0.height.equalTo(22)
         }
         
@@ -235,6 +254,8 @@ extension ParticipantsView {
             $0.top.equalTo(self.girl3Label.snp.bottom)
             $0.height.equalTo(22)
         }
+        
+        
         
         
     }

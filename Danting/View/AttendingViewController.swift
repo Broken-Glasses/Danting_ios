@@ -73,14 +73,12 @@ final class AttendingViewController: PopupViewController {
         super.viewDidLoad()
         self.participantsView.meetingType = .threeBythree
         self.configureAttendingVC()
-        
-     
     }
     
     
     
     @objc func attendButtonDidTapped() {
-        print("Debug: opendKakaoChatting")
+        print("Debug: Attend Room")
         
     }
 

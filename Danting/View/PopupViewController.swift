@@ -21,11 +21,33 @@ class PopupViewController: UIViewController {
         $0.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
     }
     
-    private let emptyView = UIView()
-    
-    lazy var popupStackView = UIStackView().then {
-        $0.axis = .vertical
+    private lazy var popupView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 30
+
     }
+    
+    private lazy var popupStackView = UIStackView(arrangedSubviews: [topEmptyView]).then {
+        $0.axis = .vertical
+        $0.distribution = .fill
+        $0.alignment = .fill
+        $0.spacing = 10
+    }
+    
+    private let logobaseView = UIView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 29
+        $0.backgroundColor = .white
+    }
+    
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage(named: "logo_danting.png")
+        $0.contentMode = .scaleAspectFill
+    }
+    
+    private let topEmptyView = UIView()
+    private let bottomEmptyView = UIView()
+    
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -56,10 +78,59 @@ class PopupViewController: UIViewController {
 }
 
 extension PopupViewController {
-    func configurePopupVC() {
+    private func configurePopupVC() {
         self.view.backgroundColor = .clear
         self.view.addSubview(self.backgroundView)
         
+        self.view.backgroundColor = .clear
+        
+        self.view.addSubviews(self.popupView, self.logobaseView)
+        
+        self.popupView.addSubviews(self.logobaseView, self.popupStackView)
+        
         self.backgroundView.snp.makeConstraints { $0.edges.equalToSuperview()}
+                
+        self.logobaseView.addSubview(self.logoImageView)
+        
+        self.popupView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(319)
+            $0.leading.equalToSuperview().offset(30)
+            $0.trailing.equalToSuperview().offset(-30)
+        }
+        
+        self.popupStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.bottom.top.equalToSuperview()
+            
+        }
+        
+        self.logobaseView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalTo(self.popupView.snp.top)
+            $0.width.height.equalTo(63)
+        }
+        
+        self.logoImageView.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.height.equalTo(63)
+        }
+        
+        self.topEmptyView.snp.makeConstraints { $0.height.equalTo(40) }
+        
+        self.bottomEmptyView.snp.makeConstraints { $0.height.equalTo(15) }
+        
+
+        
     }
+    
+    func addSubviewsToStackView(views: [UIView], completionHandler: @escaping(()->())) {
+        
+        DispatchQueue.main.async {
+            views.forEach { self.popupStackView.addArrangedSubview($0) }
+            self.popupStackView.addArrangedSubview(self.bottomEmptyView)
+            completionHandler()
+        }
+    }
+    
 }
