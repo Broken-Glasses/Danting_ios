@@ -124,13 +124,19 @@ extension PopupViewController {
         
     }
     
-    func addSubviewsToStackView(views: [UIView], completionHandler: @escaping(()->())) {
-        
+    func addSubviewsToStackView(views: [UIView], spacing: CGFloat = 10,
+                                bottomSpacing: CFloat = 15, topSpacing: CGFloat = 40,
+                                completionHandler: @escaping(()->())) {
         DispatchQueue.main.async {
+            self.popupStackView.spacing = spacing
+            self.bottomEmptyView.snp.updateConstraints { $0.height.equalTo(bottomSpacing)}
+            self.topEmptyView.snp.updateConstraints { $0.height.equalTo(topSpacing)}
             views.forEach { self.popupStackView.addArrangedSubview($0) }
             self.popupStackView.addArrangedSubview(self.bottomEmptyView)
             completionHandler()
         }
     }
+    
+    
     
 }

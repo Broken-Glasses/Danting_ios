@@ -69,6 +69,8 @@ class StandbyViewController: UIViewController {
     
     private let dotSequence = [0, 1, 2, 3, 2, 1, 0] // 점의 수 배열
     
+    
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCommonComponents()
@@ -78,11 +80,23 @@ class StandbyViewController: UIViewController {
     }
     
     
-    
-    @objc func readyButtonDidTapped(_ sender: UIButton) {
-        let popupVC = AttendingViewController()
+    private func fetchReadyState() {
+        // 전부 준비 완료라면 카카오톡 오픈 채팅방으로 들어가는 부분
+        let popupVC = PopupViewController()
         popupVC.modalPresentationStyle = .overFullScreen
-        self.present(popupVC, animated: false)
+        let views = self.generateViewsForOpenKakao()
+        popupVC.addSubviewsToStackView(views: views, spacing: 20, bottomSpacing: 10, topSpacing: 20) {
+            self.present(popupVC, animated: true, completion: nil)
+        }
+        
+        
+    }
+
+    
+    
+    //MARK: - Action
+    @objc func readyButtonDidTapped(_ sender: UIButton) {
+        fetchReadyState()
         // 준비완료시 서버로 상태 전달
         
         if sender.currentTitle == "준비" {
@@ -93,6 +107,12 @@ class StandbyViewController: UIViewController {
             sender.setTitle("준비", for: .normal)
             
         }
+    }
+    
+    
+    @objc func openKakaoChatting() {
+        print("Debug: opendKakaoChatting")
+        
     }
 
 }
@@ -212,5 +232,43 @@ extension StandbyViewController {
     private func updateLabelWithDots(count: Int) {
         let dots = String(repeating: "·", count: count)
         self.findingLoveLabel.text = "Finding Love" + dots
+    }
+    
+    private func generateViewsForOpenKakao() -> [UIView] {
+        let titleLabel = UILabel().then {
+            $0.text = "새로운 만남을 가질 준비가 되었나요?"
+            $0.textAlignment = .center
+            $0.textColor = .black
+            $0.font = UIFont(name: "Pretendard-Bold", size: 18)
+        }
+        
+        let descriptionLabel = UILabel().then {
+            $0.text = "상호 간의 배려를 통해 즐거운 만남을 이어가 보세요.\n타인에 대한 비방이나 욕설은 처벌의 대상이 됩니다."
+            $0.textAlignment = .center
+            $0.textColor = .black
+            $0.numberOfLines = 2
+            $0.font = UIFont(name: "Pretendard-Light", size: 13)
+        }
+        
+        lazy var kakaoChatButton = UIButton().then {
+            $0.setTitle("카카오로 3초만에 시작하기", for: .normal)
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 10
+            $0.backgroundColor = UIColor(hexCode: "#FBE400")
+            $0.setTitleColor(UIColor(hexCode: "#3E1A1D"), for: .normal)
+            $0.semanticContentAttribute = .forceLeftToRight
+            $0.contentHorizontalAlignment = .fill
+            $0.contentVerticalAlignment = .center
+            $0.setImage(UIImage(named: "logo_kakao.png"), for: .normal)
+            $0.imageView?.contentMode = .scaleAspectFit
+            $0.imageEdgeInsets = UIEdgeInsets(top: 2, left: 23, bottom: 2, right: 2)
+            $0.titleEdgeInsets = UIEdgeInsets(top: 2, left: 40, bottom: 2, right: 2)
+            $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
+            $0.addTarget(self, action: #selector(openKakaoChatting), for: .touchUpInside)
+        }
+        
+        
+        
+        return [titleLabel, descriptionLabel, kakaoChatButton]
     }
 }
