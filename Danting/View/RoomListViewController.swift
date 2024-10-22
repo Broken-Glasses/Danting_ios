@@ -130,7 +130,7 @@ extension RoomListViewController {
             
             $0.textColor = .black
             $0.numberOfLines = 0
-            $0.font = UIFont(name: "Pretendard-Light", size: 15)
+            $0.font = UIFont(name: "Pretendard-Regular", size: 15)
         }
         
         lazy var firstStackView = UIStackView(arrangedSubviews: [heartImageView1, titleLabel]).then {
@@ -186,8 +186,8 @@ extension RoomListViewController {
         print("Debug: Attend Room")
         self.dismiss(animated: true)
         let standbyVC = StandbyVC3()
-        standbyVC.modalPresentationStyle = .overFullScreen
-        self.present(standbyVC, animated: true, completion: nil)
+//        standbyVC.modalPresentationStyle = .overFullScreen
+        self.navigationController?.pushViewController(standbyVC, animated: true)
         
     }
     
