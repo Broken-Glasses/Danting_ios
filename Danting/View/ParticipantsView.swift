@@ -11,53 +11,15 @@ import Then
 
 final class ParticipantsView: UIView {
     
-    private let man1Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        $0.font = UIFont(name: "Pretendard-Regular", size: 11)
-        
-    }
+    private let man1Label = UILabel()
+    private let man2Label = UILabel()
+    private let man3Label = UILabel()
+    private let man4Label = UILabel()
     
-    private let man2Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
-    
-    private let man3Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
-    
-    private let man4Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
-    
-    private let girl1Label = UILabel().then {
-        $0.text = "24 | 커뮤니케이션디자인전공"
-        
-        
-    }
-    
-    private let girl2Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
-    
-    private let girl3Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
-    
-    private let girl4Label = UILabel().then {
-        $0.text = "24 | 기계공학과"
-        
-        
-    }
+    private let girl1Label = UILabel()
+    private let girl2Label = UILabel()
+    private let girl3Label = UILabel()
+    private let girl4Label = UILabel()
     
     private let heartImageView = UIImageView().then {
         $0.image = UIImage(systemName: "heart")
@@ -79,6 +41,7 @@ final class ParticipantsView: UIView {
         }
     }
     
+    var participants: [User]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -143,6 +106,22 @@ extension ParticipantsView {
             $0.height.equalTo(18)
             $0.top.equalTo(man1Label.snp.bottom).offset(-11)
         }
+        
+        guard let participants = self.participants else { return }
+        
+        let males = participants.filter{$0.gender == "Male"}
+        let females = participants.filter{$0.gender == "Female"}
+        
+        let manLabels: [UILabel] = [man1Label, man2Label]
+        let girlLabels: [UILabel] = [girl1Label, girl2Label]
+
+        for (index, male) in males.prefix(manLabels.count).enumerated() {
+            setLabelWithAttributedText(for: manLabels[index], studentID: male.studentID, major: male.major, colorHex: "5A80FD")
+        }
+
+        for (index, female) in females.prefix(girlLabels.count).enumerated() {
+            setLabelWithAttributedText(for: girlLabels[index], studentID: female.studentID, major: female.major, colorHex: "FF80A5")
+        }
     }
     
     private func configure3by3() {
@@ -192,6 +171,20 @@ extension ParticipantsView {
             $0.height.equalTo(18)
         }
         
+        guard let participants = self.participants else { return }
+        let males = participants.filter{$0.gender == "Male"}
+        let females = participants.filter{$0.gender == "Female"}
+        
+        let manLabels: [UILabel] = [man1Label, man2Label, man3Label]
+        let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label]
+
+        for (index, male) in males.prefix(manLabels.count).enumerated() {
+            setLabelWithAttributedText(for: manLabels[index], studentID: male.studentID, major: male.major, colorHex: "5A80FD")
+        }
+
+        for (index, female) in females.prefix(girlLabels.count).enumerated() {
+            setLabelWithAttributedText(for: girlLabels[index], studentID: female.studentID, major: female.major, colorHex: "FF80A5")
+        }
     }
     
     private func configure4by4() {
@@ -255,7 +248,20 @@ extension ParticipantsView {
             $0.height.equalTo(22)
         }
         
-        
+        guard let participants = self.participants else { return }
+        let males = participants.filter{$0.gender == "Male"}
+        let females = participants.filter{$0.gender == "Female"}
+ 
+        let manLabels: [UILabel] = [man1Label, man2Label, man3Label, man4Label]
+        let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label, girl4Label]
+
+        for (index, male) in males.prefix(manLabels.count).enumerated() {
+            setLabelWithAttributedText(for: manLabels[index], studentID: male.studentID, major: male.major, colorHex: "5A80FD")
+        }
+
+        for (index, female) in females.prefix(girlLabels.count).enumerated() {
+            setLabelWithAttributedText(for: girlLabels[index], studentID: female.studentID, major: female.major, colorHex: "FF80A5")
+        }
         
         
     }
@@ -264,6 +270,20 @@ extension ParticipantsView {
         self.manLabels.forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
         self.girlLabels.forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
     }
+    
+    func setLabelWithAttributedText(for label: UILabel, studentID: String, major: String, colorHex: String) {
+        let entryYear = studentID.entryYear() ?? "00"
+        
+        label.text = entryYear + " | " + major
+        
+        let attributedString = NSMutableAttributedString(string: label.text ?? "")
+        let range = (label.text! as NSString).range(of: entryYear)
+        
+        attributedString.addAttribute(.foregroundColor, value: UIColor(hexCode: colorHex), range: range)
+        
+        label.attributedText = attributedString
+    }
+    
 }
 
 

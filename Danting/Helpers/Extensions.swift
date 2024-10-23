@@ -95,3 +95,29 @@ extension UIBezierPath {
         cgPath = path
     }
 }
+
+extension Int {
+    func integerToMeetingType() -> MeetingType {
+        switch self {
+        case 4:
+            return .twoBytwo
+        case 6:
+            return .threeBythree
+        case 8:
+            return .fourByfour
+        default:
+            return .twoBytwo
+        }
+    }
+}
+
+extension String {
+    func entryYear() -> String? {
+        guard self.count >= 3 else { return nil }
+        
+        let startIndex = self.index(self.startIndex, offsetBy: 1)
+        let endIndex = self.index(self.startIndex, offsetBy: 3)
+        
+        return String(self[startIndex..<endIndex])
+    }
+}

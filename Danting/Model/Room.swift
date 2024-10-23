@@ -7,9 +7,10 @@
 
 import UIKit
 
-struct {
-    
-      "title" : STRING, //required
-      "max" : INT, //required
-      "status" : STRING //required
+struct Room {
+    let title: String
+    let subTitle: String
+    var participants: [User]
+    let maxParticipants: Int
+    var status: String
 }

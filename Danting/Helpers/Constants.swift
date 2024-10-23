@@ -7,8 +7,8 @@
 
 import UIKit
 
-enum MeetingType {
-    case twoBytwo
-    case threeBythree
-    case fourByfour
+enum MeetingType: Int {
+    case twoBytwo = 4
+    case threeBythree = 6
+    case fourByfour = 8
 }

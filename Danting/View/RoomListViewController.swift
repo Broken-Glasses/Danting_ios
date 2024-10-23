@@ -36,9 +36,12 @@ final class RoomListViewController: UIViewController {
                  ("Room 7", "Description 7"), ("Room 8", "Description 8"),
                  ("Room 9", "Description 9")]
     
+    var myViewModel: MyViewModel!
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.myViewModel = MyViewModel()
         self.configureRoomListVC()
         
         
@@ -47,21 +50,7 @@ final class RoomListViewController: UIViewController {
     
     //MARK: - Helpers
 
-    private func configureRoomListVC() {
-        self.title = "단팅 그룹"
-        
-        self.view.backgroundColor = UIColor.white
-        self.view.addSubviews(self.tableView, self.floatingButton)
-        
-        self.floatingButton.snp.makeConstraints { (make) in
-            make.trailing.equalTo(self.view.snp.trailing).offset(-20)
-            make.bottom.equalTo(self.view.snp.bottom).offset(-35)
-            make.width.height.equalTo(55)
-        }
-
-        // 버튼을 화면 맨 앞으로 가져옴
-        self.view.bringSubviewToFront(floatingButton)
-    }
+    
 
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {
@@ -71,26 +60,39 @@ final class RoomListViewController: UIViewController {
 
 extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        guard let roomlist = self.myViewModel.roomList else { return 0 }
+        return roomlist.count
+        
+        //return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //prepareForReuse 사용하기
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoomItemCell", for: indexPath) as! RoomItemCell
         cell.selectionStyle = .none
-        cell.roomItemView.titleLabel.text = items[indexPath.row].0
-        cell.roomItemView.subtitleLabel.text = items[indexPath.row].1
+        guard let roomList = self.myViewModel.roomList else { return cell }
+        let room = roomList[indexPath.row]
+        let maxParticipants = room.maxParticipants
+        cell.roomItemView.titleLabel.text = room.title
+        cell.roomItemView.subtitleLabel.text = room.subTitle
+        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == "Male"}.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == "Female"}.count) + "/" + String(maxParticipants/2)
+        
+//        cell.roomItemView.titleLabel.text = items[indexPath.row].0
+//        cell.roomItemView.subtitleLabel.text = items[indexPath.row].1
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected \(items[indexPath.row])")
+        guard let roomList = self.myViewModel.roomList else { return }
+        let room = roomList[indexPath.row]
         
         
+        let views = self.generateViewsForRoomListPopupVC(room: room)
+    
         let attendingVC = PopupViewController()
         attendingVC.modalPresentationStyle = .overFullScreen
-        
-        let views = self.generateViewsForRoomListPopupVC(meetingType: .threeBythree)
         attendingVC.addSubviewsToStackView(views: views) {
             self.present(attendingVC, animated: true, completion: nil)
         }
@@ -99,12 +101,26 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 extension RoomListViewController {
-    private func generateViewsForRoomListPopupVC(meetingType: MeetingType = .twoBytwo) -> [UIView] {
+    private func configureRoomListVC() {
+        self.title = "단팅 그룹"
+        
+        self.view.backgroundColor = UIColor.white
+        self.view.addSubviews(self.tableView, self.floatingButton)
+        
+        self.floatingButton.snp.makeConstraints {
+            $0.trailing.equalTo(self.view.snp.trailing).offset(-20)
+            $0.bottom.equalTo(self.view.snp.bottom).offset(-35)
+            $0.width.height.equalTo(55)
+        }
 
-        
-        
+        self.view.bringSubviewToFront(floatingButton)
+    }
+    
+    private func generateViewsForRoomListPopupVC(room: Room) -> [UIView] {
+        let meetingType = room.maxParticipants.integerToMeetingType()
+        let participants = room.participants
+
         let heartImageView1 = UIImageView()
-        
         let heartImageView2 = UIImageView()
         
         [heartImageView1, heartImageView2].forEach {
@@ -116,7 +132,7 @@ extension RoomListViewController {
         }
 
         let titleLabel = UILabel().then {
-            $0.text = "술 배틀 뜰 사람 들어와"
+            $0.text = room.title
             $0.textAlignment = .left
             $0.textColor = .black
             $0.numberOfLines = 1
@@ -125,7 +141,7 @@ extension RoomListViewController {
         }
         
         let descriptionLabel = UILabel().then {
-            $0.text = "공대에서 술 잘 마시는 여성분들 구합니다. 여성분들은 자신 있으면 아무나 들어오세요!"
+            $0.text = room.subTitle
             $0.textAlignment = .left
             
             $0.textColor = .black
@@ -151,6 +167,7 @@ extension RoomListViewController {
 
                 
         lazy var thirdView = ParticipantsView()
+        thirdView.participants = room.participants
         thirdView.meetingType = meetingType
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
         thirdView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
@@ -183,10 +200,8 @@ extension RoomListViewController {
     }
     
     @objc func attendButtonDidTapped() {
-        print("Debug: Attend Room")
         self.dismiss(animated: true)
         let standbyVC = StandbyVC3()
-//        standbyVC.modalPresentationStyle = .overFullScreen
         self.navigationController?.pushViewController(standbyVC, animated: true)
         
     }
