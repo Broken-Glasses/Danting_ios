@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SplashViewControlloer: UIViewController {
+class SplashViewController: UIViewController {
     var LogoImage = UIImageView()
     var LogoName = UIImageView()
     var BottomLogo1 = UIImageView()
@@ -63,7 +63,7 @@ class SplashViewControlloer: UIViewController {
     
 }
 
-extension SplashViewControlloer {
+extension SplashViewController {
     private func activateBackgroundGradient() {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.view.bounds
