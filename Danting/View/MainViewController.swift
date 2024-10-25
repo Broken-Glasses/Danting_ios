@@ -9,7 +9,7 @@
 
 import UIKit
 
-class OpenView: UIViewController {
+class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

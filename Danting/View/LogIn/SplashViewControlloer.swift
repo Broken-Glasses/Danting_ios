@@ -33,24 +33,28 @@ class SplashViewControlloer: UIViewController {
         LogoName.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
             make.top.equalTo(self.view).offset(430)
-                    
-                }
+        }
+        
         LogoName.image = UIImage(named: "logo_wdanting2.png")
         
         
         //하단 로고
         self.view.addSubview(BottomLogo1)
+        
         BottomLogo1.snp.makeConstraints { (make) in
             make.top.equalTo(self.view).offset(752)
             make.centerX.equalTo(self.view)
-                }
+        }
+        
         BottomLogo1.image = UIImage(named: "logo_with.png")
         
         self.view.addSubview(BottomLogo2)
+        
         BottomLogo2.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
             make.top.equalTo(self.view).offset(782)
-                }
+        }
+        
         BottomLogo2.image = UIImage(named: "logo_dankook.png")
         
     }

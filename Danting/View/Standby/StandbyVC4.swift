@@ -174,20 +174,16 @@ final class StandbyVC4: StandbyViewController {
                                 self.seventhUserImageButton, self.eighthUserImageButton]
     
     lazy var firstInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var secondInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var thirdInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var fourthInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var fifthInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var sixthInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var seventhInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var eightInfoView = InfoView().then { $0.isHidden = true }
+    
+    var myViewModel = MyViewModel()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -201,8 +197,6 @@ final class StandbyVC4: StandbyViewController {
     }
     
     @objc func userButtonTapped(_ sender: UIButton) {
-        print("Dubug: userButtonTapped")
-        print("Debug: userButtonTag == \(sender.tag)")
         self.presentInfoView(tag: sender.tag)
     }
     

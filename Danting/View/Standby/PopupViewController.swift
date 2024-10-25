@@ -9,12 +9,7 @@ import UIKit
 import Then
 import SnapKit
 
-enum PopUpType {
-    case OpenKakao
-    case AttendingRoom
-}
-
-class PopupViewController: UIViewController {
+final class PopupViewController: UIViewController {
     //MARK: - Properties
     private let backgroundView = UIView().then {
         $0.backgroundColor = UIColor(hexCode: "#B6B6B6").withAlphaComponent(0.49)
@@ -24,7 +19,6 @@ class PopupViewController: UIViewController {
     private lazy var popupView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 30
-
     }
     
     private lazy var popupStackView = UIStackView(arrangedSubviews: [topEmptyView]).then {
@@ -48,6 +42,8 @@ class PopupViewController: UIViewController {
     private let topEmptyView = UIView()
     private let bottomEmptyView = UIView()
     
+    var myViewModel = MyViewModel()
+    
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -70,6 +66,7 @@ class PopupViewController: UIViewController {
         UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseIn) { [weak self] in
             self?.backgroundView.transform = .identity
             self?.backgroundView.isHidden = true
+            self?.myViewModel.room = nil
         }
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -119,9 +116,6 @@ extension PopupViewController {
         self.topEmptyView.snp.makeConstraints { $0.height.equalTo(40) }
         
         self.bottomEmptyView.snp.makeConstraints { $0.height.equalTo(15) }
-        
-
-        
     }
     
     func addSubviewsToStackView(views: [UIView], spacing: CGFloat = 10,
@@ -136,7 +130,4 @@ extension PopupViewController {
             completionHandler()
         }
     }
-    
-    
-    
 }

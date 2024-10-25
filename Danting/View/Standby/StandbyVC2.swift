@@ -102,12 +102,16 @@ final class StandbyVC2: StandbyViewController {
                                 self.thirdUserImageButton, self.fourthUserImageButton]
     
     lazy var firstInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var secondInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var thirdInfoView = InfoView().then { $0.isHidden = true }
-    
     lazy var fourthInfoView = InfoView().then { $0.isHidden = true }
+    
+    var myViewModel = MyViewModel() {
+        didSet {
+            guard let room = self.myViewModel.room else { return }
+            self.configureUIWithData(room: room)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,10 +126,14 @@ final class StandbyVC2: StandbyViewController {
 
     
     @objc func userButtonTapped(_ sender: UIButton) {
-        print("Dubug: userButtonTapped")
-        print("Debug: userButtonTag == \(sender.tag)")
         self.presentInfoView(tag: sender.tag)
         // 준비완료시 서버로 상태 전달
+    }
+    
+    override func readyButtonDidTapped(_ sender: UIButton) {
+        guard let room = myViewModel.room else { return }
+        let participants = room.participants
+        
     }
     
     
@@ -220,6 +228,32 @@ extension StandbyVC2: StandbyInformation {
         self.secondInfoView.roundCorners(topLeft: 25, topRight: 25.5, bottomLeft: 25)
         self.thirdInfoView.roundCorners(topRight: 25, bottomLeft: 25.5, bottomRight: 25)
         self.fourthInfoView.roundCorners(topLeft: 25, bottomLeft: 25 ,bottomRight: 25.5)
-
     }
+    
+    private func configureUIWithData(room: Room) {
+        let participants = room.participants
+        let males = participants.filter{$0.gender == .male}
+        let females = participants.filter{$0.gender == .female}
+        
+        let maleInfoView = [self.firstInfoView, self.secondInfoView]
+        let femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
+        
+        updateInfoView(infoViews: maleInfoView, users: males)
+        updateInfoView(infoViews: femaleInfoView, users: females)
+    }
+    
+    private func updateInfoView(infoViews: [InfoView], users: [User]) {
+        // InfoView와 users의 개수만큼 업데이트
+        for (index, user) in users.enumerated() where index < infoViews.count {
+            let infoView = infoViews[index]
+            infoView.isHidden = false
+            infoView.updateWithData(studentID: user.studentID, major: user.major)
+        }
+        
+        // 남은 InfoView는 숨김 처리
+        for index in users.count..<infoViews.count {
+            infoViews[index].isHidden = true
+        }
+    }
+    
 }

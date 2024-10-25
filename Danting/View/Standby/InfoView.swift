@@ -10,19 +10,16 @@ import SnapKit
 import Then
 
 final class InfoView: UIView {
-
-    var studentNum: Int?
-    var major: String?
     
     private lazy var studentNumLabel = UILabel().then {
-        $0.text = "32240000"
+        $0.text = "로딩중..."
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Regular", size: 10)
         $0.textAlignment = .center
     }
     
     private lazy var majorLabel = UILabel().then {
-        $0.text = "어쩌구저쩌구학부"
+        $0.text = "로딩중..."
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Regular", size: 10)
         $0.textAlignment = .center
@@ -35,7 +32,6 @@ final class InfoView: UIView {
     }
     
     private let leftEmptyView = UIView()
-    
     private let rightEmptyView = UIView()
     
     private lazy var infoStackView = UIStackView(arrangedSubviews: [leftEmptyView, nameMajorStackView, rightEmptyView]).then {
@@ -53,9 +49,6 @@ final class InfoView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    //MARK: - Helpers
 }
 
 
@@ -72,7 +65,13 @@ extension InfoView {
             
         }
         
-        self.leftEmptyView.snp.makeConstraints { $0.width.equalTo(13) }
+        self.leftEmptyView.snp.makeConstraints {$0.width.equalTo(13)}
         self.rightEmptyView.snp.makeConstraints { $0.width.equalTo(13)}
+    }
+    
+    func updateWithData(studentID: String, major: String) {
+        self.majorLabel.text = major
+        self.studentNumLabel.text = studentID
+        
     }
 }

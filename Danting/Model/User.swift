@@ -10,7 +10,12 @@ import UIKit
 struct User {
     let id: String
     let studentID: String
-    let gender: String
+    let gender: Gender
     let major: String
     var readyState: Bool
+}
+
+
+enum Gender: String {
+    case male, female
 }

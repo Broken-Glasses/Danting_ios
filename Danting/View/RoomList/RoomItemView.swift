@@ -8,6 +8,8 @@
 import UIKit
 import Then
 
+let testUser = User(id: "000218", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false)
+
 final class RoomItemCell: UITableViewCell {
     //MARK: - Properties
     

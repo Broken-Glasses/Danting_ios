@@ -19,7 +19,7 @@ final class RoomListViewController: UIViewController {
     }()
 
 
-    private lazy var tableView = UITableView().then {
+    private lazy var roomListTableView = UITableView().then {
         $0.frame = self.view.bounds
         $0.delegate = self
         $0.dataSource = self
@@ -30,12 +30,6 @@ final class RoomListViewController: UIViewController {
         $0.estimatedRowHeight = 100
     }
     
-    let items = [("Room 1", "Description 1"), ("Room 2", "Description 2"),
-                 ("Room 3", "Description 3"), ("Room 4", "Description 4"),
-                 ("Room 5", "Description 5"), ("Room 6", "Description 6"),
-                 ("Room 7", "Description 7"), ("Room 8", "Description 8"),
-                 ("Room 9", "Description 9")]
-    
     var myViewModel: MyViewModel!
     
     //MARK: - LifeCycle
@@ -43,18 +37,13 @@ final class RoomListViewController: UIViewController {
         super.viewDidLoad()
         self.myViewModel = MyViewModel()
         self.configureRoomListVC()
-        
-        
-        
     }
-    
-    //MARK: - Helpers
-
     
 
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {
         print("Debug: FloatingButtonTapped")
+        // 방 등록하는 view로 이동
     }
 }
 
@@ -62,8 +51,6 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let roomlist = self.myViewModel.roomList else { return 0 }
         return roomlist.count
-        
-        //return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -75,11 +62,9 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         let maxParticipants = room.maxParticipants
         cell.roomItemView.titleLabel.text = room.title
         cell.roomItemView.subtitleLabel.text = room.subTitle
-        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == "Male"}.count) + "/" + String(maxParticipants/2)
-        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == "Female"}.count) + "/" + String(maxParticipants/2)
-        
-//        cell.roomItemView.titleLabel.text = items[indexPath.row].0
-//        cell.roomItemView.subtitleLabel.text = items[indexPath.row].1
+        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == .male}.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == .female}.count) + "/" + String(maxParticipants/2)
+
         
         return cell
     }
@@ -87,13 +72,13 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let roomList = self.myViewModel.roomList else { return }
         let room = roomList[indexPath.row]
-        
-        
+        self.myViewModel.room = room
         let views = self.generateViewsForRoomListPopupVC(room: room)
     
         let attendingVC = PopupViewController()
         attendingVC.modalPresentationStyle = .overFullScreen
         attendingVC.addSubviewsToStackView(views: views) {
+            attendingVC.myViewModel = self.myViewModel
             self.present(attendingVC, animated: true, completion: nil)
         }
     }
@@ -105,7 +90,7 @@ extension RoomListViewController {
         self.title = "단팅 그룹"
         
         self.view.backgroundColor = UIColor.white
-        self.view.addSubviews(self.tableView, self.floatingButton)
+        self.view.addSubviews(self.roomListTableView, self.floatingButton)
         
         self.floatingButton.snp.makeConstraints {
             $0.trailing.equalTo(self.view.snp.trailing).offset(-20)
@@ -118,7 +103,6 @@ extension RoomListViewController {
     
     private func generateViewsForRoomListPopupVC(room: Room) -> [UIView] {
         let meetingType = room.maxParticipants.integerToMeetingType()
-        let participants = room.participants
 
         let heartImageView1 = UIImageView()
         let heartImageView2 = UIImageView()
@@ -169,6 +153,7 @@ extension RoomListViewController {
         lazy var thirdView = ParticipantsView()
         thirdView.participants = room.participants
         thirdView.meetingType = meetingType
+        
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
         thirdView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
         
@@ -200,9 +185,43 @@ extension RoomListViewController {
     }
     
     @objc func attendButtonDidTapped() {
+        //방이 가득 차있으면 방이 가득차있다는 알림 띄우기
+        guard let room = self.myViewModel.room else { return }
+        let maxParticipants = room.maxParticipants
+        let meetingType = maxParticipants.integerToMeetingType()
+        let participants = room.participants
+        let myGender = testUser.gender
+        
+        guard maxParticipants/2 != participants.filter({$0.gender == myGender}).count  else {
+            let alert = UIAlertController(title: "알림", message: "참여할 수 없는 방입니다.", preferredStyle: .actionSheet)
+            let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
+            alert.addAction(confirm)
+            present(alert, animated: true, completion: nil)
+            return
+        }
         self.dismiss(animated: true)
-        let standbyVC = StandbyVC3()
-        self.navigationController?.pushViewController(standbyVC, animated: true)
+    
+        var standbyVC: UIViewController?
+        
+        switch meetingType {
+        case .twoBytwo:
+            let standbyVC2 = StandbyVC2()
+            self.myViewModel.room?.participants.append(testUser)
+            standbyVC2.myViewModel = self.myViewModel
+            standbyVC = standbyVC2
+        case .threeBythree:
+            let standbyVC3 = StandbyVC3()
+            self.myViewModel.room?.participants.append(testUser)
+            standbyVC3.myViewModel = self.myViewModel
+            standbyVC = standbyVC3
+        case .fourByfour:
+            let standbyVC4 = StandbyVC4()
+            self.myViewModel.room?.participants.append(testUser)
+            standbyVC4.myViewModel = self.myViewModel
+            standbyVC = standbyVC4
+        }
+        
+        self.navigationController?.pushViewController(standbyVC!, animated: true)
         
     }
     
