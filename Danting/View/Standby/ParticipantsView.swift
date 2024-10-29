@@ -105,18 +105,18 @@ extension ParticipantsView {
         
         guard let participants = self.participants else { return }
         
-        let males = participants.filter{$0?.gender == .male}
-        let females = participants.filter{$0?.gender == .female}
+        let males = participants.filter{$0?.gender == "male"}
+        let females = participants.filter{$0?.gender == "female"}
         
         let manLabels: [UILabel] = [man1Label, man2Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], studentID: male!.studentID, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], studentID: female!.studentID, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
         }
     }
     
@@ -168,18 +168,18 @@ extension ParticipantsView {
         }
         
         guard let participants = self.participants else { return }
-        let males = participants.filter{$0?.gender == .male}
-        let females = participants.filter{$0?.gender == .female}
+        let males = participants.filter{$0?.gender == "male"}
+        let females = participants.filter{$0?.gender == "female"}
         
         let manLabels: [UILabel] = [man1Label, man2Label, man3Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], studentID: male!.studentID, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], studentID: female!.studentID, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
         }
     }
     
@@ -245,18 +245,18 @@ extension ParticipantsView {
         }
         
         guard let participants = self.participants else { return }
-        let males = participants.filter{$0?.gender == .male}
-        let females = participants.filter{$0?.gender == .female}
+        let males = participants.filter{$0?.gender == "male"}
+        let females = participants.filter{$0?.gender == "female"}
  
         let manLabels: [UILabel] = [man1Label, man2Label, man3Label, man4Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label, girl4Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], studentID: male!.studentID, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], studentID: female!.studentID, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
         }
         
         
@@ -267,8 +267,8 @@ extension ParticipantsView {
         self.girlLabels.forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
     }
     
-    func setLabelWithAttributedText(for label: UILabel, studentID: String, major: String, colorHex: String) {
-        let entryYear = studentID.entryYear() ?? "00"
+    func setLabelWithAttributedText(for label: UILabel, student_no: String, major: String, colorHex: String) {
+        let entryYear = student_no.entryYear() ?? "00"
         
         label.text = entryYear + " | " + major
         

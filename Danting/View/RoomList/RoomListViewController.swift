@@ -44,6 +44,9 @@ final class RoomListViewController: UIViewController {
     @objc func floatingButtonTapped(_ sender: UIButton) {
         print("Debug: FloatingButtonTapped")
         // 방 등록하는 view로 이동
+        let registerRoomVC = RegisterRoomVC()
+        
+        self.navigationController?.pushViewController(registerRoomVC, animated: true)
     }
 }
 
@@ -62,8 +65,8 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         let maxParticipants = room.maxParticipants
         cell.roomItemView.titleLabel.text = room.title
         cell.roomItemView.subtitleLabel.text = room.subTitle
-        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == .male}.count) + "/" + String(maxParticipants/2)
-        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == .female}.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == "male"}.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == "female"}.count) + "/" + String(maxParticipants/2)
 
         
         return cell
@@ -173,7 +176,7 @@ extension RoomListViewController {
         
     }
     
-    func getHeightValueFromMeetingType(meetingType: MeetingType) -> Double {
+    private func getHeightValueFromMeetingType(meetingType: MeetingType) -> Double {
         switch meetingType {
         case .twoBytwo:
             return 44

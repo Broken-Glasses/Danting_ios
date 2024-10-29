@@ -8,7 +8,7 @@
 import UIKit
 import Then
 
-let testUser = User(id: "000218", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false)
+let testUser = User(nickName: "김기계", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "123123123")
 
 final class RoomItemCell: UITableViewCell {
     //MARK: - Properties

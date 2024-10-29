@@ -232,8 +232,8 @@ extension StandbyVC2: StandbyInformation {
     
     private func configureUIWithData(room: Room) {
         let participants = room.participants
-        let males = participants.filter{$0.gender == .male}
-        let females = participants.filter{$0.gender == .female}
+        let males = participants.filter{$0.gender == "male"}
+        let females = participants.filter{$0.gender == "female"}
         
         let maleInfoView = [self.firstInfoView, self.secondInfoView]
         let femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
@@ -247,7 +247,7 @@ extension StandbyVC2: StandbyInformation {
         for (index, user) in users.enumerated() where index < infoViews.count {
             let infoView = infoViews[index]
             infoView.isHidden = false
-            infoView.updateWithData(studentID: user.studentID, major: user.major)
+            infoView.updateWithData(studentID: user.student_no, major: user.major)
         }
         
         // 남은 InfoView는 숨김 처리

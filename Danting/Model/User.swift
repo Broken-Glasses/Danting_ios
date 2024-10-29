@@ -7,15 +7,12 @@
 
 import UIKit
 
-struct User {
-    let id: String
-    let studentID: String
-    let gender: Gender
+struct User: Codable {
+    let nickName: String
+    let student_no: String
+    let gender: String
     let major: String
     var readyState: Bool
-}
-
-
-enum Gender: String {
-    case male, female
+    let user_id: String?
+    
 }

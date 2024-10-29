@@ -10,54 +10,71 @@ import UIKit
 
 final class MyViewModel {
     //MARK: - Model
-    var userInfo: User = User(id: "123123123", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false)
+    var userInfo: User = User(nickName: "김기계", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "123123123")
     
-    lazy var testUser1: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                                  User(id: "12312312123", studentID: "32200956", gender: .female, major: "경영학과", readyState: false),
-                                  User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                                  User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false)]
-    
-    let testUser2: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false)]
-    
-    let testUser3: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false)]
-    
-    let testUser4: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "1442", studentID: "32220956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312312123", studentID: "32200956", gender: .female, major: "경영학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false)]
-    
-    let testUser5: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "1442", studentID: "32220956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312312123", studentID: "32200956", gender: .female, major: "경영학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false)]
-    
-    let testUser6: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "1442", studentID: "32220956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312312123", studentID: "32200956", gender: .female, major: "경영학과", readyState: false),
-                             User(id: "12312343123", studentID: "32180956", gender: .male, major: "전자전기공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false)]
-    
-    let testUser7: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "1442", studentID: "32220956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false)]
-    
-    let testUser8: [User] = [User(id: "1231231233", studentID: "32190956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "1442", studentID: "32220956", gender: .male, major: "기계공학과", readyState: false),
-                             User(id: "12312223123", studentID: "32240956", gender: .female, major: "화학공학과", readyState: false),
-                             User(id: "12312355123", studentID: "32230956", gender: .female, major: "경영학과", readyState: false)]
+    lazy var testUser1: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: "12312312123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123")
+    ]
+
+    let testUser2: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123")
+    ]
+
+    let testUser3: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123")
+    ]
+
+    let testUser4: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: "1442"),
+        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: "12312312123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123")
+    ]
+
+    let testUser5: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: "1442"),
+        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: "12312312123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123")
+    ]
+
+    let testUser6: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: "1442"),
+        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: "12312312123"),
+        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: "12312343123"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123")
+    ]
+
+    let testUser7: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: "1442"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123")
+    ]
+
+    let testUser8: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: "1231231233"),
+        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: "1442"),
+        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: "12312223123"),
+        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: "12312355123")
+    ]
+
     
     lazy var roomList: [Room]? = [Room(title: "진짜 술고래들만 들어와라", subTitle: "이거 보여주려고 어그로 끌었다 미안하다...", participants:                          self.testUser1, maxParticipants: 6),
                              Room(title: "공대 차은우입니다.", subTitle: "카리나 구합니다. 윈터도 괜찮습니다.", participants: self.testUser2, maxParticipants: 4),

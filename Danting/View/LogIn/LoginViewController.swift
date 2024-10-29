@@ -8,69 +8,120 @@
 import UIKit
 import SnapKit
 
-class LoginViewController: UIViewController {
-    var LogoImage = UIImageView()
-    var LogoName = UIImageView()
-    var Login = UIImageView()
-    var BottomLogo1 = UIImageView()
-    var BottomLogo2 = UIImageView()
+final class LoginViewController: UIViewController {
     
+    //MARK: - Properties
+    private let logoImageView = UIImageView().then {
+        $0.image = UIImage(named: "logo_wdanting1.png")
+    }
     
+    private let topLabel = UILabel().then {
+        $0.text = "DANTING"
+        $0.font = UIFont(name: "Kodchasan-SemiBold", size: 30)
+        $0.textColor = .white
+        $0.textAlignment = .center
+    }
+
+    private let logInLabel = UILabel().then {
+        $0.text = "LOG - IN"
+        $0.font = UIFont(name: "Kodchasan-Regular", size: 15)
+        $0.textColor = .white
+        $0.textAlignment = .center
+    }
     
+    private let bottomLabel = UILabel().then {
+        $0.text = "with \n DANKOOK UNIV."
+        $0.font = UIFont(name: "Kodchasan-Regular", size: 15)
+        $0.textColor = .white
+        $0.numberOfLines = 3
+        $0.textAlignment = .center
+    }
+    
+    private lazy var nickNameTextField = UITextField().then {
+        $0.placeholder = "닉네임을 입력해주세요."
+        $0.backgroundColor = .white
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        $0.delegate = self
+    }
+    
+    private let nickNameConfirmButton = UIButton().then {
+        $0.setTitle("확인", for: .normal)
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        $0.backgroundColor = UIColor(hexCode: "5A80FD")
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
+    }
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //배경
         self.activateBackgroundGradient()
-        
-        //로고 사진
-        self.view.addSubview(LogoImage)
-        LogoImage.snp.makeConstraints{ (make) in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(235)
-        }
-        LogoImage.image = UIImage(named: "logo_wdanting1.png")
-        
-        //로고 이름
-        self.view.addSubview(LogoName)
-        LogoName.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(315)
-            
-        }
-        LogoName.image = UIImage(named: "logo_wdanting2.png")
-        
-        //중간 로고
-        self.view.addSubview(Login)
-        Login.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(521)
-            
-        }
-        Login.image = UIImage(named: "logo_login.png")
-        
-        //하단 로고
-        self.view.addSubview(BottomLogo1)
-        BottomLogo1.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view).offset(752)
-            make.centerX.equalTo(self.view)
-        }
-        BottomLogo1.image = UIImage(named: "logo_with.png")
-        
-        self.view.addSubview(BottomLogo2)
-        BottomLogo2.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.view)
-            make.top.equalTo(self.view).offset(782)
-        }
-        BottomLogo2.image = UIImage(named: "logo_dankook.png")
-        
+        self.configureLoginUI()
     }
+    
+    
+    
+    
+}
+extension LoginViewController: UITextFieldDelegate {
+    //텍스트 필드 관련 메서드는 여기에
+    
+    
+}
+
+
+
+extension LoginViewController {
     
     
     private func configureLoginUI() {
+        self.view.addSubviews(self.logoImageView, self.topLabel, self.logInLabel,
+                              self.bottomLabel, self.nickNameTextField,
+                              self.nickNameConfirmButton)
+        
+        self.logoImageView.snp.makeConstraints{ (make) in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(self.view).offset(235)
+        }
+        
+        self.topLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(self.logoImageView.snp.bottom).offset(3)
+        }
+        
+        self.logInLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(521)
+        }
         
         
+        self.nickNameTextField.snp.makeConstraints {
+            $0.top.equalTo(self.logInLabel.snp.bottom).offset(25)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(55)
+        }
         
+        self.nickNameConfirmButton.snp.makeConstraints {
+            $0.top.equalTo(self.nickNameTextField.snp.bottom).offset(20)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(55)
+        }
+        
+        self.bottomLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(752)
+            $0.centerX.equalToSuperview()
+            
+        }
+      
+        
+
     }
+    
     
     private func activateBackgroundGradient() {
         let gradientLayer = CAGradientLayer()
@@ -88,5 +139,3 @@ class LoginViewController: UIViewController {
         
     }
 }
-
-

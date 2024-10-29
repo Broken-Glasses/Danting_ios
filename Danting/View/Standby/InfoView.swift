@@ -12,14 +12,14 @@ import Then
 final class InfoView: UIView {
     
     private lazy var studentNumLabel = UILabel().then {
-        $0.text = "로딩중..."
+        $0.text = "아직 안들어왔어요"
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Regular", size: 10)
         $0.textAlignment = .center
     }
     
     private lazy var majorLabel = UILabel().then {
-        $0.text = "로딩중..."
+        $0.text = "기대가 크시군요!"
         $0.textColor = .white
         $0.font = UIFont(name: "Pretendard-Regular", size: 10)
         $0.textAlignment = .center
