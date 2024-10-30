@@ -85,6 +85,9 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
             self.present(attendingVC, animated: true, completion: nil)
         }
     }
+    
+    
+    //무한 스크롤 없다~~~~🤗
 }
 
 

@@ -238,8 +238,14 @@ extension StandbyVC2: StandbyInformation {
         let maleInfoView = [self.firstInfoView, self.secondInfoView]
         let femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
         
+        let maleNameView = [self.firstUserNameLabel, self.secondUserNameLabel]
+        let femaleNameView = [self.thirdUserNameLabel, self.fourthUserNameLabel]
+        
         updateInfoView(infoViews: maleInfoView, users: males)
         updateInfoView(infoViews: femaleInfoView, users: females)
+        
+        updateUserNameView(nameLabels: maleNameView, users: males)
+        updateUserNameView(nameLabels: femaleNameView, users: females)
     }
     
     private func updateInfoView(infoViews: [InfoView], users: [User]) {
@@ -253,6 +259,19 @@ extension StandbyVC2: StandbyInformation {
         // 남은 InfoView는 숨김 처리
         for index in users.count..<infoViews.count {
             infoViews[index].isHidden = true
+        }
+    }
+    
+    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
+        // InfoView와 users의 개수만큼 업데이트
+        for (index, user) in users.enumerated() where index < nameLabels.count {
+            let nameLabel = nameLabels[index]
+            nameLabel.text = user.nickName
+        }
+        
+        // 남은 InfoView는 숨김 처리
+        for index in users.count..<nameLabels.count {
+            nameLabels[index].text = ""
         }
     }
     
