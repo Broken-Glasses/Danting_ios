@@ -34,6 +34,8 @@ final class RegisterRoomVC: UIViewController {
 
     private let roomTitleTextField = UITextField().then {
         $0.placeholder = "방 제목을 입력해주세요"
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        $0.leftViewMode = .always
         $0.backgroundColor = .white
     }
 

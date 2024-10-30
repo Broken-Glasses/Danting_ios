@@ -39,12 +39,15 @@ final class LoginViewController: UIViewController {
     
     private lazy var nickNameTextField = UITextField().then {
         $0.placeholder = "닉네임을 입력해주세요."
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        $0.leftViewMode = .always
         $0.backgroundColor = .white
         $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
         $0.delegate = self
+        $0.clearButtonMode = .whileEditing // 편집 중에 지우기 버튼 표시
     }
     
     private let nickNameConfirmButton = UIButton().then {
