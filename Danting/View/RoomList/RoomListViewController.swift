@@ -37,9 +37,22 @@ final class RoomListViewController: UIViewController {
         super.viewDidLoad()
         self.myViewModel = MyViewModel()
         self.configureRoomListVC()
+        
     }
     
-
+    //MARK: - Helpers
+    private func fetchRoomList() {
+        let apiService = APIService.shared
+        apiService.getRooms { response in
+            switch response {
+            case .success(let rooms):
+                self.myViewModel.roomList = rooms
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+        
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {
         let registerRoomVC = RegisterRoomVC()
