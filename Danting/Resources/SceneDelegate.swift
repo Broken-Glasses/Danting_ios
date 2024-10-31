@@ -17,7 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
             
         let window = UIWindow(windowScene: windowScene)
-        let rootViewController: UIViewController = LoginViewController()
+        //let splashViewController = SplashViewController() // 초기 화면을 SplashViewController로 설정
+            //window.rootViewController = splashViewController
+        let rootViewController: UIViewController = PersonInfoViewController()
         
         let navigationController = UINavigationController(rootViewController: rootViewController)
         

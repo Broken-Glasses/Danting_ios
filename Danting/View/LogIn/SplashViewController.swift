@@ -57,10 +57,18 @@ class SplashViewController: UIViewController {
         
         BottomLogo2.image = UIImage(named: "logo_dankook.png")
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    self.showMainViewController()
+                }
+        
     }
     
-    
-    
+    private func showMainViewController() {
+        let mainViewController = LoginViewController()
+           mainViewController.modalTransitionStyle = .crossDissolve
+           mainViewController.modalPresentationStyle = .fullScreen
+           present(mainViewController, animated: true, completion: nil)
+       }
 }
 
 extension SplashViewController {
@@ -79,4 +87,6 @@ extension SplashViewController {
         self.view.layer.addSublayer(gradientLayer)
 
     }
+    
+    
 }
