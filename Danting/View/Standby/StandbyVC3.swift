@@ -138,7 +138,12 @@ final class StandbyVC3: StandbyViewController {
     lazy var fifthInfoView = InfoView().then { $0.isHidden = true }
     lazy var sixthInfoView = InfoView().then { $0.isHidden = true }
     
-    var myViewModel = MyViewModel()
+    var myViewModel = MyViewModel() {
+        didSet {
+            guard let room = self.myViewModel.room else { return }
+            self.configureUIWithData(room: room)
+        }
+    }
 
     
     
@@ -158,7 +163,11 @@ final class StandbyVC3: StandbyViewController {
         self.presentInfoView(tag: sender.tag)
         // 준비완료시 서버로 상태 전달
     }
-    
+    override func readyButtonDidTapped(_ sender: UIButton) {
+        guard let room = myViewModel.room else { return }
+        let participants = room.participants
+        
+    }
     
 }
 
@@ -288,4 +297,52 @@ extension StandbyVC3: StandbyInformation {
         self.fifthInfoView.roundCorners(topLeft: 25, bottomLeft: 25, bottomRight: 25.5)
         self.sixthInfoView.roundCorners(topLeft: 25, bottomLeft: 25 ,bottomRight: 25.5)
     }
+    
+    
+    private func configureUIWithData(room: Room) {
+        let participants = room.participants
+        let males = participants.filter{$0.gender == "male"}
+        let females = participants.filter{$0.gender == "female"}
+        
+        let maleInfoView = [self.firstInfoView, self.secondInfoView, self.thirdInfoView]
+        let femaleInfoView = [self.fourthInfoView, self.fifthInfoView, self.sixthInfoView]
+        
+        let maleNameView = [self.firstUserNameLabel, self.secondUserNameLabel, self.thirdUserNameLabel]
+        let femaleNameView = [self.fourthUserNameLabel, self.fifthUserNameLabel, self.sixthUserNameLabel]
+        
+        updateInfoView(infoViews: maleInfoView, users: males)
+        updateInfoView(infoViews: femaleInfoView, users: females)
+        
+        updateUserNameView(nameLabels: maleNameView, users: males)
+        updateUserNameView(nameLabels: femaleNameView, users: females)
+    }
+    
+    private func updateInfoView(infoViews: [InfoView], users: [User]) {
+        // InfoView와 users의 개수만큼 업데이트
+        for (index, user) in users.enumerated() where index < infoViews.count {
+            let infoView = infoViews[index]
+            infoView.isHidden = false
+            infoView.updateWithData(studentID: user.student_no, major: user.major)
+        }
+        
+        // 남은 InfoView는 숨김 처리
+        for index in users.count..<infoViews.count {
+            infoViews[index].isHidden = true
+        }
+    }
+    
+    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
+        // InfoView와 users의 개수만큼 업데이트
+        for (index, user) in users.enumerated() where index < nameLabels.count {
+            let nameLabel = nameLabels[index]
+            nameLabel.text = user.nickName
+            nameLabel.isHidden = false
+        }
+        
+        // 남은 InfoView는 숨김 처리
+        for index in users.count..<nameLabels.count {
+            nameLabels[index].text = ""
+        }
+    }
+    
 }

@@ -27,7 +27,6 @@ enum DantingRouter {
     case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
-    case postTodo(content: String)
 }
 
 
@@ -58,9 +57,6 @@ extension DantingRouter: URLRequestConvertible {
             
         case .ready(let room_id, let user_id):
             return "/ready"
-            
-        case .postTodo:
-            return "/todo-list.json"
                 
         }
     }
@@ -71,9 +67,6 @@ extension DantingRouter: URLRequestConvertible {
             return .get
         case .createRoom, .createUser, .ready, .attendRoom:
             return .post
-        case .postTodo:
-            return .post
-                
         }
     }
     
@@ -91,8 +84,6 @@ extension DantingRouter: URLRequestConvertible {
             return ["room_id" : room_id, "user_id" : user_id]
         case .attendRoom(let room_id, let user_id):
             return ["room_id" : room_id, "user_id" : user_id]
-        case .postTodo(let content):
-            return ["content": content]
         }
     }
     
@@ -186,17 +177,6 @@ final class APIService {
         }
     }
     
-    //MARK: - Test...
-    func postTodo(content: String, completion: @escaping (Result<String, Error>) -> Void) {
-        AF.request(DantingRouter.postTodo(content: content)).responseString{ response in
-            switch response.result {
-            case.success(let success):
-                completion(.success(success))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
     
 }
 

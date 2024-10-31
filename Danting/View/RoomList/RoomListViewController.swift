@@ -42,10 +42,7 @@ final class RoomListViewController: UIViewController {
 
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {
-        print("Debug: FloatingButtonTapped")
-        // 방 등록하는 view로 이동
         let registerRoomVC = RegisterRoomVC()
-        
         self.navigationController?.pushViewController(registerRoomVC, animated: true)
     }
 }
@@ -85,9 +82,6 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
             self.present(attendingVC, animated: true, completion: nil)
         }
     }
-    
-    
-    //무한 스크롤 없다~~~~🤗
 }
 
 
@@ -162,6 +156,11 @@ extension RoomListViewController {
         
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
         thirdView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
+        let maxParticipants = room.maxParticipants
+        let participants = room.participants
+        let myGender = testUser.gender
+        
+       
         
         lazy var attendButton = UIButton().then {
             $0.setTitle("참가하기", for: .normal)
@@ -171,9 +170,13 @@ extension RoomListViewController {
             $0.backgroundColor = UIColor(hexCode: "#5A80FD")
             $0.setTitleColor(.white, for: .normal)
             $0.heightAnchor.constraint(equalToConstant: 55).isActive = true
-            $0.addTarget(self, action: #selector(attendButtonDidTapped), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(attendButtonDidTapped(_:)), for: .touchUpInside)
         }
-        
+        if maxParticipants/2 == participants.filter({$0.gender == myGender}).count  {
+            attendButton.backgroundColor = UIColor(hexCode: "A8B1CE")
+            attendButton.isEnabled = false
+            attendButton.setTitle("가득참", for: .normal)
+        }
         
         return [firstStackView, secondStackView, thirdView, attendButton]
         
@@ -190,21 +193,22 @@ extension RoomListViewController {
         }
     }
     
-    @objc func attendButtonDidTapped() {
-        //방이 가득 차있으면 방이 가득차있다는 알림 띄우기
+    @objc func attendButtonDidTapped(_ sender: UIButton) {
         guard let room = self.myViewModel.room else { return }
         let maxParticipants = room.maxParticipants
-        let meetingType = maxParticipants.integerToMeetingType()
-        let participants = room.participants
-        let myGender = testUser.gender
+//        let participants = room.participants
+//        let myGender = testUser.gender
+//        
+//        guard maxParticipants/2 != participants.filter({$0.gender == myGender}).count  else {
+//            sender.backgroundColor = UIColor(hexCode: "A8B1CE")
+//            sender.isEnabled = false
+//            return
+//        }
         
-        guard maxParticipants/2 != participants.filter({$0.gender == myGender}).count  else {
-            let alert = UIAlertController(title: "알림", message: "참여할 수 없는 방입니다.", preferredStyle: .actionSheet)
-            let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
-            alert.addAction(confirm)
-            present(alert, animated: true, completion: nil)
-            return
-        }
+        
+        let meetingType = maxParticipants.integerToMeetingType()
+        
+        
         self.dismiss(animated: true)
     
         var standbyVC: UIViewController?

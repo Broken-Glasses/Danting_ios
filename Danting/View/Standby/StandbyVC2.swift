@@ -131,8 +131,7 @@ final class StandbyVC2: StandbyViewController {
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
-        guard let room = myViewModel.room else { return }
-        let participants = room.participants
+        print("readyready")
         
     }
     
@@ -267,6 +266,7 @@ extension StandbyVC2: StandbyInformation {
         for (index, user) in users.enumerated() where index < nameLabels.count {
             let nameLabel = nameLabels[index]
             nameLabel.text = user.nickName
+            nameLabel.isHidden = false
         }
         
         // 남은 InfoView는 숨김 처리

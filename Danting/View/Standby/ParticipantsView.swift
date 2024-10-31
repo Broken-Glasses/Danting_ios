@@ -28,16 +28,9 @@ final class ParticipantsView: UIView {
         $0.contentMode = .scaleAspectFill
     }
     
-    private lazy var manLabels = [self.man1Label, self.man2Label,
-                                  self.man3Label, self.man4Label]
-    
-    private lazy var girlLabels = [self.girl1Label, self.girl2Label,
-                                  self.girl3Label, self.girl4Label]
-    
     var meetingType: MeetingType? {
         didSet {
-            guard let meetingType = self.meetingType else { return }
-            self.configureUIWithType(meetingType: meetingType)
+            self.configureUIWithType(meetingType: self.meetingType)
         }
     }
     
@@ -55,8 +48,8 @@ final class ParticipantsView: UIView {
 }
 
 extension ParticipantsView {
-    private func configureUIWithType(meetingType: MeetingType) {
-        
+    private func configureUIWithType(meetingType: MeetingType?) {
+        guard let meetingType = meetingType else { return }
         
         switch meetingType {
         case .twoBytwo:
@@ -263,8 +256,8 @@ extension ParticipantsView {
     }
     
     private func settingLabelFontAndTextAttributes() {
-        self.manLabels.forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
-        self.girlLabels.forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
+        [self.man1Label, self.man2Label, self.man3Label, self.man4Label].forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
+        [self.girl1Label, self.girl2Label, self.girl3Label, self.girl4Label].forEach { $0.font = UIFont(name: "Pretendard-Regular", size: 11)}
     }
     
     func setLabelWithAttributedText(for label: UILabel, student_no: String, major: String, colorHex: String) {
@@ -279,6 +272,7 @@ extension ParticipantsView {
         
         label.attributedText = attributedString
     }
+    
     
 }
 

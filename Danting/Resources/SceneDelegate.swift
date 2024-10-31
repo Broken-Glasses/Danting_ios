@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = window
 
         guard let user_id = UserDefaults.standard.string(forKey: "user_id"), !user_id.isEmpty else {
-            setRootViewController(LoginViewController())
+            setRootViewController(RoomListViewController())
             return
         }
         
