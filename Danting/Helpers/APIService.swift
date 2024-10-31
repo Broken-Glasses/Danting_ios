@@ -44,21 +44,19 @@ extension DantingRouter: URLRequestConvertible {
         case .getUser(let user_id):
             return "/users/\(user_id)"
             
-        case .createUser(let nickName, let student_no,
-                         let gender, let major):
+        case .createUser(_, _, _, _):
             return "/users"
             
         case .getRooms:
             return "/rooms"
             
-        case .createRoom(let title, let subTitle,
-                         let user_id, let maxParticipants):
+        case .createRoom(_, _, _, _):
             return "/create"
             
-        case .attendRoom(let room_id, let user_id):
+        case .attendRoom(_, _):
             return "/enter"
             
-        case .ready(let room_id, let user_id):
+        case .ready(_, _):
             return "/ready"
         }
     }

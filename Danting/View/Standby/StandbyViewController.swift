@@ -13,7 +13,6 @@ protocol StandbyInformation {
     func presentInfoView(tag: Int)
 }
 
-
 class StandbyViewController: UIViewController {
 
     private lazy var readyButton = UIButton().then {
@@ -93,14 +92,8 @@ class StandbyViewController: UIViewController {
         
     }
 
-    
-    
-    //MARK: - Action
-    @objc func readyButtonDidTapped(_ sender: UIButton) {
-        //fetchReadyState()
-        // 준비완료시 서버로 상태 전달
-        
-        if sender.currentTitle == "준비" {
+    func configureButtonState(sender: UIButton, isReady: Bool) {
+        if isReady {
             sender.backgroundColor = UIColor(hexCode: "#A8B1CE")
             sender.setTitle("취소", for: .normal)
         } else {
@@ -110,12 +103,12 @@ class StandbyViewController: UIViewController {
         }
     }
     
+    //MARK: - Action
+    @objc func readyButtonDidTapped(_ sender: UIButton) { }
     
     @objc func openKakaoChatting() {
-        print("Debug: opendKakaoChatting")
-        
+        print("Debug: Open Kakao Open Chatting")
     }
-
 }
 
 

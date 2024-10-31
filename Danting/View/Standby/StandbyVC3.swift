@@ -164,11 +164,19 @@ final class StandbyVC3: StandbyViewController {
         // 준비완료시 서버로 상태 전달
     }
     override func readyButtonDidTapped(_ sender: UIButton) {
-        guard let room = myViewModel.room else { return }
-        let participants = room.participants
-        
+        //1안대로 간다면, 준비를 하지 않은 상태에서 준비를 누르면, 바뀐 준비 상태인 isReady == true 의 값을 result로 받음
+        guard let user_id = UserDefaults.standard.string(forKey: "user_id"), !user_id.isEmpty,
+              let room_id = self.myViewModel.room?.room_id else { return }
+        APIService.shared.ready(user_id: Int(user_id) ?? 0, room_id: Int(room_id) ?? 0 ) { response in
+            switch response {
+            case .success(let isReady):
+                print(isReady)
+                self.configureButtonState(sender: sender, isReady: isReady)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
-    
 }
 
 
