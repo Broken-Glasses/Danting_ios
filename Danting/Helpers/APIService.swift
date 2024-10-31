@@ -31,6 +31,9 @@ enum DantingRouter {
 
 
 extension DantingRouter: URLRequestConvertible {
+    
+    
+    
     var baseURL: URL {
         guard let url = URL(string: "https://samplearchitecture-b2897-default-rtdb.firebaseio.com/") else { fatalError("baseURL Error") }
         return url
@@ -57,7 +60,6 @@ extension DantingRouter: URLRequestConvertible {
             
         case .ready(let room_id, let user_id):
             return "/ready"
-                
         }
     }
     
@@ -69,24 +71,24 @@ extension DantingRouter: URLRequestConvertible {
             return .post
         }
     }
-    
-    var parameters: Parameters? {
-        switch self {
-        case .getRooms:
-            return nil
-        case .createRoom(let title, let subTitle, let participants, let maxParticipants):
-            return ["title" : title, "subTitle" : subTitle, "participants" : participants, "maxParticipants" : maxParticipants]
-        case .getUser(let user_id):
-            return ["user_id" : user_id]
-        case .createUser(let nickName, let student_no, let major, let gender):
-            return ["nickName" : nickName, "student_no" : student_no, "major"  : major, "gender" : gender]
-        case .ready(let room_id, let user_id):
-            return ["room_id" : room_id, "user_id" : user_id]
-        case .attendRoom(let room_id, let user_id):
-            return ["room_id" : room_id, "user_id" : user_id]
+        var parameters: Parameters? {
+            switch self {
+            case .getRooms:
+                return nil
+            case .createRoom(let title, let subTitle, let participants, let maxParticipants):
+                return ["title" : title, "subTitle" : subTitle, "participants" : participants, "maxParticipants" : maxParticipants]
+            case .getUser(let user_id):
+                return ["user_id" : user_id]
+            case .createUser(let nickName, let student_no, let major, let gender):
+                return ["nickName" : nickName, "student_no" : student_no, "major"  : major, "gender" : gender]
+            case .ready(let room_id, let user_id):
+                return ["room_id" : room_id, "user_id" : user_id]
+            case .attendRoom(let room_id, let user_id):
+                return ["room_id" : room_id, "user_id" : user_id]
+                
+            }
         }
-    }
-    
+        
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL()
         var urlRequest = URLRequest(url: url.appendingPathComponent(path))
@@ -97,86 +99,86 @@ extension DantingRouter: URLRequestConvertible {
         }
         return urlRequest
     }
-}
+    }
+    
 
-final class APIService {
-    
-    static let shared = APIService()
-    private init() {}
-    
-    //MARK: - GET
-    func getUser(user_id: String, completion: @escaping (Result<User, Error>) -> Void) {
-        AF.request(DantingRouter.getUser(user_id: user_id)).responseDecodable(of: User.self) { response in
-            switch response.result {
-            case .success(let user):
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
+    final class APIService {
+        
+        static let shared = APIService()
+        private init() {}
+        
+        //MARK: - GET
+        func getUser(user_id: String, completion: @escaping (Result<User, Error>) -> Void) {
+            AF.request(DantingRouter.getUser(user_id: user_id)).responseDecodable(of: User.self) { response in
+                switch response.result {
+                case .success(let user):
+                    completion(.success(user))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
-    
-    
-    func getRooms(completion: @escaping(Result<[Room], Error>) -> Void) {
-        AF.request(DantingRouter.getRooms).responseDecodable(of: [Room].self) { response in
-            switch response.result {
-            case .success(let rooms):
-                completion(.success(rooms))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        
+        
+        func getRooms(completion: @escaping(Result<[Room], Error>) -> Void) {
+            AF.request(DantingRouter.getRooms).responseDecodable(of: [Room].self) { response in
+                switch response.result {
+                case .success(let rooms):
+                    completion(.success(rooms))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
-    
-    //MARK: - POST
-   
-    func createUser(nickName: String, student_no: Int, major: String, gender: String, completion: @escaping (Result<User, Error>) -> Void) {
-        AF.request(DantingRouter.createUser(nickName: nickName, student_no: student_no, gender: gender, major: major)).responseDecodable(of: User.self) { response in
-            switch response.result {
-            case .success(let user):
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        
+        //MARK: - POST
+        
+        func createUser(nickName: String, student_no: Int, major: String, gender: String, completion: @escaping (Result<User, Error>) -> Void) {
+            AF.request(DantingRouter.createUser(nickName: nickName, student_no: student_no, gender: gender, major: major)).responseDecodable(of: User.self) { response in
+                switch response.result {
+                case .success(let user):
+                    completion(.success(user))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
-    
-    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<Int, Error>) -> Void) {
-        AF.request(DantingRouter.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max)).responseDecodable(of: Int.self) { response in
-            switch response.result {
-            case .success(let room_id):
-                completion(.success(room_id))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        
+        func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<Int, Error>) -> Void) {
+            AF.request(DantingRouter.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max)).responseDecodable(of: Int.self) { response in
+                switch response.result {
+                case .success(let room_id):
+                    completion(.success(room_id))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
-    func ready(user_id: Int, room_id: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
-        AF.request(DantingRouter.ready(room_id: room_id, user_id: user_id)).responseDecodable(of: Bool.self) { response in
-            switch response.result {
-            case .success(let isReady):
-                completion(.success(isReady))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        func ready(user_id: Int, room_id: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
+            AF.request(DantingRouter.ready(room_id: room_id, user_id: user_id)).responseDecodable(of: Bool.self) { response in
+                switch response.result {
+                case .success(let isReady):
+                    completion(.success(isReady))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
-    func attendRoom(user_id: Int, room_id: Int, completion: @escaping (Result<Int, Error>) -> Void) {
-        AF.request(DantingRouter.attendRoom(room_id: room_id, user_id: user_id)).responseDecodable(of: Int.self) { response in
-            switch response.result {
-            case .success(let room_id):
-                completion(.success(room_id))
-            case .failure(let error):
-                completion(.failure(error))
+        
+        func attendRoom(user_id: Int, room_id: Int, completion: @escaping (Result<Int, Error>) -> Void) {
+            AF.request(DantingRouter.attendRoom(room_id: room_id, user_id: user_id)).responseDecodable(of: Int.self) { response in
+                switch response.result {
+                case .success(let room_id):
+                    completion(.success(room_id))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
-    
     
 }
 
