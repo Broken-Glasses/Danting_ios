@@ -13,6 +13,5 @@ struct User: Codable {
     let gender: String
     let major: String
     var readyState: Bool
-    let user_id: String?
-    
+    let user_id: Int? //없앨 예정
 }

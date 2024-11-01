@@ -72,6 +72,5 @@ extension InfoView {
     func updateWithData(studentID: String, major: String) {
         self.majorLabel.text = major
         self.studentNumLabel.text = studentID
-        
     }
 }

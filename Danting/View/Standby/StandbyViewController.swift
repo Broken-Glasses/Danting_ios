@@ -19,6 +19,7 @@ class StandbyViewController: UIViewController {
     private lazy var readyButton = UIButton().then {
         $0.setTitle("준비", for: .normal)
         $0.setTitleColor(UIColor(hexCode: "#FFFFFF"), for: .normal)
+        
         $0.backgroundColor = UIColor(hexCode: "#5A80FD")
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
@@ -96,7 +97,7 @@ class StandbyViewController: UIViewController {
     
     //MARK: - Action
     @objc func readyButtonDidTapped(_ sender: UIButton) {
-        fetchReadyState()
+        //fetchReadyState()
         // 준비완료시 서버로 상태 전달
         
         if sender.currentTitle == "준비" {
