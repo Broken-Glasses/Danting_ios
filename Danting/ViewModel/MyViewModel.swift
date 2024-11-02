@@ -22,10 +22,11 @@ final class MyViewModel {
     ]
     
     let testMaleUser2: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 1),
+        
         User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 5),
     ]
     let testFemaleUser2: [User] = [
+        User(nickName: "John", student_no: "32190956", gender: "female", major: "기계공학과", readyState: false, user_id: 1),
         User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 68)
     ]
     
@@ -109,17 +110,21 @@ final class MyViewModel {
                                Room(room_id: 5, title: "여기 비쥬얼 연애대상", subTitle: "저희는 외모 안봐요. 성격 좋은 남자분들, 재밌는 남자분들 들어오세욥", maxParticipants: 8, maleParticipants: self.testMaleUser5, femaleParticipants: self.testFemaleUser5),
                                Room(room_id: 6, title: "고인물도 과팅하자", subTitle: "18-21학번까지만 받겠습니다. 고인물도 사랑을 찾고 싶어요", maxParticipants: 6, maleParticipants: self.testMaleUser6, femaleParticipants: self.testFemaleUser6),
                                Room(room_id: 7, title: "이성 친구 만들 사람은 들어와", subTitle: "남고 여고출신이라 이성 친구가 없는 사람 환영해요", maxParticipants: 4, maleParticipants: self.testMaleUser7, femaleParticipants: self.testFemaleUser7),
-                               Room(room_id: 8,  title: "단국 뉴진스 만날사람", subTitle: "유유유유유유유유유~~~ 매그네~~~~릭", maxParticipants: 4, maleParticipants: self.testMaleUser8, femaleParticipants: self.testFemaleUser8)] {
+                               Room(room_id: 8,  title: "단국 뉴진스 만날사람", subTitle: "유유유유유유유유유~~~ 매그네~~~~릭", maxParticipants: 4, maleParticipants: self.testMaleUser8, femaleParticipants: self.testFemaleUser8)] 
+        
+    var room: Room? {
         didSet {
-            
+            guard let room = self.room else { return }
+            didFetchRoom?(room)
         }
     }
-        
-    var room: Room?
     
     
+    var didFetchRoom: ((Room) ->(Void))?
     
     var didFetchRooms: (([Room])->(Void))?
+    
+    
     
     
     func updateCurrentUser(_ currentUser: User) {
@@ -131,12 +136,19 @@ final class MyViewModel {
        
     }
     
-    
-    func postUserInfo() {
+    func fetchRoomInfo() {
+        guard let room = self.room else { return }
+        let apiService = APIService.shared
+        apiService.getRoom(room_id: room.room_id) { response in
+            switch response {
+            case .success(let room):
+                self.room = room
+                
+            case .failure(let error):
+                print("Debug: Error : \(error)")
+            }
+        }
         
     }
-    
-    
-    
     
 }

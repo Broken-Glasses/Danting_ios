@@ -12,97 +12,60 @@ import Then
 
 final class StandbyVC2: StandbyViewController {
     //MARK: - Properties
-    private lazy var firstUserStackView = UIStackView(arrangedSubviews: [firstUserImageButton, firstUserNameLabel]).then {
-        $0.backgroundColor = .clear
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.spacing = 4
-        
-    }
+    private lazy var firstUserStackView = UIStackView(arrangedSubviews: [firstUserImageButton, firstUserNameLabel])
+    private lazy var secondUserStackView = UIStackView(arrangedSubviews: [secondUserImageButton, secondUserNameLabel])
+    private lazy var thirdUserStackView = UIStackView(arrangedSubviews: [thirdUserImageButton, thirdUserNameLabel])
+    private lazy var fourthUserStackView = UIStackView(arrangedSubviews: [fourthUserImageButton, fourthUserNameLabel])
     
-    private lazy var secondUserStackView = UIStackView(arrangedSubviews: [secondUserImageButton, secondUserNameLabel]).then {
-        $0.backgroundColor = .clear
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.spacing = 4
-        
-    }
     
-    private lazy var thirdUserStackView = UIStackView(arrangedSubviews: [thirdUserImageButton, thirdUserNameLabel]).then {
-        $0.backgroundColor = .clear
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.spacing = 4
-        
-    }
-    
-    private lazy var fourthUserStackView = UIStackView(arrangedSubviews: [fourthUserImageButton, fourthUserNameLabel]).then {
-        $0.backgroundColor = .clear
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.spacing = 4
-    }
-    
-    private lazy var firstUserImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "unready.png"), for: .normal)
-        $0.tag = 1
-    }
-    
+
+    private let firstUserImageButton = UIButton()
+    private let secondUserImageButton = UIButton()
+    private let thirdUserImageButton = UIButton()
+    private let fourthUserImageButton = UIButton()
+
     private lazy var firstUserNameLabel = UILabel().then {
         $0.text = "김단국"
         $0.textAlignment = .center
         $0.textColor = UIColor(hexCode: "#404040")
         $0.font = UIFont.systemFont(ofSize: 12)
     }
-    
-    
-    
-    
-    private lazy var secondUserImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "unready.png"), for: .normal)
-        $0.tag = 2
-    }
-    
     private lazy var secondUserNameLabel = UILabel().then {
         $0.text = "김단국"
         $0.textAlignment = .center
         $0.textColor = UIColor(hexCode: "#404040")
         $0.font = UIFont.systemFont(ofSize: 12)
     }
-    
-    private lazy var thirdUserImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "unready.png"), for: .normal)
-        $0.tag = 3
-    }
-    
     private lazy var thirdUserNameLabel = UILabel().then {
         $0.text = "김단국"
         $0.textAlignment = .center
         $0.textColor = UIColor(hexCode: "#404040")
         $0.font = UIFont.systemFont(ofSize: 12)
     }
-    
-    
-    
-    private lazy var fourthUserImageButton = UIButton().then {
-        $0.setImage(UIImage(named: "unready.png"), for: .normal)
-        $0.tag = 4
-    }
-    
     private lazy var fourthUserNameLabel = UILabel().then {
         $0.text = "김단국"
         $0.textAlignment = .center
         $0.textColor = UIColor(hexCode: "#404040")
         $0.font = UIFont.systemFont(ofSize: 12)
     }
+
+    private lazy var firstInfoView = InfoView().then { $0.isHidden = true }
+    private lazy var secondInfoView = InfoView().then { $0.isHidden = true }
+    private lazy var thirdInfoView = InfoView().then { $0.isHidden = true }
+    private lazy var fourthInfoView = InfoView().then { $0.isHidden = true }
     
-    private lazy var buttons = [self.firstUserImageButton, self.secondUserImageButton,
-                                self.thirdUserImageButton, self.fourthUserImageButton]
+    private lazy var maleInfoView = [self.firstInfoView, self.secondInfoView]
+    private lazy var maleNameLabel = [self.firstUserNameLabel, self.secondUserNameLabel]
     
-    lazy var firstInfoView = InfoView().then { $0.isHidden = true }
-    lazy var secondInfoView = InfoView().then { $0.isHidden = true }
-    lazy var thirdInfoView = InfoView().then { $0.isHidden = true }
-    lazy var fourthInfoView = InfoView().then { $0.isHidden = true }
+    private lazy var femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
+    private lazy var femaleNameLabel = [self.thirdUserNameLabel, self.fourthUserNameLabel]
+    
+    private lazy var userStackViews = [self.firstUserStackView, self.secondUserStackView, self.thirdUserStackView, self.fourthUserStackView]
+    
+    
+    private lazy var userImageButtons = [self.firstUserImageButton, self.secondUserImageButton,
+                                         self.thirdUserImageButton, self.fourthUserImageButton]
+        
     
     var myViewModel = MyViewModel() {
         didSet {
@@ -111,10 +74,13 @@ final class StandbyVC2: StandbyViewController {
         }
     }
     
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureStandyVC2()
-        self.settingActionsForImageButton()
+        self.settingUserImageButton()
+        self.settingUserStackView()
+        // 서버로 주기적으로 변경사항을 요청
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,9 +89,9 @@ final class StandbyVC2: StandbyViewController {
     }
 
     
+    //MARK: - Actions
     @objc func userButtonTapped(_ sender: UIButton) {
         self.presentInfoView(tag: sender.tag)
-        // 준비완료시 서버로 상태 전달
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
@@ -144,9 +110,9 @@ final class StandbyVC2: StandbyViewController {
     }
 }
 
-
+//MARK: - StandbyInformation
 extension StandbyVC2: StandbyInformation {
-    
+
     func presentInfoView(tag: Int) {
         switch tag {
         case 1:
@@ -162,12 +128,48 @@ extension StandbyVC2: StandbyInformation {
         }
     }
     
+    private func configureUIWithData(room: Room) {
+        let maleParticipants = room.maleParticipants
+        let femaleParticipants = room.femaleParticipants
 
+        print("Debug: 남성 참가자 == \(maleParticipants)")
+        print("\n")
+        print("Debug: 여성 참가자 == \(femaleParticipants)")
+        
+        self.updateInfoView(infoViews: self.maleInfoView, participants: maleParticipants)
+        self.updateInfoView(infoViews: self.femaleInfoView, participants: femaleParticipants)
+        
+        self.updateUserNameView(nameLabels: self.maleNameLabel, users: maleParticipants)
+        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
+    }
+    
+    private func updateInfoView(infoViews: [InfoView], participants: [User]) {
+        for (index, user) in participants.enumerated() where index < infoViews.count {
+            let infoView = infoViews[index]
+            infoView.isHidden = false
+            infoView.updateWithData(studentID: user.student_no, major: user.major)
+        }
+        
+        for index in participants.count..<infoViews.count {
+            infoViews[index].isHidden = true
+        }
+    }
+    
+    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
+        for (index, user) in users.enumerated() where index < nameLabels.count {
+            let nameLabel = nameLabels[index]
+            nameLabel.text = user.nickName
+            nameLabel.isHidden = false
+        }
+        
+        for index in users.count..<nameLabels.count {
+            nameLabels[index].text = ""
+        }
+    }
+    
     private func configureStandyVC2() {
-        self.view.addSubviews(firstUserStackView, secondUserStackView,
-                              thirdUserStackView, fourthUserStackView,
-                              firstInfoView, secondInfoView,
-                              thirdInfoView, fourthInfoView)
+        self.view.addSubviews(firstUserStackView, secondUserStackView, thirdUserStackView, fourthUserStackView,
+                              firstInfoView, secondInfoView, thirdInfoView, fourthInfoView)
         
         self.firstUserStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(55)
@@ -222,9 +224,25 @@ extension StandbyVC2: StandbyInformation {
         }
         
     }
-    private func settingActionsForImageButton() {
-        self.buttons.forEach {
-            $0.addTarget(self, action: #selector(userButtonTapped(_:)), for: .touchUpInside)
+    
+    private func settingUserImageButton() {
+        
+        for (index, button) in self.userImageButtons.enumerated() {
+            button.addTarget(self, action: #selector(userButtonTapped(_:)), for: .touchUpInside)
+            button.setImage(UIImage(named: "unready.png"), for: .normal)
+            button.tag = index + 1
+        }
+        
+    }
+    
+    
+    
+    private func settingUserStackView() {
+        self.userStackViews.forEach {
+            $0.backgroundColor = .clear
+            $0.axis = .vertical
+            $0.distribution = .fill
+            $0.spacing = 4
         }
     }
     
@@ -234,50 +252,4 @@ extension StandbyVC2: StandbyInformation {
         self.thirdInfoView.roundCorners(topRight: 25, bottomLeft: 25.5, bottomRight: 25)
         self.fourthInfoView.roundCorners(topLeft: 25, bottomLeft: 25 ,bottomRight: 25.5)
     }
-    
-    private func configureUIWithData(room: Room) {
-        let males = room.maleParticipants
-        let females = room.femaleParticipants
-        
-        let maleInfoView = [self.firstInfoView, self.secondInfoView]
-        let femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
-        
-        let maleNameView = [self.firstUserNameLabel, self.secondUserNameLabel]
-        let femaleNameView = [self.thirdUserNameLabel, self.fourthUserNameLabel]
-        
-        updateInfoView(infoViews: maleInfoView, users: males)
-        updateInfoView(infoViews: femaleInfoView, users: females)
-        
-        updateUserNameView(nameLabels: maleNameView, users: males)
-        updateUserNameView(nameLabels: femaleNameView, users: females)
-    }
-    
-    private func updateInfoView(infoViews: [InfoView], users: [User]) {
-        // InfoView와 users의 개수만큼 업데이트
-        for (index, user) in users.enumerated() where index < infoViews.count {
-            let infoView = infoViews[index]
-            infoView.isHidden = false
-            infoView.updateWithData(studentID: user.student_no, major: user.major)
-        }
-        
-        // 남은 InfoView는 숨김 처리
-        for index in users.count..<infoViews.count {
-            infoViews[index].isHidden = true
-        }
-    }
-    
-    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
-        // InfoView와 users의 개수만큼 업데이트
-        for (index, user) in users.enumerated() where index < nameLabels.count {
-            let nameLabel = nameLabels[index]
-            nameLabel.text = user.nickName
-            nameLabel.isHidden = false
-        }
-        
-        // 남은 InfoView는 숨김 처리
-        for index in users.count..<nameLabels.count {
-            nameLabels[index].text = ""
-        }
-    }
-    
 }

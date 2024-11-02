@@ -173,8 +173,6 @@ extension RoomListViewController {
         
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
         participantsView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
-        let maxParticipants = room.maxParticipants
-        let myGender = testUser.gender
         
 
         
@@ -206,38 +204,41 @@ extension RoomListViewController {
     }
     
     @objc func attendButtonDidTapped(_ sender: UIButton) {
-        guard let room = self.myViewModel.room,
-              let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int else { return }
+        guard let room = self.myViewModel.room
+                //,let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int
+        else { return }
         let maxParticipants = room.maxParticipants
         let meetingType = maxParticipants.integerToMeetingType()
         let room_id = room.room_id
-        let apiService = APIService.shared
-        apiService.attendRoom(user_id: user_id, room_id: room_id) { response in
-            switch response {
-            case .success(let room_id):
-                print("Debug: Room ID: \(room_id)")
-                self.dismiss(animated: true)
-                
-                apiService.getRoom(room_id: room.room_id) { response in
-                    switch response {
-                    case .success(let room):
-                        self.myViewModel.room = room
-                        self.pushStandbyVC(meetingType: meetingType)
-                    case.failure(let error):
-                        print("Debug: Error :\(error)")
-                    }
-                }
-                
-            case .failure(let error):
-                self.dismiss(animated: true)
-                print("Debug: There is no place to attend")
-                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
-                let confirm = UIAlertAction(title: "확인", style: .default)
-                alert.addAction(confirm)
-                self.present(alert, animated: true)
-                print("Error: \(error)")
-            }
-        }
+        self.dismiss(animated: true)
+        self.pushStandbyVC(meetingType: meetingType)
+//        let apiService = APIService.shared
+//        apiService.attendRoom(user_id: user_id, room_id: room_id) { response in
+//            switch response {
+//            case .success(let room_id):
+//                print("Debug: Room ID: \(room_id)")
+//                self.dismiss(animated: true)
+//                
+//                apiService.getRoom(room_id: room.room_id) { response in
+//                    switch response {
+//                    case .success(let room):
+//                        self.myViewModel.room = room
+//                        self.pushStandbyVC(meetingType: meetingType)
+//                    case.failure(let error):
+//                        print("Debug: Error :\(error)")
+//                    }
+//                }
+//                
+//            case .failure(let error):
+//                self.dismiss(animated: true)
+//                print("Debug: There is no place to attend")
+//                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
+//                let confirm = UIAlertAction(title: "확인", style: .default)
+//                alert.addAction(confirm)
+//                self.present(alert, animated: true)
+//                print("Error: \(error)")
+//            }
+//        }
     }
     
     private func pushStandbyVC(meetingType: MeetingType) {
