@@ -8,10 +8,11 @@
 import UIKit
 
 struct Room: Codable {
-    let room_id: String // room_id는 생성할 때, 서버에 던져주기?
+    let room_id: Int
     let title: String
     let subTitle: String
-    var participants: [User]
     let maxParticipants: Int
-    
+    var maleParticipants: [User]
+    var femaleParticipants: [User]
+    var isReady: Bool = false
 }

@@ -46,7 +46,10 @@ final class RoomListViewController: UIViewController {
         apiService.getRooms { response in
             switch response {
             case .success(let rooms):
-                self.myViewModel.roomList = rooms
+                self.myViewModel.rooms = rooms
+                DispatchQueue.main.async {
+                    self.roomListTableView.reloadData()
+                }
             case .failure(let error):
                 print(error)
             }
@@ -62,7 +65,7 @@ final class RoomListViewController: UIViewController {
 
 extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let roomlist = self.myViewModel.roomList else { return 0 }
+        guard let roomlist = self.myViewModel.rooms else { return 0 }
         return roomlist.count
     }
     
@@ -70,20 +73,20 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         //prepareForReuse 사용하기
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoomItemCell", for: indexPath) as! RoomItemCell
         cell.selectionStyle = .none
-        guard let roomList = self.myViewModel.roomList else { return cell }
-        let room = roomList[indexPath.row]
+        guard let rooms = self.myViewModel.rooms else { return cell }
+        let room = rooms[indexPath.row]
         let maxParticipants = room.maxParticipants
         cell.roomItemView.titleLabel.text = room.title
         cell.roomItemView.subtitleLabel.text = room.subTitle
-        cell.roomItemView.blueHeartLabel.text = String(room.participants.filter{$0.gender == "male"}.count) + "/" + String(maxParticipants/2)
-        cell.roomItemView.redHeartLabel.text = String(room.participants.filter{$0.gender == "female"}.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.blueHeartLabel.text = String(room.maleParticipants.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.redHeartLabel.text = String(room.femaleParticipants.count) + "/" + String(maxParticipants/2)
 
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let roomList = self.myViewModel.roomList else { return }
+        guard let roomList = self.myViewModel.rooms else { return }
         let room = roomList[indexPath.row]
         self.myViewModel.room = room
         let views = self.generateViewsForRoomListPopupVC(room: room)
@@ -163,17 +166,17 @@ extension RoomListViewController {
         }
 
                 
-        lazy var thirdView = ParticipantsView()
-        thirdView.participants = room.participants
-        thirdView.meetingType = meetingType
+        lazy var participantsView = ParticipantsView()
+        participantsView.maleParticipants = room.maleParticipants
+        participantsView.femaleParticipants = room.femaleParticipants
+        participantsView.meetingType = meetingType
         
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
-        thirdView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
+        participantsView.heightAnchor.constraint(equalToConstant: heightValue).isActive = true
         let maxParticipants = room.maxParticipants
-        let participants = room.participants
         let myGender = testUser.gender
         
-       
+
         
         lazy var attendButton = UIButton().then {
             $0.setTitle("참가하기", for: .normal)
@@ -185,13 +188,9 @@ extension RoomListViewController {
             $0.heightAnchor.constraint(equalToConstant: 55).isActive = true
             $0.addTarget(self, action: #selector(attendButtonDidTapped(_:)), for: .touchUpInside)
         }
-        if maxParticipants/2 == participants.filter({$0.gender == myGender}).count  {
-            attendButton.backgroundColor = UIColor(hexCode: "A8B1CE")
-            attendButton.isEnabled = false
-            attendButton.setTitle("가득참", for: .normal)
-        }
+
         
-        return [firstStackView, secondStackView, thirdView, attendButton]
+        return [firstStackView, secondStackView, participantsView, attendButton]
         
     }
     
@@ -207,46 +206,58 @@ extension RoomListViewController {
     }
     
     @objc func attendButtonDidTapped(_ sender: UIButton) {
-        guard let room = self.myViewModel.room else { return }
+        guard let room = self.myViewModel.room,
+              let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int else { return }
         let maxParticipants = room.maxParticipants
-//        let participants = room.participants
-//        let myGender = testUser.gender
-//        
-//        guard maxParticipants/2 != participants.filter({$0.gender == myGender}).count  else {
-//            sender.backgroundColor = UIColor(hexCode: "A8B1CE")
-//            sender.isEnabled = false
-//            return
-//        }
-        
-        
         let meetingType = maxParticipants.integerToMeetingType()
-        
-        
-        self.dismiss(animated: true)
+        let room_id = room.room_id
+        let apiService = APIService.shared
+        apiService.attendRoom(user_id: user_id, room_id: room_id) { response in
+            switch response {
+            case .success(let room_id):
+                print("Debug: Room ID: \(room_id)")
+                self.dismiss(animated: true)
+                
+                apiService.getRoom(room_id: room.room_id) { response in
+                    switch response {
+                    case .success(let room):
+                        self.myViewModel.room = room
+                        self.pushStandbyVC(meetingType: meetingType)
+                    case.failure(let error):
+                        print("Debug: Error :\(error)")
+                    }
+                }
+                
+            case .failure(let error):
+                self.dismiss(animated: true)
+                print("Debug: There is no place to attend")
+                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
+                let confirm = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(confirm)
+                self.present(alert, animated: true)
+                print("Error: \(error)")
+            }
+        }
+    }
     
+    private func pushStandbyVC(meetingType: MeetingType) {
         var standbyVC: UIViewController?
         
         switch meetingType {
         case .twoBytwo:
             let standbyVC2 = StandbyVC2()
-            self.myViewModel.room?.participants.append(testUser)
             standbyVC2.myViewModel = self.myViewModel
             standbyVC = standbyVC2
         case .threeBythree:
             let standbyVC3 = StandbyVC3()
-            self.myViewModel.room?.participants.append(testUser)
             standbyVC3.myViewModel = self.myViewModel
             standbyVC = standbyVC3
         case .fourByfour:
             let standbyVC4 = StandbyVC4()
-            self.myViewModel.room?.participants.append(testUser)
             standbyVC4.myViewModel = self.myViewModel
             standbyVC = standbyVC4
         }
         
         self.navigationController?.pushViewController(standbyVC!, animated: true)
-        
     }
-    
-    
 }

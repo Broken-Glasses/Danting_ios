@@ -34,7 +34,8 @@ final class ParticipantsView: UIView {
         }
     }
     
-    var participants: [User?]?
+    var maleParticipants: [User]?
+    var femaleParticipants: [User]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -95,21 +96,19 @@ extension ParticipantsView {
             $0.height.equalTo(18)
             $0.top.equalTo(man1Label.snp.bottom).offset(-11)
         }
-        
-        guard let participants = self.participants else { return }
-        
-        let males = participants.filter{$0?.gender == "male"}
-        let females = participants.filter{$0?.gender == "female"}
+                
+        guard let males = self.maleParticipants,
+              let females = self.femaleParticipants else { return }
         
         let manLabels: [UILabel] = [man1Label, man2Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male.student_no, major: male.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female.student_no, major: female.major, colorHex: "FF80A5")
         }
     }
     
@@ -160,19 +159,18 @@ extension ParticipantsView {
             $0.height.equalTo(18)
         }
         
-        guard let participants = self.participants else { return }
-        let males = participants.filter{$0?.gender == "male"}
-        let females = participants.filter{$0?.gender == "female"}
+        guard let males = self.maleParticipants,
+              let females = self.femaleParticipants else { return }
         
         let manLabels: [UILabel] = [man1Label, man2Label, man3Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male.student_no, major: male.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female.student_no, major: female.major, colorHex: "FF80A5")
         }
     }
     
@@ -237,19 +235,18 @@ extension ParticipantsView {
             $0.height.equalTo(22)
         }
         
-        guard let participants = self.participants else { return }
-        let males = participants.filter{$0?.gender == "male"}
-        let females = participants.filter{$0?.gender == "female"}
+        guard let males = self.maleParticipants,
+              let females = self.femaleParticipants else { return }
  
         let manLabels: [UILabel] = [man1Label, man2Label, man3Label, man4Label]
         let girlLabels: [UILabel] = [girl1Label, girl2Label, girl3Label, girl4Label]
 
         for (index, male) in males.prefix(manLabels.count).enumerated() {
-            setLabelWithAttributedText(for: manLabels[index], student_no: male!.student_no, major: male!.major, colorHex: "5A80FD")
+            setLabelWithAttributedText(for: manLabels[index], student_no: male.student_no, major: male.major, colorHex: "5A80FD")
         }
 
         for (index, female) in females.prefix(girlLabels.count).enumerated() {
-            setLabelWithAttributedText(for: girlLabels[index], student_no: female!.student_no, major: female!.major, colorHex: "FF80A5")
+            setLabelWithAttributedText(for: girlLabels[index], student_no: female.student_no, major: female.major, colorHex: "FF80A5")
         }
         
         

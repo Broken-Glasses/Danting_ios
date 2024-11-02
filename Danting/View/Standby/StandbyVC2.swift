@@ -70,8 +70,6 @@ final class StandbyVC2: StandbyViewController {
         $0.font = UIFont.systemFont(ofSize: 12)
     }
     
-    
-    
     private lazy var thirdUserImageButton = UIButton().then {
         $0.setImage(UIImage(named: "unready.png"), for: .normal)
         $0.tag = 3
@@ -132,9 +130,9 @@ final class StandbyVC2: StandbyViewController {
     
     override func readyButtonDidTapped(_ sender: UIButton) {
         //1안대로 간다면, 준비를 하지 않은 상태에서 준비를 누르면, 바뀐 준비 상태인 isReady == true 의 값을 result로 받음
-        guard let user_id = UserDefaults.standard.string(forKey: "user_id"), !user_id.isEmpty,
+        guard let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int,
               let room_id = self.myViewModel.room?.room_id else { return }
-        APIService.shared.ready(user_id: Int(user_id) ?? 0, room_id: Int(room_id) ?? 0 ) { response in
+        APIService.shared.ready(user_id:user_id, room_id: room_id ) { response in
             switch response {
             case .success(let isReady):
                 print(isReady)
@@ -238,9 +236,8 @@ extension StandbyVC2: StandbyInformation {
     }
     
     private func configureUIWithData(room: Room) {
-        let participants = room.participants
-        let males = participants.filter{$0.gender == "male"}
-        let females = participants.filter{$0.gender == "female"}
+        let males = room.maleParticipants
+        let females = room.femaleParticipants
         
         let maleInfoView = [self.firstInfoView, self.secondInfoView]
         let femaleInfoView = [self.thirdInfoView, self.fourthInfoView]
