@@ -38,7 +38,7 @@ final class LoginViewController: UIViewController {
     }
     
     private lazy var nickNameTextField = UITextField().then {
-        $0.placeholder = "닉네임을 입력해주세요."
+//        $0.placeholder = "닉네임을 입력해주세요."
         $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         $0.leftViewMode = .always
         $0.backgroundColor = .white
@@ -47,6 +47,12 @@ final class LoginViewController: UIViewController {
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
         $0.delegate = self
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 16)! // Note the !
+        ]
+        $0.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        $0.attributedPlaceholder = NSAttributedString(string: "   닉네임을 입력해주세요.", attributes:attributes)
         $0.clearButtonMode = .whileEditing // 편집 중에 지우기 버튼 표시
     }
     
@@ -54,7 +60,8 @@ final class LoginViewController: UIViewController {
         $0.setTitle("확인", for: .normal)
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.backgroundColor = UIColor(hexCode: "5A80FD")
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor(hexCode: "A8B1CE")
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
     }
@@ -63,9 +70,55 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         self.activateBackgroundGradient()
         self.configureLoginVC()
+        self.setupKeyboardObservers()
+        self.addGesture()
     }
     
-   
+    
+    //MARK: - Actions
+    
+    // 키보드가 올라올 때 호출되는 메서드
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+           let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            let keyboardHeight = keyboardFrame.height
+            
+            UIView.animate(withDuration: duration) {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -keyboardHeight / 2) // 필요한 만큼 위치 조정
+            }
+        }
+    }
+    
+    // 키보드가 내려갈 때 호출되는 메서드
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            UIView.animate(withDuration: duration) {
+                self.view.transform = .identity // 뷰를 원래 위치로 되돌림
+            }
+        }
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
+    }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        // 텍스트 필드의 텍스트 길이를 체크하고 버튼 활성화
+        if let text = textField.text {
+            // 10글자 이하인지 확인
+            if text.count > 10 {
+                // 10글자 초과 시 마지막 문자 제거
+                textField.text = String(text.prefix(10))
+            }
+            // 입력값이 있으면 버튼 활성화
+            nickNameConfirmButton.isEnabled = !text.isEmpty
+            nickNameConfirmButton.backgroundColor = UIColor(hexCode: "5A80FD")
+        }
+    }
+       
+    deinit {
+        NotificationCenter.default.removeObserver(self) // 옵저버 해제
+    }
 }
 extension LoginViewController: UITextFieldDelegate {
     //텍스트 필드 관련 메서드는 여기에
@@ -137,8 +190,21 @@ extension LoginViewController {
             $0.centerX.equalToSuperview()
 
         }
-      
+    }
+    
+    private func setupKeyboardObservers() {
+        // 키보드가 올라올 때의 노티피케이션 옵저버
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        // 키보드가 내려갈 때의 노티피케이션 옵저버
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func addGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
         
 
     }
+    
 }
