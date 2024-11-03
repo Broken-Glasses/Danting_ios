@@ -85,6 +85,9 @@ final class StandbyVC3: StandbyViewController {
                                          self.fourthUserImageButton,self.fifthUserImageButton, self.sixthUserImageButton]
    
 
+    private var refreshTimer: Timer?
+    private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
+    
     var myViewModel = MyViewModel() {
         didSet {
             guard let room = self.myViewModel.room else { return }
@@ -106,9 +109,29 @@ final class StandbyVC3: StandbyViewController {
         self.settingCornerRadiusForInfoView()
     }
     
+    //MARK: - Helpers
+    private func updateUI() {
+        refreshTimer = Timer.scheduledTimer(timeInterval: interval, target: self,
+                                            selector: #selector(fetchDataAndRefresh),
+                                            userInfo: nil, repeats: true)
+    }
+    
     //MARK: - Actions
     @objc func userButtonTapped(_ sender: UIButton) {
         self.presentInfoView(tag: sender.tag)
+    }
+    
+    @objc func fetchDataAndRefresh() {
+        guard let room = myViewModel.room else { return }
+        APIService.shared.getRoom(room_id: room.room_id) { response in
+            switch response {
+            case .success(let room):
+                // 받은 데이터를 사용하여 화면 갱신
+                self.configureUIWithData(room: room)
+            case .failure(let error):
+                print("Failed to fetch data: \(error)")
+            }
+        }
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
