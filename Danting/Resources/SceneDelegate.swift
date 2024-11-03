@@ -15,18 +15,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        window = UIWindow(windowScene: windowScene)
+        
+        // SplashViewController를 먼저 표시
+        let splashVC = SplashViewController()
+        window?.rootViewController = splashVC
+        window?.makeKeyAndVisible()
+        
+        // 2초 후에 user_id 확인하여 애니메이션과 함께 화면 전환
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
             
-        let window = UIWindow(windowScene: windowScene)
-
-        let rootViewController: UIViewController = PersonInfoViewController()
-        
-        let navigationController = UINavigationController(rootViewController: rootViewController)
-        
-        window.rootViewController = navigationController
-        self.window = window
-//        window?.rootViewController = StandbyViewController()
-        window.makeKeyAndVisible()
-
+            let nextViewController: UIViewController
+            if let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int {
+                // user_id가 있는 경우 RoomListController로 이동
+                nextViewController = UINavigationController(rootViewController: RoomListViewController())
+            } else {
+                // user_id가 없는 경우 LogInController로 이동
+                nextViewController = LoginViewController()
+            }
+            
+            // 애니메이션 적용하여 화면 전환
+            UIView.transition(with: self.window!,
+                              duration: 0.5,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.window?.rootViewController = nextViewController
+            }, completion: nil)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

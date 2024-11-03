@@ -62,12 +62,10 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.activateBackgroundGradient()
-        self.configureLoginUI()
+        self.configureLoginVC()
     }
     
-    
-    
-    
+   
 }
 extension LoginViewController: UITextFieldDelegate {
     //텍스트 필드 관련 메서드는 여기에
@@ -78,11 +76,30 @@ extension LoginViewController: UITextFieldDelegate {
 
 
 extension LoginViewController {
+    private func activateBackgroundGradient() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.view.bounds
+        let topColor = UIColor(hexCode: "#5A80FD").cgColor
+        let bottomColor = UIColor(hexCode: "CEDEFF").cgColor
+        let colors: [CGColor] = [topColor, bottomColor]
+        
+        gradientLayer.colors = colors
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+
+        
+        self.view.layer.addSublayer(gradientLayer)
+
+    }
     
     
-    private func configureLoginUI() {
-        self.view.addSubviews(self.logoImageView, self.topLabel, self.logInLabel,
-                              self.bottomLabel, self.nickNameTextField,
+    
+    private func configureLoginVC() {
+        self.view.addSubviews(
+                              self.logoImageView, self.topLabel,
+                              self.logInLabel,
+                              self.bottomLabel,
+                              self.nickNameTextField,
                               self.nickNameConfirmButton)
         
         self.logoImageView.snp.makeConstraints{ (make) in
@@ -118,27 +135,10 @@ extension LoginViewController {
         self.bottomLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(752)
             $0.centerX.equalToSuperview()
-            
+
         }
       
         
 
-    }
-    
-    
-    private func activateBackgroundGradient() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.view.bounds
-        let topColor = UIColor(hexCode: "#5A80FD").cgColor
-        let bottomColor = UIColor(hexCode: "CEDEFF").cgColor
-        let colors: [CGColor] = [topColor, bottomColor]
-        
-        gradientLayer.colors = colors
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-        
-        
-        self.view.layer.addSublayer(gradientLayer)
-        
     }
 }
