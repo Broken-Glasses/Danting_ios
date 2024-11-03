@@ -56,7 +56,7 @@ final class LoginViewController: UIViewController {
         $0.clearButtonMode = .whileEditing // 편집 중에 지우기 버튼 표시
     }
     
-    private let nickNameConfirmButton = UIButton().then {
+    private lazy var nickNameConfirmButton = UIButton().then {
         $0.setTitle("확인", for: .normal)
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
@@ -64,7 +64,13 @@ final class LoginViewController: UIViewController {
         $0.backgroundColor = UIColor(hexCode: "A8B1CE")
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
+        $0.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
     }
+    
+    
+    
+    
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +78,19 @@ final class LoginViewController: UIViewController {
         self.configureLoginVC()
         self.setupKeyboardObservers()
         self.addGesture()
+//        self.setupNavigationBar()
     }
     
     
     //MARK: - Actions
+    @objc func confirmButtonDidTapped() {
+        print("Debug: Confirm Button did Tapped")
+        self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
+        let personInfoVC = PersonInfoViewController()
+        personInfoVC.nickName = self.nickNameTextField.text
+        self.navigationController?.pushViewController(personInfoVC, animated: true)
+    }
+    
     
     // 키보드가 올라올 때 호출되는 메서드
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -145,7 +160,16 @@ extension LoginViewController {
 
     }
     
-    
+    func setupNavigationBar() {
+        guard let navigationController = navigationController else { return }
+        
+        // 네비게이션 바를 투명하게 설정
+        navigationController.navigationBar.isTranslucent = true
+        navigationController.navigationBar.barTintColor = .clear // 배경 색상 설정
+        navigationController.navigationBar.backgroundColor = .clear // 추가로 배경 색상 설정
+        navigationController.navigationBar.tintColor = .systemBlue // 버튼 색상 설정
+        navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.label] // 제목 텍스트 색상 설정
+    }
     
     private func configureLoginVC() {
         self.view.addSubviews(

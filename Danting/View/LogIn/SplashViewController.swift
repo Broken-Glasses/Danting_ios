@@ -125,7 +125,7 @@ extension SplashViewController {
         DispatchQueue.main.asyncAfter(deadline: .now()) { // 약간의 딜레이를 줄 수도 있음
             self.topConstraint.update(offset: 235) // top 제약 조건 변경
             
-            UIView.animate(withDuration: 2.0, animations: {
+            UIView.animate(withDuration: 1.5, animations: {
                 self.view.layoutIfNeeded() // 레이아웃 업데이트를 애니메이션화
             })
         }

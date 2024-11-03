@@ -48,7 +48,7 @@ final class RegisterRoomVC: UIViewController {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.borderColor = (UIColor(hexCode: "5A80FD") ?? .systemBlue).cgColor
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
         $0.layer.borderWidth = 1
     }
     
@@ -59,7 +59,7 @@ final class RegisterRoomVC: UIViewController {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
-        $0.layer.borderColor = (UIColor(hexCode: "5A80FD") ?? .systemBlue).cgColor
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
         $0.layer.borderWidth = 1
         
     }

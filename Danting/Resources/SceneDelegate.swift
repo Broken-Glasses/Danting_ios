@@ -23,17 +23,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = splashVC
         window?.makeKeyAndVisible()
         
+        let logInVC = LoginViewController()
+        let logInNav = UINavigationController(rootViewController: logInVC)
+        let roomListVC = UINavigationController(rootViewController: RoomListViewController())
+
+        logInNav.navigationBar.isHidden = false
+        logInNav.navigationBar.setBackgroundImage(UIImage(), for: .default) // 배경 이미지 제거
+        logInNav.navigationBar.shadowImage = UIImage() // 그림자 제거
+        logInVC.setupNavigationBar()
         // 2초 후에 user_id 확인하여 애니메이션과 함께 화면 전환
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             guard let self = self else { return }
             
             let nextViewController: UIViewController
-            if let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int {
+            if UserDefaults.standard.value(forKey: "user_id") is Int {
                 // user_id가 있는 경우 RoomListController로 이동
-                nextViewController = UINavigationController(rootViewController: RoomListViewController())
+                nextViewController = roomListVC
             } else {
                 // user_id가 없는 경우 LogInController로 이동
-                nextViewController = LoginViewController()
+                
+                nextViewController = logInNav
             }
             
             // 애니메이션 적용하여 화면 전환

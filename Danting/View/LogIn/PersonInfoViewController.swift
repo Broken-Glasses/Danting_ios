@@ -24,8 +24,8 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.textColor = .black
     }
     
-    private let personIDField = UITextField().then {
-        $0.placeholder = "학번을 입력해주세요. ex)32190111"
+    private lazy var personIDField = UITextField().then {
+//        $0.placeholder = "학번을 입력해주세요. ex)32190111"
         $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         $0.leftViewMode = .always
         $0.backgroundColor = .white
@@ -33,10 +33,16 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
+        
+        $0.delegate = self
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)! // Note the !
+        ]
+        $0.attributedPlaceholder = NSAttributedString(string: " 학번을 입력해주세요. ex)32190111", attributes:attributes)
     }
     
-    private let personMajorField = UITextField().then {
-        $0.placeholder = "학과를 선택해주세요"
+    private lazy var personMajorField = UITextField().then {
         $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         $0.leftViewMode = .always
         $0.backgroundColor = .white
@@ -44,6 +50,12 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
+        $0.delegate = self
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)! // Note the !
+        ]
+        $0.attributedPlaceholder = NSAttributedString(string: " 학과를 선택해주세요", attributes:attributes)
     }
     
     private let majorPicker = UIPickerView()
@@ -68,6 +80,11 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
                           "치의예과", "치의학과",
                           "약학과"]
 
+    var nickName: String?
+    
+    let myViewModel = MyViewModel()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -78,6 +95,11 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         majorPicker.dataSource = self
         personMajorField.inputView = majorPicker // 텍스트 필드에 picker 뷰를 input으로 설정
     }
+}
+
+
+extension PersonInfoViewController: UITextFieldDelegate {
+    
 }
 
 extension PersonInfoViewController {
@@ -132,3 +154,6 @@ extension PersonInfoViewController {
         personMajorField.resignFirstResponder() // picker 뷰 닫기
     }
 }
+
+
+
