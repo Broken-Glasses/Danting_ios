@@ -183,6 +183,15 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         }
         personMajorField.rightViewMode = .always
 
+        // 키보드 이벤트 옵저버 추가
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+            
+        deinit {
+            // 옵저버 제거
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -210,6 +219,41 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
             femaleButton.setTitleColor(.black, for: .normal)
             maleButton.backgroundColor = .white
             maleButton.setTitleColor(.black, for: .normal)
+            }
+        }
+    
+    // 키보드 나타날 때 호출되는 메서드
+    @objc func handleKeyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let keyboardHeight = keyboardFrame.height
+            
+        // 버튼 위치 변경
+        personInfoConfirmButton.snp.remakeConstraints { make in
+            make.top.equalTo(self.personGenderLabel.snp.bottom).offset(39)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(55)
+        }
+        
+        // 레이아웃 갱신
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
+            
+    // 키보드 사라질 때 호출되는 메서드
+    @objc func handleKeyboardWillHide(notification: Notification) {
+        // 버튼 위치 원래대로 복구
+        personInfoConfirmButton.snp.remakeConstraints { make in
+          make.top.equalTo(self.personMajorField.snp.bottom).offset(351)
+          make.leading.equalToSuperview().offset(16)
+          make.trailing.equalToSuperview().inset(16)
+          make.height.equalTo(55)
+        }
+                
+        // 레이아웃 갱신
+            UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
             }
         }
 }
