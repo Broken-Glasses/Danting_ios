@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 
-final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     private let dantingLogoLabel = UILabel().then {
         $0.text = "DANTING"
@@ -31,39 +31,35 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.textColor = .black
     }
     
-    private lazy var personIDField = UITextField().then {
-//        $0.placeholder = "학번을 입력해주세요. ex)32190111"
-        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-        $0.leftViewMode = .always
-        $0.backgroundColor = .white
-        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 10
-        $0.clipsToBounds = true
+    private let personIDField = UITextField().then {
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+            $0.leftViewMode = .always
+            $0.backgroundColor = .white
+            $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 10
+            $0.clipsToBounds = true
+            let attributes = [
+                NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
+            ]
+            $0.attributedPlaceholder = NSAttributedString(string: " 학번을 입력해주세요. ex)32190111", attributes:attributes)
+        }
         
-        $0.delegate = self
-        let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
-            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)! // Note the !
-        ]
-        $0.attributedPlaceholder = NSAttributedString(string: " 학번을 입력해주세요. ex)32190111", attributes:attributes)
-    }
-    
-    private lazy var personMajorField = UITextField().then {
-        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-        $0.leftViewMode = .always
-        $0.backgroundColor = .white
-        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 10
-        $0.clipsToBounds = true
-        $0.delegate = self
-        let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
-            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)! // Note the !
-        ]
-        $0.attributedPlaceholder = NSAttributedString(string: " 학과를 선택해주세요", attributes:attributes)
-    }
+        private let personMajorField = UITextField().then {
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+            $0.leftViewMode = .always
+            $0.backgroundColor = .white
+            $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 10
+            $0.clipsToBounds = true
+            let attributes = [
+                NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+                NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
+            ]
+            $0.attributedPlaceholder = NSAttributedString(string: " 학과를 선택해주세요", attributes:attributes)
+        }
     
     private let majorPicker = UIPickerView()
     
@@ -135,6 +131,14 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         majorPicker.delegate = self
         majorPicker.dataSource = self
         personMajorField.inputView = majorPicker // 텍스트 필드에 picker 뷰를 input으로 설정
+        
+        personIDField.delegate = self
+        personMajorField.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        personIDField.becomeFirstResponder() // personIDField에 키보드 표시
     }
     
     //MARK: - Actions
@@ -147,9 +151,6 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
 }
 
 
-extension PersonInfoViewController: UITextFieldDelegate {
-    
-}
 
 extension PersonInfoViewController {
     private func configurePersonInfoUI() {
