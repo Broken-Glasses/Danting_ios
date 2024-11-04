@@ -199,7 +199,12 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         personIDField.becomeFirstResponder() // personIDField에 키보드 표시
     }
     
-    //MARK: - Actions
+    // 상태 변수 추가
+    private var isIDValid = false
+    private var isMajorSelected = false
+    private var isGenderSelected = false
+
+    // confirmButtonDidTapped 메서드의 기존 부분 수정
     @objc func confirmButtonDidTapped() {
         print("Debug: Confirm Button did Tapped")
         self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
@@ -207,20 +212,23 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         self.navigationController?.pushViewController(registerRoomVC, animated: true)
     }
     
-    // 성별 버튼 클릭 시 호출되는 메서드
+    // genderButtonTapped 메서드 수정
     @objc func genderButtonTapped(_ sender: UIButton) {
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             maleButton.setTitleColor(.black, for: .normal)
             femaleButton.backgroundColor = .white
             femaleButton.setTitleColor(.black, for: .normal)
+            isGenderSelected = true // 성별 선택 상태 업데이트
         } else {
             femaleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             femaleButton.setTitleColor(.black, for: .normal)
             maleButton.backgroundColor = .white
             maleButton.setTitleColor(.black, for: .normal)
-            }
+            isGenderSelected = true // 성별 선택 상태 업데이트
         }
+        updateConfirmButtonState() // 상태 업데이트
+    }
     
     // 키보드 나타날 때 호출되는 메서드
     @objc func handleKeyboardWillShow(notification: Notification) {
@@ -327,35 +335,52 @@ extension PersonInfoViewController {
         return majors.count
     }
     
-    // UIPickerViewDelegate
+    //
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         personMajorField.text = majors[row]
         personMajorCheckmarkImageView.isHidden = false
         personMajorXmarkImageView.isHidden = true
+        isMajorSelected = true // 전공 선택 상태 업데이트
         personMajorField.resignFirstResponder()
+        updateConfirmButtonState() // 상태 업데이트
         return majors[row]
     }
 
-    // UITextFieldDelegate
+    // 상태를 체크하고 버튼 색상 업데이트하는 메서드 추가
+    private func updateConfirmButtonState() {
+        if isIDValid && isMajorSelected && isGenderSelected {
+            personInfoConfirmButton.isEnabled = true
+            personInfoConfirmButton.backgroundColor = UIColor(hexCode: "5A80FD") // 활성화된 색상
+        } else {
+            personInfoConfirmButton.isEnabled = false
+            personInfoConfirmButton.backgroundColor = UIColor(hexCode: "A8B1CE") // 비활성화된 색상
+        }
+    }
+
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == personIDField {
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-                
+
             if updatedText.isEmpty {
                 personIDCheckmarkImageView.isHidden = true
                 personIDXmarkImageView.isHidden = false
+                isIDValid = false // ID 유효성 업데이트
             } else if isValidID(updatedText) {
                 personIDCheckmarkImageView.isHidden = false
                 personIDXmarkImageView.isHidden = true
+                isIDValid = true // ID 유효성 업데이트
                 // 유효한 ID일 때 personMajorField로 포커스 이동
                 personMajorField.becomeFirstResponder()
             } else {
                 personIDCheckmarkImageView.isHidden = true
                 personIDXmarkImageView.isHidden = false
+                isIDValid = false // ID 유효성 업데이트
             }
         }
+        updateConfirmButtonState() // 상태 업데이트
         return true
     }
 
