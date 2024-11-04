@@ -116,15 +116,27 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
     }
 
-    private let checkmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
-        $0.contentMode = .scaleAspectFit
-        $0.isHidden = true
-    }
+    // 학번 필드의 체크마크와 엑스마크
+       private let personIDCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
+           $0.contentMode = .scaleAspectFit
+           $0.isHidden = true
+       }
 
-    private let xmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
-        $0.contentMode = .scaleAspectFit
-        $0.isHidden = false
-    }
+       private let personIDXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
+           $0.contentMode = .scaleAspectFit
+           $0.isHidden = true
+       }
+
+       // 학과 필드의 체크마크와 엑스마크
+       private let personMajorCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
+           $0.contentMode = .scaleAspectFit
+           $0.isHidden = true
+       }
+
+       private let personMajorXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
+           $0.contentMode = .scaleAspectFit
+           $0.isHidden = true
+       }
 
     
     var nickName: String?
@@ -155,17 +167,22 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         maleButton.setTitleColor(.black, for: .normal)
         femaleButton.setTitleColor(.black, for: .normal)
         
-        // 오른쪽 뷰 설정
-        personIDField.rightView = UIStackView(arrangedSubviews: [checkmarkImageView, xmarkImageView]).then {
+        // mark표시 설정
+        personIDField.rightView = UIStackView(arrangedSubviews: [personIDCheckmarkImageView, personIDXmarkImageView]).then {
             $0.axis = .horizontal
             $0.translatesAutoresizingMaskIntoConstraints = false
             // UIStackView의 너비를 제한하여 오른쪽으로 여백을 추가
             $0.widthAnchor.constraint(equalToConstant: 40).isActive = true // 전체 너비
         }
-
         personIDField.rightViewMode = .always
-
-
+        
+        personMajorField.rightView = UIStackView(arrangedSubviews: [personMajorCheckmarkImageView, personMajorXmarkImageView]).then {
+            $0.axis = .horizontal
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            // UIStackView의 너비를 제한하여 오른쪽으로 여백을 추가
+            $0.widthAnchor.constraint(equalToConstant: 40).isActive = true // 전체 너비
+        }
+        personMajorField.rightViewMode = .always
 
     }
     
@@ -268,43 +285,38 @@ extension PersonInfoViewController {
     }
     
     // UIPickerViewDelegate
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return majors[row]
-    }
-    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         personMajorField.text = majors[row]
-        personMajorField.resignFirstResponder() // picker 뷰 닫기
+        personMajorCheckmarkImageView.isHidden = false
+        personMajorXmarkImageView.isHidden = true
+        personMajorField.resignFirstResponder()
     }
-    
-    // UITextFieldDelegate 메서드
+
+    // UITextFieldDelegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-
-        // 조건에 따라 이미지 변경
-        if updatedText.isEmpty {
-            checkmarkImageView.isHidden = true
-            xmarkImageView.isHidden = false // 내용이 없을 때 X 표시
-        } else if isValidID(updatedText) { // 학번 유효성 검사
-            checkmarkImageView.isHidden = false // 내용이 유효할 때 V 표시
-            xmarkImageView.isHidden = true
-        } else {
-            checkmarkImageView.isHidden = true
-            xmarkImageView.isHidden = false // 내용이 유효하지 않을 때 X 표시
+        if textField == personIDField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+                
+            if updatedText.isEmpty {
+                personIDCheckmarkImageView.isHidden = true
+                personIDXmarkImageView.isHidden = false
+            } else if isValidID(updatedText) {
+                personIDCheckmarkImageView.isHidden = false
+                personIDXmarkImageView.isHidden = true
+            } else {
+                personIDCheckmarkImageView.isHidden = true
+                personIDXmarkImageView.isHidden = false
+            }
         }
-
         return true
     }
 
-    // 학번 유효성 검사 메서드
-    private func isValidID(_ id: String) -> Bool {
-        // 여기서 학번이 유효한지 검사하는 로직을 추가
-        // 예: 길이가 8인 숫자인지 확인
-        let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
-        return idPredicate.evaluate(with: id)
-    }
+        private func isValidID(_ id: String) -> Bool {
+            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
+            return idPredicate.evaluate(with: id)
+        }
 }
 
 
