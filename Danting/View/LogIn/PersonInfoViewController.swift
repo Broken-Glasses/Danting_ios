@@ -87,7 +87,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.setTitle("남성", for: .normal)
         $0.layer.cornerRadius = 14
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.layer.borderColor = UIColor(hexCode: "CEDEFF").cgColor
         $0.clipsToBounds = true
         $0.backgroundColor = .white
         $0.setTitleColor(.black, for: .normal)
@@ -98,7 +98,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.setTitle("여성", for: .normal)
         $0.layer.cornerRadius = 14
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.layer.borderColor = UIColor(hexCode: "CEDEFF").cgColor
         $0.clipsToBounds = true
         $0.backgroundColor = .white
         $0.setTitleColor(.black, for: .normal)
@@ -134,6 +134,16 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         
         personIDField.delegate = self
         personMajorField.delegate = self
+        
+        // 성별 버튼 액션 추가
+        maleButton.addTarget(self, action: #selector(genderButtonTapped(_:)), for: .touchUpInside)
+        femaleButton.addTarget(self, action: #selector(genderButtonTapped(_:)), for: .touchUpInside)
+
+        // 초기 상태 설정
+        maleButton.backgroundColor = .white
+        femaleButton.backgroundColor = .white
+        maleButton.setTitleColor(.black, for: .normal)
+        femaleButton.setTitleColor(.black, for: .normal)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,9 +158,22 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         let registerRoomVC = RegisterRoomVC()
         self.navigationController?.pushViewController(registerRoomVC, animated: true)
     }
+    
+    // 성별 버튼 클릭 시 호출되는 메서드
+    @objc func genderButtonTapped(_ sender: UIButton) {
+        if sender == maleButton {
+            maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
+            maleButton.setTitleColor(.black, for: .normal)
+            femaleButton.backgroundColor = .white
+            femaleButton.setTitleColor(.black, for: .normal)
+        } else {
+            femaleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
+            femaleButton.setTitleColor(.black, for: .normal)
+            maleButton.backgroundColor = .white
+            maleButton.setTitleColor(.black, for: .normal)
+            }
+        }
 }
-
-
 
 extension PersonInfoViewController {
     private func configurePersonInfoUI() {
