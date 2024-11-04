@@ -305,6 +305,8 @@ extension PersonInfoViewController {
             } else if isValidID(updatedText) {
                 personIDCheckmarkImageView.isHidden = false
                 personIDXmarkImageView.isHidden = true
+                // 유효한 ID일 때 personMajorField로 포커스 이동
+                personMajorField.becomeFirstResponder()
             } else {
                 personIDCheckmarkImageView.isHidden = true
                 personIDXmarkImageView.isHidden = false
@@ -312,6 +314,7 @@ extension PersonInfoViewController {
         }
         return true
     }
+
 
         private func isValidID(_ id: String) -> Bool {
             let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
