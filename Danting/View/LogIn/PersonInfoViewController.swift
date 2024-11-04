@@ -124,8 +124,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
 
        private let personIDXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
            $0.contentMode = .scaleAspectFit
-           $0.isHidden = true
-       }
+           $0.isHidden = false       }
 
        // 학과 필드의 체크마크와 엑스마크
        private let personMajorCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
@@ -135,7 +134,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
 
        private let personMajorXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
            $0.contentMode = .scaleAspectFit
-           $0.isHidden = true
+           $0.isHidden = false
        }
 
     
@@ -255,7 +254,7 @@ extension PersonInfoViewController {
         
         maleButton.snp.makeConstraints { make in
             make.centerY.equalTo(personGenderLabel.snp.centerY)
-            make.leading.equalTo(personGenderLabel.snp.trailing).offset(60)
+            make.leading.equalTo(personGenderLabel.snp.trailing).offset(70)
             make.width.equalTo(71)
             make.height.equalTo(28)
         }
@@ -285,11 +284,12 @@ extension PersonInfoViewController {
     }
     
     // UIPickerViewDelegate
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         personMajorField.text = majors[row]
         personMajorCheckmarkImageView.isHidden = false
         personMajorXmarkImageView.isHidden = true
         personMajorField.resignFirstResponder()
+        return majors[row]
     }
 
     // UITextFieldDelegate
