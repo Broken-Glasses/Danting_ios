@@ -24,6 +24,13 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.textColor = .black
     }
     
+    private let personGenderLabel = UILabel().then {
+        $0.text = "성별"
+        $0.font = UIFont(name: "Pretendard-Regular", size: 14)
+        $0.textAlignment = .left
+        $0.textColor = .black
+    }
+    
     private lazy var personIDField = UITextField().then {
 //        $0.placeholder = "학번을 입력해주세요. ex)32190111"
         $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -80,6 +87,40 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
                           "치의예과", "치의학과",
                           "약학과"]
 
+    private let maleButton = UIButton().then {
+        $0.setTitle("남성", for: .normal)
+        $0.layer.cornerRadius = 14
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+    }
+        
+    private let femaleButton = UIButton().then {
+        $0.setTitle("여성", for: .normal)
+        $0.layer.cornerRadius = 14
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+    }
+    
+    private lazy var personInfoConfirmButton = UIButton().then {
+        $0.setTitle("확인", for: .normal)
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        $0.isEnabled = false
+        $0.backgroundColor = UIColor(hexCode: "A8B1CE")
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
+        $0.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
+    }
+
+    
     var nickName: String?
     
     let myViewModel = MyViewModel()
@@ -95,6 +136,14 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         majorPicker.dataSource = self
         personMajorField.inputView = majorPicker // 텍스트 필드에 picker 뷰를 input으로 설정
     }
+    
+    //MARK: - Actions
+    @objc func confirmButtonDidTapped() {
+        print("Debug: Confirm Button did Tapped")
+        self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
+        let registerRoomVC = RegisterRoomVC()
+        self.navigationController?.pushViewController(registerRoomVC, animated: true)
+    }
 }
 
 
@@ -105,7 +154,8 @@ extension PersonInfoViewController: UITextFieldDelegate {
 extension PersonInfoViewController {
     private func configurePersonInfoUI() {
         self.title = "기본정보"
-        self.view.addSubviews(self.dantingLogoLabel, self.personIDLabel, self.personMajorLabel, self.personIDField, self.personMajorField)
+        self.view.addSubviews(self.dantingLogoLabel, self.personIDLabel, self.personMajorLabel, self.personIDField, self.personMajorField,
+                              self.personGenderLabel, self.maleButton, self.femaleButton, self.personInfoConfirmButton)
         
         self.dantingLogoLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -124,7 +174,7 @@ extension PersonInfoViewController {
         }
         
         personMajorLabel.snp.makeConstraints { make in
-            make.top.equalTo(personIDField.snp.bottom).offset(30)
+            make.top.equalTo(personIDField.snp.bottom).offset(45)
             make.leading.equalToSuperview().offset(20)
         }
         
@@ -132,6 +182,32 @@ extension PersonInfoViewController {
             make.top.equalTo(personMajorLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(40)
+        }
+        
+        personGenderLabel.snp.makeConstraints { make in
+            make.top.equalTo(personMajorField.snp.bottom).offset(50)
+            make.leading.equalToSuperview().offset(20)
+        }
+        
+        maleButton.snp.makeConstraints { make in
+            make.centerY.equalTo(personGenderLabel.snp.centerY)
+            make.leading.equalTo(personGenderLabel.snp.trailing).offset(60)
+            make.width.equalTo(71)
+            make.height.equalTo(28)
+        }
+
+        femaleButton.snp.makeConstraints { make in
+            make.centerY.equalTo(personGenderLabel.snp.centerY)
+            make.leading.equalTo(maleButton.snp.trailing).offset(59)
+            make.width.equalTo(71)
+            make.height.equalTo(28)
+        }
+        
+        personInfoConfirmButton.snp.makeConstraints { make in
+            make.top.equalTo(self.personMajorField.snp.bottom).offset(351)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(55)
         }
     }
     
