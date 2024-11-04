@@ -63,9 +63,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     
     private let majorPicker = UIPickerView()
     
-    private let majors = ["국어국문학과", "사학과", "철학과", "영미인문학과",
-                          "법학과",
-                          "정치외교학과", "행정학과", "도시계획부동산학부", "미디어커뮤니케이션학부","상담학과",
+    private let majors = ["국어국문학과", "사학과", "철학과", "영미인문학과", "법학과", "정치외교학과", "행정학과", "도시계획부동산학부", "미디어커뮤니케이션학부","상담학과",
                           "경제학과", "무역학과", "경영학부", "산업경영학과(야)", "글로벌경영학과",
                           "전자전기공학과", "융합반도체공학과", "고분자시스템공학부", "토목환경공학과", "기계공학과", "화학공학과", "건축학부",
                           "소프트웨어학과", "컴퓨터공학과", "모바일시스템공학과", "통계데이터사이언스학과", "사이버보안학과", "SW융합학부",
@@ -126,7 +124,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
            $0.contentMode = .scaleAspectFit
            $0.isHidden = false       }
 
-       // 학과 필드의 체크마크와 엑스마크
+    // 학과 필드의 체크마크와 엑스마크
        private let personMajorCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
            $0.contentMode = .scaleAspectFit
            $0.isHidden = true
@@ -204,7 +202,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     private var isMajorSelected = false
     private var isGenderSelected = false
 
-    // confirmButtonDidTapped 메서드의 기존 부분 수정
+
     @objc func confirmButtonDidTapped() {
         print("Debug: Confirm Button did Tapped")
         self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
@@ -212,7 +210,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         self.navigationController?.pushViewController(registerRoomVC, animated: true)
     }
     
-    // genderButtonTapped 메서드 수정
+    
     @objc func genderButtonTapped(_ sender: UIButton) {
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
@@ -335,16 +333,29 @@ extension PersonInfoViewController {
         return majors.count
     }
     
-    //
+    
+    // UIPickerViewDelegate
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return majors[row] // 전공 리스트의 각 항목을 반환
+    }
+
+    // 선택된 전공을 텍스트 필드에 설정하는 메서드
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        // 선택된 전공을 personMajorField에 설정
         personMajorField.text = majors[row]
+
+        // 체크마크와 엑스마크 표시
         personMajorCheckmarkImageView.isHidden = false
         personMajorXmarkImageView.isHidden = true
         isMajorSelected = true // 전공 선택 상태 업데이트
+
+        // confirm 버튼 상태 업데이트
+        updateConfirmButtonState()
+
+        // 텍스트 필드의 포커스 해제
         personMajorField.resignFirstResponder()
-        updateConfirmButtonState() // 상태 업데이트
-        return majors[row]
     }
+
 
     // 상태를 체크하고 버튼 색상 업데이트하는 메서드 추가
     private func updateConfirmButtonState() {
