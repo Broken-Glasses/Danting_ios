@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let logInVC = LoginViewController()
         let logInNav = UINavigationController(rootViewController: logInVC)
-        let roomListVC = UINavigationController(rootViewController: PersonInfoViewController())
+        let roomListVC = UINavigationController(rootViewController: LoginViewController())
 
         logInNav.navigationBar.isHidden = false
         logInNav.navigationBar.setBackgroundImage(UIImage(), for: .default) // 배경 이미지 제거
