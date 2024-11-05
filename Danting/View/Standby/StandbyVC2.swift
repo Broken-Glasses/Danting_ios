@@ -184,7 +184,7 @@ extension StandbyVC2: StandbyInformation {
     private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
         for (index, user) in users.enumerated() where index < nameLabels.count {
             let nameLabel = nameLabels[index]
-            nameLabel.text = user.nickName
+            nameLabel.text = user.nickname
             nameLabel.isHidden = false
         }
         

@@ -13,5 +13,5 @@ struct Room: Codable {
     let maxParticipants: Int
     var maleParticipants: [User]
     var femaleParticipants: [User]
-    var isReady: Bool = false
+    var ready: Bool = false
 }
