@@ -12,8 +12,9 @@ enum DantingRouter {
     case getRoom(room_id: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, users_id: Int, maxParticipants: Int)
-    case attendRoom(room_id: Int, user_id: Int)
-    case ready(room_id: Int, user_id: Int)
+    case enterRoom(member_id: Int, room_id: Int)
+    case ready(member_id: Int, room_id: Int)
+    case unready(member_id: Int, room_id: Int)
 }
 
 extension DantingRouter: URLRequestConvertible {
@@ -30,7 +31,7 @@ extension DantingRouter: URLRequestConvertible {
             
         case .createUser(_, _, _, _):
             return "/join"
-
+            
         case .getRoom(let room_id):
             return "/info/\(room_id)"
             
@@ -40,11 +41,14 @@ extension DantingRouter: URLRequestConvertible {
         case .createRoom(_, _, _, _):
             return "/create"
             
-        case .attendRoom(_, _):
+        case .enterRoom(_, _):
             return "/enter"
             
         case .ready(_, _):
             return "/ready"
+        
+        case .unready(_, _):
+            return "/unready"
         }
     }
     
@@ -52,7 +56,7 @@ extension DantingRouter: URLRequestConvertible {
         switch self {
         case .getRoom, .getRooms, .getUser:
             return .get
-        case .createUser, .createRoom, .ready, .attendRoom:
+        case .createUser, .createRoom, .enterRoom, .ready, .unready:
             return .post
         }
     }
@@ -70,10 +74,12 @@ extension DantingRouter: URLRequestConvertible {
             return ["user_id" : user_id]
         case .createUser(let nickName, let student_no, let major, let gender):
             return ["nickName": nickName, "student_no" : student_no, "major"  : major, "gender" : gender]
-        case .ready(let room_id, let user_id):
-            return ["room_id" : room_id, "user_id" : user_id]
-        case .attendRoom(let room_id, let user_id):
-            return ["room_id" : room_id, "user_id" : user_id]
+        case .enterRoom(let member_id, let room_id):
+            return ["member_id": member_id, "room_id": room_id]
+        case .ready(let member_id, let room_id):
+            return ["member_id": member_id, "room_id": room_id]
+        case .unready(let member_id, let room_id):
+            return ["member_id": member_id, "room_id": room_id]
         }
     }
     
@@ -127,12 +133,16 @@ final class APIService {
         request(router: .createRoom(title: title, subTitle: subTitle, users_id: user_id, maxParticipants: max), completion: completion)
     }
     
-    func ready(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
-        request(router: .ready(room_id: room_id, user_id: user_id), completion: completion)
+    func enterRoom(member_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
+        request(router: .enterRoom(member_id: member_id, room_id: room_id), completion: completion)
     }
     
-    func attendRoom(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
-        request(router: .attendRoom(room_id: room_id, user_id: user_id), completion: completion)
+    func ready(member_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
+        request(router: .ready(member_id: member_id, room_id: room_id), completion: completion)
+    }
+    
+    func unready(member_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
+        request(router: .unready(member_id: member_id, room_id: room_id), completion: completion)
     }
     
     private func request<T: Codable>(router: DantingRouter, completion: @escaping (Result<ServerResponse<T>, Error>) -> Void) {
