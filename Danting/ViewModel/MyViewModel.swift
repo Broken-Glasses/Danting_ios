@@ -14,6 +14,7 @@ final class MyViewModel {
     let apiService = APIService.shared
     
     var currentUser: User? = User(student_no: "32190956", gender: "male", major: "기계공학과")
+
     
     lazy var testMaleUser1: [User] = [
         User(student_no: "32190956", gender: "male", major: "기계공학과"),
@@ -113,7 +114,7 @@ final class MyViewModel {
                                Room(room_id: 5, title: "여기 비쥬얼 연애대상", subTitle: "저희는 외모 안봐요. 성격 좋은 남자분들, 재밌는 남자분들 들어오세욥", maxParticipants: 8, maleParticipants: self.testMaleUser5, femaleParticipants: self.testFemaleUser5),
                                Room(room_id: 6, title: "고인물도 과팅하자", subTitle: "18-21학번까지만 받겠습니다. 고인물도 사랑을 찾고 싶어요", maxParticipants: 6, maleParticipants: self.testMaleUser6, femaleParticipants: self.testFemaleUser6),
                                Room(room_id: 7, title: "이성 친구 만들 사람은 들어와", subTitle: "남고 여고출신이라 이성 친구가 없는 사람 환영해요", maxParticipants: 4, maleParticipants: self.testMaleUser7, femaleParticipants: self.testFemaleUser7),
-                               Room(room_id: 8,  title: "단국 뉴진스 만날사람", subTitle: "유유유유유유유유유~~~ 매그네~~~~릭", maxParticipants: 4, maleParticipants: self.testMaleUser8, femaleParticipants: self.testFemaleUser8)] 
+                               Room(room_id: 8,  title: "단국 뉴진스 만날사람", subTitle: "유유유유유유유유유~~~ 매그네~~~~릭", maxParticipants: 4, maleParticipants: self.testMaleUser8, femaleParticipants: self.testFemaleUser8)]
         
     var room: Room? {
         didSet {
@@ -131,7 +132,6 @@ final class MyViewModel {
     
     var didFetchRoomList: (()->(Void))?
 
-    
     var didFetchRoom: ((Room) ->(Void))?
     
     var didFetchRooms: (([Room])->(Void))?
@@ -155,21 +155,6 @@ final class MyViewModel {
     }
     
     
-    func createUser(student_no: String, major: String, gender: String, completionHandler: @escaping(()->Void)) {
-        apiService.createUser(student_no: student_no, major: major, gender: gender) { serverResponse in
-            switch serverResponse {
-            case .success(let result):
-//                guard let user_id = result.result.user_id else { return }
-//                UserDefaults.standard.setValue(user_id, forKey: "user_id")
-                completionHandler()
-            case .failure(let error):
-                print(error.localizedDescription)
-                
-            }
-        }
-    }
-    
-    
     func createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int, completionHandler: @escaping(()->Void)) {
         
         APIService.shared.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { serverResponse in
@@ -183,7 +168,18 @@ final class MyViewModel {
         
         
     }
-    
-    
-    
+    func createUser(student_no: String, major: String, gender: String, completionHandler: @escaping () -> Void) {
+        apiService.createUser(student_no: student_no, major: major, gender: gender) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                //let user_id = result.result.userId // 직접 사용
+                //UserDefaults.standard.setValue(user_id, forKey: userIdKey)
+                print(result)
+                completionHandler()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
+

@@ -78,7 +78,6 @@ final class LoginViewController: UIViewController {
         self.configureLoginVC()
         self.setupKeyboardObservers()
         self.addGesture()
-
     }
     
     
@@ -89,7 +88,6 @@ final class LoginViewController: UIViewController {
         let personInfoVC = PersonInfoViewController()
         personInfoVC.nickName = self.nickNameTextField.text
         self.navigationController?.pushViewController(personInfoVC, animated: true)
-        
     }
     
     
@@ -141,7 +139,6 @@ extension LoginViewController: UITextFieldDelegate {
     
     
 }
-
 
 
 extension LoginViewController {

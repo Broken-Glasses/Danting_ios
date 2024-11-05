@@ -30,7 +30,7 @@ extension DantingRouter: URLRequestConvertible {
             
         case .createUser(_, _, _):
             return "/join"
-            
+
         case .getRoom(let room_id):
             return "/info/\(room_id)"
             
@@ -52,7 +52,7 @@ extension DantingRouter: URLRequestConvertible {
         switch self {
         case .getRoom, .getRooms, .getUser:
             return .get
-        case .createRoom, .createUser, .ready, .attendRoom:
+        case .createUser, .createRoom, .ready, .attendRoom:
             return .post
         }
     }
@@ -92,8 +92,6 @@ final class APIService {
     
     static let shared = APIService()
     private init() {}
-    
-    // MARK: - GET Requests
     
     func getUser(user_id: Int, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
         request(router: .getUser(user_id: user_id), completion: completion)

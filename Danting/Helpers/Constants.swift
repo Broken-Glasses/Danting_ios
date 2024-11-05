@@ -12,3 +12,6 @@ enum MeetingType: Int {
     case threeBythree = 6
     case fourByfour = 8
 }
+
+let userIdKey = "userId"
+let nicknameKey = "nickname"

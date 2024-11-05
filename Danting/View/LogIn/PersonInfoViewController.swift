@@ -197,11 +197,11 @@ final class PersonInfoViewController: UIViewController {
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "user_id")))")
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "nickName")))")
         }
-        
     }
     
     
-    @objc func genderButtonTapped(_ sender: UIButton) {
+    @objc func genderButtonTapped(_ sender: UIButton) -> String? {
+        print("Selected gender: \(gender ?? "None")")
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             maleButton.setTitleColor(.black, for: .normal)
@@ -209,7 +209,6 @@ final class PersonInfoViewController: UIViewController {
             femaleButton.setTitleColor(.black, for: .normal)
             isGenderSelected = true // 성별 선택 상태 업데이트
             self.gender = "male"
-            
         } else {
             femaleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             femaleButton.setTitleColor(.black, for: .normal)
@@ -219,6 +218,7 @@ final class PersonInfoViewController: UIViewController {
             self.gender = "female"
         }
         updateConfirmButtonState() // 상태 업데이트
+        return gender
     }
 }
 
@@ -377,10 +377,10 @@ extension PersonInfoViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
             // UIStackView의 너비를 제한하여 오른쪽으로 여백을 추가
             $0.widthAnchor.constraint(equalToConstant: 40).isActive = true // 전체 너비
+
         }
         personMajorField.rightViewMode = .always
     }
-   
 }
 
 

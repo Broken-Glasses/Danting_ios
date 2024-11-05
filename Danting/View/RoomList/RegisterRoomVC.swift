@@ -141,7 +141,16 @@ final class RegisterRoomVC: UIViewController {
         self.view.backgroundColor = .white
         self.configureRegisterRoomVC()
         self.addGesture()
+        
+        // 버튼에 액션 추가
+        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
     }
+
+    @objc private func registerButtonTapped() {
+        let roomListViewController = RoomListViewController()
+        self.navigationController?.pushViewController(roomListViewController, animated: true)
+    }
+
     
     //MARK: - Helpers
     private func updateCharacterCount() {
@@ -262,7 +271,6 @@ extension RegisterRoomVC: UITextViewDelegate {
             textView.textColor = .lightGray // 플레이스홀더 색상
         }
     }
-    
     
 }
 
