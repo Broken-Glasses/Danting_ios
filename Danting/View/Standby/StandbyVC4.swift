@@ -145,6 +145,7 @@ final class StandbyVC4: StandbyViewController {
     }
     
     @objc func fetchDataAndRefresh() {
+<<<<<<< HEAD
         guard let room = myViewModel.room else { return }
         APIService.shared.getRoom(room_id: room.room_id) { response in
             /*switch response {
@@ -155,6 +156,18 @@ final class StandbyVC4: StandbyViewController {
                 print("Failed to fetch data: \(error)")
             }*/
         }
+=======
+//        guard let room = myViewModel.room else { return }
+//        APIService.shared.getRoom(room_id: room.room_id) { response in
+//            switch response {
+//            case .success(let room):
+//                // 받은 데이터를 사용하여 화면 갱신
+//                self.configureUIWithData(room: room)
+//            case .failure(let error):
+//                print("Failed to fetch data: \(error)")
+//            }
+//        }
+>>>>>>> 862075d (ETC: 저장)
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {

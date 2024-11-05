@@ -79,16 +79,27 @@ final class LoginViewController: UIViewController {
         self.setupKeyboardObservers()
         self.addGesture()
 //        self.setupNavigationBar()
+<<<<<<< HEAD
         
         APIService.shared.getRooms { response in
             print(response)
             switch (response) {
             case .success(let room):
                 print(room)
+=======
+        APIService.shared.getRoom(room_id: 0) { result in
+            switch result {
+            case .success(let room):
+                dump(room)
+>>>>>>> 862075d (ETC: 저장)
             case .failure(let error):
                 print(error)
             }
         }
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 862075d (ETC: 저장)
     }
     
     

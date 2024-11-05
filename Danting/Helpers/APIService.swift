@@ -11,7 +11,7 @@ enum DantingRouter {
     case createUser(nickName: String, student_no: Int, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
-    case createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int)
+    case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
 }
@@ -113,9 +113,8 @@ final class APIService {
         request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
-    func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
+    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
         request(router: .createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max), completion: completion)
-
     }
     
     func ready(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
@@ -126,7 +125,6 @@ final class APIService {
         request(router: .attendRoom(room_id: room_id, user_id: user_id), completion: completion)
     }
     
-    // Generic request function with improved error handling and debug logging
     private func request<T: Codable>(router: DantingRouter, completion: @escaping (Result<ServerResponse<T>, Error>) -> Void) {
         AF.request(router).responseDecodable(of: ServerResponse<T>.self) { response in
             switch response.result {
@@ -134,7 +132,6 @@ final class APIService {
                 print("Success:  + \(serverResponse)")
                 completion(.success(serverResponse))
             case .failure(let error):
-                // Error occurred, print raw data for debugging
                 if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
                     print("Raw JSON Response: \(jsonString)")
                 }

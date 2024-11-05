@@ -32,34 +32,34 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     }
     
     private let personIDField = UITextField().then {
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-            $0.leftViewMode = .always
-            $0.backgroundColor = .white
-            $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
-            $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 10
-            $0.clipsToBounds = true
-            let attributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.lightGray,
-                NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
-            ]
-            $0.attributedPlaceholder = NSAttributedString(string: " 학번을 입력해주세요. ex)32190111", attributes:attributes)
-        }
-        
-        private let personMajorField = UITextField().then {
-            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-            $0.leftViewMode = .always
-            $0.backgroundColor = .white
-            $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
-            $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 10
-            $0.clipsToBounds = true
-            let attributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.lightGray,
-                NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
-            ]
-            $0.attributedPlaceholder = NSAttributedString(string: " 학과를 선택해주세요", attributes:attributes)
-        }
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        $0.leftViewMode = .always
+        $0.backgroundColor = .white
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
+        ]
+        $0.attributedPlaceholder = NSAttributedString(string: " 학번을 입력해주세요. ex)32190111", attributes:attributes)
+    }
+    
+    private let personMajorField = UITextField().then {
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        $0.leftViewMode = .always
+        $0.backgroundColor = .white
+        $0.layer.borderColor = UIColor(hexCode: "5A80FD").cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont(name: "Pretendard-Regular", size: 13)!
+        ]
+        $0.attributedPlaceholder = NSAttributedString(string: " 학과를 선택해주세요", attributes:attributes)
+    }
     
     private let majorPicker = UIPickerView()
     
@@ -80,7 +80,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
                           "간호학과",
                           "치의예과", "치의학과",
                           "약학과"]
-
+    
     private let maleButton = UIButton().then {
         $0.setTitle("남성", for: .normal)
         $0.layer.cornerRadius = 14
@@ -91,7 +91,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
     }
-        
+    
     private let femaleButton = UIButton().then {
         $0.setTitle("여성", for: .normal)
         $0.layer.cornerRadius = 14
@@ -104,7 +104,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     }
     
     private lazy var personInfoConfirmButton = UIButton().then {
-        $0.setTitle("확인", for: .normal)
+        $0.setTitle("등록", for: .normal)
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
         $0.isEnabled = false
@@ -112,28 +112,28 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
     }
-
+    
     // 학번 필드의 체크마크와 엑스마크
-       private let personIDCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
-           $0.contentMode = .scaleAspectFit
-           $0.isHidden = true
-       }
-
-       private let personIDXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
-           $0.contentMode = .scaleAspectFit
-           $0.isHidden = false       }
-
+    private let personIDCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
+        $0.contentMode = .scaleAspectFit
+        $0.isHidden = true
+    }
+    
+    private let personIDXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
+        $0.contentMode = .scaleAspectFit
+        $0.isHidden = false       }
+    
     // 학과 필드의 체크마크와 엑스마크
-       private let personMajorCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
-           $0.contentMode = .scaleAspectFit
-           $0.isHidden = true
-       }
-
-       private let personMajorXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
-           $0.contentMode = .scaleAspectFit
-           $0.isHidden = false
-       }
-
+    private let personMajorCheckmarkImageView = UIImageView(image: UIImage(named: "checkmark")).then {
+        $0.contentMode = .scaleAspectFit
+        $0.isHidden = true
+    }
+    
+    private let personMajorXmarkImageView = UIImageView(image: UIImage(named: "xmark")).then {
+        $0.contentMode = .scaleAspectFit
+        $0.isHidden = false
+    }
+    
     
     var nickName: String?
     
@@ -156,7 +156,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         // 성별 버튼 액션 추가
         maleButton.addTarget(self, action: #selector(genderButtonTapped(_:)), for: .touchUpInside)
         femaleButton.addTarget(self, action: #selector(genderButtonTapped(_:)), for: .touchUpInside)
-
+        
         // 초기 상태 설정
         maleButton.backgroundColor = .white
         femaleButton.backgroundColor = .white
@@ -179,12 +179,20 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
             $0.widthAnchor.constraint(equalToConstant: 40).isActive = true // 전체 너비
         }
         personMajorField.rightViewMode = .always
+<<<<<<< HEAD
+=======
+        
+        
+        // 키보드 이벤트 옵저버 추가
+        //        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        //        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+>>>>>>> 862075d (ETC: 저장)
     }
-            
-        deinit {
-            // 옵저버 제거
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    
+    deinit {
+        // 옵저버 제거
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -196,13 +204,16 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     private var isIDValid = false
     private var isMajorSelected = false
     private var isGenderSelected = false
-
-
+    
+    
     @objc func confirmButtonDidTapped() {
         print("Debug: Confirm Button did Tapped")
         self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
-        let registerRoomVC = RegisterRoomVC()
-        self.navigationController?.pushViewController(registerRoomVC, animated: true)
+//        guard let nickName = self.nickName,
+//              let student_no = self.personIDField.text,
+//              let major = self.personMajorField.text,
+//        else { return }
+        
     }
     
     
@@ -222,7 +233,46 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         }
         updateConfirmButtonState() // 상태 업데이트
     }
+<<<<<<< HEAD
         }
+=======
+    
+    // 키보드 나타날 때 호출되는 메서드
+    //    @objc func handleKeyboardWillShow(notification: Notification) {
+    //        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+    //        let keyboardHeight = keyboardFrame.height
+    //
+    //        // 버튼 위치 변경
+    //        personInfoConfirmButton.snp.remakeConstraints { make in
+    //            make.top.equalTo(self.personGenderLabel.snp.bottom).offset(39)
+    //            make.leading.equalToSuperview().offset(16)
+    //            make.trailing.equalToSuperview().inset(16)
+    //            make.height.equalTo(55)
+    //        }
+    //
+    //        // 레이아웃 갱신
+    //            UIView.animate(withDuration: 0.3) {
+    //                self.view.layoutIfNeeded()
+    //            }
+    //        }
+    
+    // 키보드 사라질 때 호출되는 메서드
+    //    @objc func handleKeyboardWillHide(notification: Notification) {
+    //        // 버튼 위치 원래대로 복구
+    //        personInfoConfirmButton.snp.remakeConstraints { make in
+    //          make.top.equalTo(self.personMajorField.snp.bottom).offset(351)
+    //          make.leading.equalToSuperview().offset(16)
+    //          make.trailing.equalToSuperview().inset(16)
+    //          make.height.equalTo(55)
+    //        }
+    //
+    //        // 레이아웃 갱신
+    //            UIView.animate(withDuration: 0.3) {
+    //                    self.view.layoutIfNeeded()
+    //            }
+    //        }
+}
+>>>>>>> 862075d (ETC: 저장)
 
 extension PersonInfoViewController {
     private func configurePersonInfoUI() {
@@ -268,7 +318,7 @@ extension PersonInfoViewController {
             make.width.equalTo(71)
             make.height.equalTo(28)
         }
-
+        
         femaleButton.snp.makeConstraints { make in
             make.centerY.equalTo(personGenderLabel.snp.centerY)
             make.leading.equalTo(maleButton.snp.trailing).offset(59)
@@ -298,25 +348,25 @@ extension PersonInfoViewController {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return majors[row] // 전공 리스트의 각 항목을 반환
     }
-
+    
     // 선택된 전공을 텍스트 필드에 설정하는 메서드
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         // 선택된 전공을 personMajorField에 설정
         personMajorField.text = majors[row]
-
+        
         // 체크마크와 엑스마크 표시
         personMajorCheckmarkImageView.isHidden = false
         personMajorXmarkImageView.isHidden = true
         isMajorSelected = true // 전공 선택 상태 업데이트
-
+        
         // confirm 버튼 상태 업데이트
         updateConfirmButtonState()
-
+        
         // 텍스트 필드의 포커스 해제
         personMajorField.resignFirstResponder()
     }
-
-
+    
+    
     // 상태를 체크하고 버튼 색상 업데이트하는 메서드 추가
     private func updateConfirmButtonState() {
         if isIDValid && isMajorSelected && isGenderSelected {
@@ -327,14 +377,14 @@ extension PersonInfoViewController {
             personInfoConfirmButton.backgroundColor = UIColor(hexCode: "A8B1CE") // 비활성화된 색상
         }
     }
-
+    
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == personIDField {
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-
+            
             if updatedText.isEmpty {
                 personIDCheckmarkImageView.isHidden = true
                 personIDXmarkImageView.isHidden = false
@@ -353,13 +403,23 @@ extension PersonInfoViewController {
         }
         updateConfirmButtonState() // 상태 업데이트
         return true
+            
     }
+    
+    
+    private func isValidID(_ id: String) -> Bool {
+        let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
+        return idPredicate.evaluate(with: id)
+    }
+<<<<<<< HEAD
 
 
         private func isValidID(_ id: String) -> Bool {
             let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{9}$")
             return idPredicate.evaluate(with: id)
         }
+=======
+>>>>>>> 862075d (ETC: 저장)
 }
 
 
