@@ -142,8 +142,6 @@ final class RegisterRoomVC: UIViewController {
         self.configureRegisterRoomVC()
         self.addGesture()
     }
-
-
     
     //MARK: - Helpers
     private func updateCharacterCount() {
@@ -188,15 +186,16 @@ final class RegisterRoomVC: UIViewController {
               let subTitle = self.roomDescriptionTextView.text,
         let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int else { return }
         
-        let apiService = APIService.shared
-        apiService.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { response in
-            switch response {
-            case .success(let room_id):
-                print("room_id")
-            case .failure(let error):
-                print(error)
+        myViewModel.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: maxParticipants) { roomId in
+                DispatchQueue.main.async {
+                    if let navigationController = self.navigationController {
+                        if let roomListViewController = navigationController.viewControllers.first(where: { $0 is RoomListViewController }) {
+                            let standByViewController = StandbyViewController()
+                            navigationController.setViewControllers([roomListViewController, standByViewController], animated: true)
+                        }
+                    }
+                }
             }
-        }
     }
     
     @objc func meetingTypeButtonDidTapped(_ sender: UIButton) {
