@@ -143,7 +143,6 @@ extension LoginViewController: UITextFieldDelegate {
 }
 
 
-
 extension LoginViewController {
     private func activateBackgroundGradient() {
         let gradientLayer = CAGradientLayer()

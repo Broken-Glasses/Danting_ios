@@ -163,6 +163,8 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         maleButton.setTitleColor(.black, for: .normal)
         femaleButton.setTitleColor(.black, for: .normal)
         
+        personInfoConfirmButton.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
+        
         // mark표시 설정
         personIDField.rightView = UIStackView(arrangedSubviews: [personIDCheckmarkImageView, personIDXmarkImageView]).then {
             $0.axis = .horizontal
