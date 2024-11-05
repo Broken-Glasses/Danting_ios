@@ -99,6 +99,7 @@ final class LoginViewController: UIViewController {
         let personInfoVC = PersonInfoViewController()
         personInfoVC.nickName = self.nickNameTextField.text
         self.navigationController?.pushViewController(personInfoVC, animated: true)
+        
     }
     
     

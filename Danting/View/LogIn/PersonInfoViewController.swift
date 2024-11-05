@@ -111,7 +111,6 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.backgroundColor = UIColor(hexCode: "A8B1CE")
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
-        $0.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
     }
 
     // 학번 필드의 체크마크와 엑스마크
@@ -180,10 +179,6 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
             $0.widthAnchor.constraint(equalToConstant: 40).isActive = true // 전체 너비
         }
         personMajorField.rightViewMode = .always
-
-        // 키보드 이벤트 옵저버 추가
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
             
         deinit {
@@ -227,42 +222,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         }
         updateConfirmButtonState() // 상태 업데이트
     }
-    
-    // 키보드 나타날 때 호출되는 메서드
-    @objc func handleKeyboardWillShow(notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let keyboardHeight = keyboardFrame.height
-            
-        // 버튼 위치 변경
-        personInfoConfirmButton.snp.remakeConstraints { make in
-            make.top.equalTo(self.personGenderLabel.snp.bottom).offset(39)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(55)
         }
-        
-        // 레이아웃 갱신
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
-            
-    // 키보드 사라질 때 호출되는 메서드
-    @objc func handleKeyboardWillHide(notification: Notification) {
-        // 버튼 위치 원래대로 복구
-        personInfoConfirmButton.snp.remakeConstraints { make in
-          make.top.equalTo(self.personMajorField.snp.bottom).offset(351)
-          make.leading.equalToSuperview().offset(16)
-          make.trailing.equalToSuperview().inset(16)
-          make.height.equalTo(55)
-        }
-                
-        // 레이아웃 갱신
-            UIView.animate(withDuration: 0.3) {
-                    self.view.layoutIfNeeded()
-            }
-        }
-}
 
 extension PersonInfoViewController {
     private func configurePersonInfoUI() {
@@ -317,7 +277,7 @@ extension PersonInfoViewController {
         }
         
         personInfoConfirmButton.snp.makeConstraints { make in
-            make.top.equalTo(self.personMajorField.snp.bottom).offset(351)
+            make.top.equalTo(self.maleButton.snp.bottom).offset(39)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
             make.height.equalTo(55)
@@ -397,7 +357,7 @@ extension PersonInfoViewController {
 
 
         private func isValidID(_ id: String) -> Bool {
-            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
+            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{9}$")
             return idPredicate.evaluate(with: id)
         }
 }
