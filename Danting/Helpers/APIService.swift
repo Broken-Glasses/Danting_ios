@@ -11,7 +11,7 @@ enum DantingRouter {
     case createUser(nickName: String, student_no: String, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
-    case createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int)
+    case createRoom(title: String, subTitle: String, users_id: Int, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
 }
@@ -59,12 +59,13 @@ extension DantingRouter: URLRequestConvertible {
 
     var parameters: Parameters? {
         switch self {
-        case .getRoom(let room_id):
+        case .getRoom(_):
             return nil
         case .getRooms:
             return nil
-        case .createRoom(let title, let subTitle, let participants, let maxParticipants):
-            return ["title" : title, "subTitle" : subTitle, "participants" : participants, "maxParticipants" : maxParticipants]
+        case .createRoom(let title, let subTitle, let users_id, let maxParticipants):
+            return ["users_id": users_id,
+                "title" : title, "subTitle" : subTitle, "maxParticipants" : maxParticipants]
         case .getUser(let user_id):
             return ["user_id" : user_id]
         case .createUser(let nickName, let student_no, let major, let gender):
@@ -84,6 +85,17 @@ extension DantingRouter: URLRequestConvertible {
         if let parameters = parameters {
             urlRequest = try JSONEncoding.default.encode(urlRequest, with: parameters)
         }
+        
+        // 로그 출력
+        print("======== Request ========")
+        print("URL: \(urlRequest.url?.absoluteString ?? "")")
+        print("Method: \(urlRequest.method?.rawValue ?? "")")
+        print("Headers: \(urlRequest.allHTTPHeaderFields ?? [:])")
+        if let body = urlRequest.httpBody, let bodyString = String(data: body, encoding: .utf8) {
+            print("Body: \(bodyString)")
+        }
+        print("=========================")
+        
         return urlRequest
     }
 }
@@ -111,8 +123,8 @@ final class APIService {
         request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
-    func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
-        request(router: .createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max), completion: completion)
+    func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<RoomListItemResponse>, Error>) -> Void) {
+        request(router: .createRoom(title: title, subTitle: subTitle, users_id: user_id, maxParticipants: max), completion: completion)
     }
     
     func ready(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
