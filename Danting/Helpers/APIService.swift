@@ -11,7 +11,7 @@ enum DantingRouter {
     case createUser(nickName: String, student_no: Int, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
-    case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
+    case createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
 }
@@ -113,8 +113,9 @@ final class APIService {
         request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
-    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
+    func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
         request(router: .createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max), completion: completion)
+
     }
     
     func ready(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
