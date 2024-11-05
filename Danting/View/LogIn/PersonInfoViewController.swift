@@ -397,7 +397,7 @@ extension PersonInfoViewController {
 
 
         private func isValidID(_ id: String) -> Bool {
-            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
+            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{9}$")
             return idPredicate.evaluate(with: id)
         }
 }
