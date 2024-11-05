@@ -205,7 +205,7 @@ extension StandbyVC4: StandbyInformation {
     
     
     
-    private func configureUIWithData(room: Room) {
+    private func configureUIWithData(room: RoomDetailResponse) {
         let maleParticipants = room.maleParticipants
         let femaleParticipants = room.femaleParticipants
 
@@ -220,7 +220,7 @@ extension StandbyVC4: StandbyInformation {
         self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
     }
     
-    private func updateInfoView(infoViews: [InfoView], participants: [User]) {
+    private func updateInfoView(infoViews: [InfoView], participants: [RoomDetailUserResponse]) {
         // InfoView와 users의 개수만큼 업데이트
         for (index, user) in participants.enumerated() where index < infoViews.count {
             let infoView = infoViews[index]
@@ -234,7 +234,7 @@ extension StandbyVC4: StandbyInformation {
         }
     }
     
-    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
+    private func updateUserNameView(nameLabels: [UILabel], users: [RoomDetailUserResponse]) {
         // InfoView와 users의 개수만큼 업데이트
         for (index, user) in users.enumerated() where index < nameLabels.count {
 //            nameLabel.text = user.nickName

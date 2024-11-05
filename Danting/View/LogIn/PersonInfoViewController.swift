@@ -164,6 +164,7 @@ final class PersonInfoViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     //MARK: - Helpers
     private func updateConfirmButtonState() {
         // personIDField가 숫자 8자리인지 확인
@@ -191,11 +192,17 @@ final class PersonInfoViewController: UIViewController {
               let student_no = self.personIDField.text,
               let major = self.personMajorField.text,
               let gender = self.gender else { return }
-        UserDefaults.standard.set(nickName, forKey: "nickName")
-        self.myViewModel.createUser(student_no: student_no, major: major, gender: gender) {
+        self.myViewModel.createUser(nickName: nickName, student_no: student_no, major: major, gender: gender) {
             print("Debug: Successfully created user")
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "user_id")))")
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "nickName")))")
+            DispatchQueue.main.async {
+                if let navigationController = self.navigationController {
+                    // RoomListViewController를 루트로 설정하여 뒤로가기 없이 이동
+                    let roomListVC = RoomListViewController()
+                    navigationController.setViewControllers([roomListVC], animated: true)
+                }
+            }
         }
     }
     
@@ -382,6 +389,7 @@ extension PersonInfoViewController {
         personMajorField.rightViewMode = .always
     }
 }
+
 
 
 

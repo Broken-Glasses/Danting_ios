@@ -1,11 +1,13 @@
 //
-//  RoomUserResponse.swift
+//  RoomUser.swift
 //  Danting
 //
 //  Created by DonghyeonKim on 11/5/24.
 //
 
-struct RoomUserResponse: Codable {
+import UIKit
+
+struct RoomListItemResponse: Codable {
     let room_id: Int
     let title: String
     let subTitle: String

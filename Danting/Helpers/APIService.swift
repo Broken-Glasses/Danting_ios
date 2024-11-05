@@ -8,7 +8,7 @@ struct ServerResponse<T: Codable>: Codable {
 
 enum DantingRouter {
     case getUser(user_id: Int)
-    case createUser(student_no: String, gender: String, major: String)
+    case createUser(nickName: String, student_no: String, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int)
@@ -28,7 +28,7 @@ extension DantingRouter: URLRequestConvertible {
         case .getUser(let user_id):
             return "/users/\(user_id)"
             
-        case .createUser(_, _, _):
+        case .createUser(_, _, _, _):
             return "/join"
 
         case .getRoom(let room_id):
@@ -60,15 +60,15 @@ extension DantingRouter: URLRequestConvertible {
     var parameters: Parameters? {
         switch self {
         case .getRoom(let room_id):
-            return ["room_id": room_id]
+            return nil
         case .getRooms:
             return nil
         case .createRoom(let title, let subTitle, let participants, let maxParticipants):
             return ["title" : title, "subTitle" : subTitle, "participants" : participants, "maxParticipants" : maxParticipants]
         case .getUser(let user_id):
             return ["user_id" : user_id]
-        case .createUser(let student_no, let major, let gender):
-            return ["student_no" : student_no, "major"  : major, "gender" : gender]
+        case .createUser(let nickName, let student_no, let major, let gender):
+            return ["nickName": nickName, "student_no" : student_no, "major"  : major, "gender" : gender]
         case .ready(let room_id, let user_id):
             return ["room_id" : room_id, "user_id" : user_id]
         case .attendRoom(let room_id, let user_id):
@@ -93,22 +93,22 @@ final class APIService {
     static let shared = APIService()
     private init() {}
     
-    func getUser(user_id: Int, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
+    func getUser(user_id: Int, completion: @escaping (Result<ServerResponse<RoomDetailUserResponse>, Error>) -> Void) {
         request(router: .getUser(user_id: user_id), completion: completion)
     }
     
-    func getRoom(room_id: Int, completion: @escaping (Result<ServerResponse<Room>, Error>) -> Void) {
+    func getRoom(room_id: Int, completion: @escaping (Result<ServerResponse<RoomDetailResponse>, Error>) -> Void) {
         request(router: .getRoom(room_id: room_id), completion: completion)
     }
     
-    func getRooms(completion: @escaping (Result<ServerResponse<[RoomList]>, Error>) -> Void) {
+    func getRooms(completion: @escaping (Result<ServerResponse<[RoomListItemResponse]>, Error>) -> Void) {
         request(router: .getRooms, completion: completion)
     }
     
     // MARK: - POST Requests
     
-    func createUser(student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
-        request(router: .createUser(student_no: student_no, gender: gender, major: major), completion: completion)
+    func createUser(nickName: String, student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<JoinResponse>, Error>) -> Void) {
+        request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
     func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {

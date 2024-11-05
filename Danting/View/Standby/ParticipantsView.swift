@@ -34,8 +34,8 @@ final class ParticipantsView: UIView {
         }
     }
     
-    var maleParticipants: [User]?
-    var femaleParticipants: [User]?
+    var maleParticipants: [RoomDetailUserResponse]?
+    var femaleParticipants: [RoomDetailUserResponse]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
