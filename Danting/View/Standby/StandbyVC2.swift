@@ -68,14 +68,14 @@ final class StandbyVC2: StandbyViewController {
         
     private var refreshTimer: Timer?
     private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
+    private var willRepeat: Bool? = true
     
-    
-    var myViewModel = MyViewModel() {
-        didSet {
-            guard let room = self.myViewModel.room else { return }
-            self.configureUIWithData(room: room)
-        }
-    }
+//    var myViewModel = MyViewModel() {
+//        didSet {
+//            guard let room = self.myViewModel.room else { return }
+//            self.configureUIWithData(room: room)
+//        }
+//    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -83,6 +83,7 @@ final class StandbyVC2: StandbyViewController {
         self.configureStandyVC2()
         self.settingUserImageButton()
         self.settingUserStackView()
+        self.repeatRequest()
         //self.updateUI()
         // 서버로 주기적으로 변경사항을 요청
     }
@@ -120,21 +121,120 @@ final class StandbyVC2: StandbyViewController {
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
-        //1안대로 간다면, 준비를 하지 않은 상태에서 준비를 누르면, 바뀐 준비 상태인 isReady == true 의 값을 result로 받음
         guard let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int,
               let room_id = self.myViewModel.room?.room_id else { return }
-        /*APIService.shared.ready(user_id:user_id, room_id: room_id ) { response in
-            switch response {
-            case .success(let isReady):
-                print(isReady)
+        APIService.shared.ready(user_id:user_id, room_id: room_id ) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                print(result)
+                let isReady = result.result
+                self.myViewModel.apiService.getRoom(room_id: room_id) { serverResponse in
+                    switch serverResponse {
+                    case .success(let response):
+                        let female = response.result.femaleParticipants
+                        let male = response.result.maleParticipants
+                    
+                        self.myViewModel.apiService.getUser(user_id: user_id) { serverResponse in
+                            switch serverResponse {
+                            case .success(let userResponse):
+                                let myGender = userResponse.result.gender
+                                if myGender == "male" {
+                                    let index = male.firstIndex(where: { $0.user_id == user_id })
+                                    
+                                    let integerIndex = Int(index ?? 0) + 1
+                                    
+                                    self.userImageButtons[integerIndex].setImage(UIImage(named: "ready"), for: .normal)
+                                    
+                                } else {
+                                    
+                                }
+                                
+                                
+                                
+                                
+                                
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        
+                    
+                    
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    
+                }
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 self.configureButtonState(sender: sender, isReady: isReady)
             case .failure(let error):
                 print(error)
             }
-        }*/
+        }
     }
     
     
+}
+
+
+extension StandbyVC2: RequestForOpenKakao {
+    
+    func repeatRequest() {
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
+                guard let self = self,
+                      let willRepeat = self.willRepeat,
+                    let roomId = self.myViewModel.room?.room_id else { return }
+                
+                // willRepeat가 true일 때만 requestReadyState 호출
+                if willRepeat {
+                    self.requestReadyState(roomId: roomId)
+                } else {
+                    // willRepeat가 false가 되면 타이머를 중지
+                    timer.invalidate()
+                }
+            }
+    }
+    func requestReadyState(roomId: Int) {
+        self.myViewModel.apiService.getRoom(room_id: roomId) { roomDetailResponse in
+            switch roomDetailResponse {
+            case .success(let detailResponse):
+                print("success")
+                let femaleParticipants = detailResponse.result.femaleParticipants
+                let maleParticipants = detailResponse.result.maleParticipants
+                let allReadyState = femaleParticipants.map{$0.ready} + maleParticipants.map{$0.ready}
+                let ready = allReadyState.allSatisfy {$0 == true}
+                if ready {
+                    self.willRepeat = false
+                    
+                    let openKakaoVC = PopupViewController()
+                    openKakaoVC.modalPresentationStyle = .overFullScreen
+                    let views = self.generateViewsForOpenKakao()
+                    openKakaoVC.addSubviewsToStackView(views: views) {
+                        DispatchQueue.main.async {
+                            self.present(openKakaoVC, animated: true)
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 //MARK: - StandbyInformation

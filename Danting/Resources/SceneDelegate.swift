@@ -33,12 +33,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logInNav.navigationBar.shadowImage = UIImage() // 그림자 제거
         logInVC.setupNavigationBar()
         // 2초 후에 user_id 확인하여 애니메이션과 함께 화면 전환
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             guard let self = self else { return }
             
             let nextViewController: UIViewController
             
-            if UserDefaults.standard.value(forKey: "user_id") is Int {
+            if UserDefaults.standard.value(forKey: "userId") is Int {
                 // user_id가 있는 경우 RoomListController로 이동
                 nextViewController = roomListVC
             } else {

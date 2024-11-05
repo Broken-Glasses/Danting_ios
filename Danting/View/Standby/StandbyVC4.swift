@@ -112,20 +112,22 @@ final class StandbyVC4: StandbyViewController {
     
     private var refreshTimer: Timer?
     private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
-    
-    
-    var myViewModel = MyViewModel() {
-        didSet {
-            guard let room = self.myViewModel.room else { return }
-            self.configureUIWithData(room: room)
-        }
-    }
+    private var willRepeat: Bool?
+
+//    var myViewModel = MyViewModel() {
+//        didSet {
+//            guard let room = self.myViewModel.room else { return }
+//            self.configureUIWithData(room: room)
+//        }
+//    }
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureStandyVC4()
+        self.settingUserStackView()
         self.settingUserImageButton()
+        self.repeatRequest()
     }
     
     override func viewDidLayoutSubviews() {
@@ -174,6 +176,50 @@ final class StandbyVC4: StandbyViewController {
     }
 }
 
+extension StandbyVC4: RequestForOpenKakao {
+    
+    func repeatRequest() {
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
+                guard let self = self,
+                      let willRepeat = self.willRepeat,
+                    let roomId = self.myViewModel.room?.room_id else { return }
+                
+                // willRepeat가 true일 때만 requestReadyState 호출
+                if willRepeat {
+                    self.requestReadyState(roomId: roomId)
+                } else {
+                    // willRepeat가 false가 되면 타이머를 중지
+                    timer.invalidate()
+                }
+            }
+    }
+    func requestReadyState(roomId: Int) {
+        self.myViewModel.apiService.getRoom(room_id: roomId) { roomDetailResponse in
+            switch roomDetailResponse {
+            case .success(let detailResponse):
+                print("success")
+                let femaleParticipants = detailResponse.result.femaleParticipants
+                let maleParticipants = detailResponse.result.maleParticipants
+                let allReadyState = femaleParticipants.map{$0.ready} + maleParticipants.map{$0.ready}
+                let ready = allReadyState.allSatisfy {$0 == true}
+                if ready {
+                    self.willRepeat = false
+                    
+                    let openKakaoVC = PopupViewController()
+                    openKakaoVC.modalPresentationStyle = .overFullScreen
+                    let views = self.generateViewsForOpenKakao()
+                    openKakaoVC.addSubviewsToStackView(views: views) {
+                        DispatchQueue.main.async {
+                            self.present(openKakaoVC, animated: true)
+                        }
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
 
 extension StandbyVC4: StandbyInformation {
 

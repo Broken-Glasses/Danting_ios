@@ -70,8 +70,8 @@ final class MyViewModel {
         apiService.createUser(nickName: nickName, student_no: student_no, major: major, gender: gender) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                //let user_id = result.result.userId // 직접 사용
-                //UserDefaults.standard.setValue(user_id, forKey: userIdKey)
+                let user_id = result.result.userId // 직접 사용
+                UserDefaults.standard.setValue(user_id, forKey: userIdKey)
                 print(result)
                 completionHandler()
             case .failure(let error):

@@ -59,7 +59,7 @@ extension DantingRouter: URLRequestConvertible {
 
     var parameters: Parameters? {
         switch self {
-        case .getRoom(let room_id):
+        case .getRoom(_):
             return nil
         case .getRooms:
             return nil
