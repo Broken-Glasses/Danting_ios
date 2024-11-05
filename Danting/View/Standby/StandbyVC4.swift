@@ -155,6 +155,7 @@ final class StandbyVC4: StandbyViewController {
                 print("Failed to fetch data: \(error)")
             }*/
         }
+
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
@@ -236,9 +237,8 @@ extension StandbyVC4: StandbyInformation {
     private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
         // InfoView와 users의 개수만큼 업데이트
         for (index, user) in users.enumerated() where index < nameLabels.count {
-            let nameLabel = nameLabels[index]
-            nameLabel.text = user.nickname
-            nameLabel.isHidden = false
+//            nameLabel.text = user.nickName
+            //nameLabel.isHidden = false
         }
         
         // 남은 InfoView는 숨김 처리

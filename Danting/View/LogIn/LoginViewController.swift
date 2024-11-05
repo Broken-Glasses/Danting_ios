@@ -78,7 +78,6 @@ final class LoginViewController: UIViewController {
         self.configureLoginVC()
         self.setupKeyboardObservers()
         self.addGesture()
-//        self.setupNavigationBar()
     }
     
     

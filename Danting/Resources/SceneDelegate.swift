@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let logInVC = LoginViewController()
         let logInNav = UINavigationController(rootViewController: logInVC)
-        let roomListVC = UINavigationController(rootViewController: LoginViewController())
+        let roomListVC = UINavigationController(rootViewController: RoomListViewController())
 
         logInNav.navigationBar.isHidden = false
         logInNav.navigationBar.setBackgroundImage(UIImage(), for: .default) // 배경 이미지 제거
@@ -43,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             } else {
                 // user_id가 없는 경우 LogInController로 이동
                 
-                nextViewController = roomListVC
+                nextViewController = logInNav
             }
             
             // 애니메이션 적용하여 화면 전환

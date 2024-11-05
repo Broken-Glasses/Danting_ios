@@ -8,10 +8,10 @@ struct ServerResponse<T: Codable>: Codable {
 
 enum DantingRouter {
     case getUser(user_id: Int)
-    case createUser(nickname: String, studentNo: String, gender: String, major: String)
+    case createUser(student_no: String, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
-    case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
+    case createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
 }
@@ -25,11 +25,11 @@ extension DantingRouter: URLRequestConvertible {
     
     var path: String {
         switch self {
-        case .createUser(let nickname, let studentNo, let gender, let major):
-            return "/join"
-            
         case .getUser(let user_id):
             return "/users/\(user_id)"
+            
+        case .createUser(_, _, _):
+            return "/join"
 
         case .getRoom(let room_id):
             return "/info/\(room_id)"
@@ -52,7 +52,7 @@ extension DantingRouter: URLRequestConvertible {
         switch self {
         case .getRoom, .getRooms, .getUser:
             return .get
-        case .createUser, .createRoom, .createUser, .ready, .attendRoom:
+        case .createUser, .createRoom, .ready, .attendRoom:
             return .post
         }
     }
@@ -67,8 +67,8 @@ extension DantingRouter: URLRequestConvertible {
             return ["title" : title, "subTitle" : subTitle, "participants" : participants, "maxParticipants" : maxParticipants]
         case .getUser(let user_id):
             return ["user_id" : user_id]
-        case .createUser(let nickName, let student_no, let major, let gender):
-            return ["nickName" : nickName, "student_no" : student_no, "major"  : major, "gender" : gender]
+        case .createUser(let student_no, let major, let gender):
+            return ["student_no" : student_no, "major"  : major, "gender" : gender]
         case .ready(let room_id, let user_id):
             return ["room_id" : room_id, "user_id" : user_id]
         case .attendRoom(let room_id, let user_id):
@@ -107,11 +107,11 @@ final class APIService {
     
     // MARK: - POST Requests
     
-    func createUser(nickname: String, student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<JoinResponse>, Error>) -> Void) {
-        request(router: .createUser(nickname: nickname, studentNo: student_no, gender: gender, major: major), completion: completion)
+    func createUser(student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
+        request(router: .createUser(student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
-    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
+    func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
         request(router: .createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max), completion: completion)
     }
     

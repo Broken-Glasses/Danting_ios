@@ -12,94 +12,95 @@ final class MyViewModel {
     //MARK: - Model
     
     let apiService = APIService.shared
-    
-    var currentUser: User? = User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 4)
+
+    var currentUser: User? = User(student_no: "32190956", gender: "male", major: "기계공학과")
+
     
     lazy var testMaleUser1: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 4),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 4)
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과")
     ]
     lazy var testFemaleUser1: [User] = [
-        User(student_no: "32200956", gender: "female", major: "경영학과", ready: false, user_id: 4),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 2)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     
     let testMaleUser2: [User] = [
-        
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 5),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
     let testFemaleUser2: [User] = [
-        User(student_no: "32190956", gender: "female", major: "기계공학과", ready: false, user_id: 1),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 68)
+        User(student_no: "32190956", gender: "female", major: "기계공학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser3: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 1),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
     ]
     
     let testFemaleUser3: [User] = [
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 5)
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     let testMaleUser4: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 3),
-        User(student_no: "32220956", gender: "male", major: "기계공학과", ready: false, user_id: 2),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 9),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 12),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
     let testFemaleUser4: [User] = [
-        User(student_no: "32200956", gender: "female", major: "경영학과", ready: false, user_id: 8),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 10),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 11),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 14)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser5: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 15),
-        User(student_no: "32220956", gender: "male", major: "기계공학과", ready: false, user_id: 17),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 15),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 15),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
 
     let testFemaleUser5: [User] = [
-        User(student_no: "32200956", gender: "female", major: "경영학과", ready: false, user_id: 15),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 15),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 15),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 15)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser6: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 15),
-        User(student_no: "32220956", gender: "male", major: "기계공학과", ready: false, user_id: 14),
-        User(student_no: "32200956", gender: "female", major: "경영학과", ready: false, user_id: 16),
-        User(student_no: "32180956", gender: "male", major: "전자전기공학과", ready: false, user_id: 17),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 21),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 25)
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     let testFemaleUser6: [User] = [
-        User(student_no: "32200956", gender: "female", major: "경영학과", ready: false, user_id: 16),
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 21),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 25)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     
     let testMaleUser7: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 16),
-        User(student_no: "32220956", gender: "male", major: "기계공학과", ready: false, user_id: 54),
+
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
     ]
     let testFemaleUser7: [User] = [
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 35),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 85)
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     let testMaleUser8: [User] = [
-        User(student_no: "32190956", gender: "male", major: "기계공학과", ready: false, user_id: 26),
-        User(student_no: "32220956", gender: "male", major: "기계공학과", ready: false, user_id: 29),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
 
     ]
     let testFemaleUser8: [User] = [
-        User(student_no: "32240956", gender: "female", major: "화학공학과", ready: false, user_id: 90),
-        User(student_no: "32230956", gender: "female", major: "경영학과", ready: false, user_id: 9)
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     
     lazy var rooms: [Room]? = [Room(room_id: 1, title: "진짜 술고래들만 들어와라", subTitle: "이거 보여주려고 어그로 끌었다 미안하다...", maxParticipants: 6,
@@ -122,6 +123,15 @@ final class MyViewModel {
         }
     }
     
+    var roomList: [RoomList]? {
+        didSet {
+            guard let roomList = self.roomList else { return }
+            didFetchRoomList?()
+        }
+    }
+    
+    var didFetchRoomList: (()->(Void))?
+
     var didFetchRoom: ((Room) ->(Void))?
     
     var didFetchRooms: (([Room])->(Void))?
@@ -131,13 +141,39 @@ final class MyViewModel {
     }
     
     
-    func createUser(nickname: String, student_no: String, major: String, gender: String, completionHandler: @escaping () -> Void) {
-        apiService.createUser(nickname: nickname, student_no: student_no, major: major, gender: gender) { serverResponse in
+    
+    func getRooms() {
+        apiService.getRooms { serverResponse in
             switch serverResponse {
             case .success(let result):
-                let user_id = result.result.userId // 직접 사용
-                UserDefaults.standard.setValue(user_id, forKey: userIdKey)
-                UserDefaults.standard.setValue(nickname, forKey: nicknameKey)
+                self.roomList = result.result
+            case .failure(let error):
+                print(error.localizedDescription)
+                
+            }
+        }
+    }
+    
+    
+    func createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int, completionHandler: @escaping(()->Void)) {
+        
+        APIService.shared.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { serverResponse in
+            switch serverResponse {
+            case .success(let room_id):
+                print("rood_id= \(room_id)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        
+    }
+    func createUser(student_no: String, major: String, gender: String, completionHandler: @escaping () -> Void) {
+        apiService.createUser(student_no: student_no, major: major, gender: gender) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                //let user_id = result.result.userId // 직접 사용
+                //UserDefaults.standard.setValue(user_id, forKey: userIdKey)
                 print(result)
                 completionHandler()
             case .failure(let error):
@@ -150,7 +186,7 @@ final class MyViewModel {
         apiService.getRoom(room_id: roomId, completion: { serverResponse in
             switch serverResponse {
             case .success(let result):
-                room = result.result
+                self.room = result.result
                 completetionHandler()
             case .failure(let error):
                 print(error.localizedDescription)
@@ -159,11 +195,5 @@ final class MyViewModel {
         })
     }
 
-    
-    
-    
-    
-    
-    
 }
 

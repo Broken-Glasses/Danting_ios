@@ -118,7 +118,7 @@ final class RegisterRoomVC: UIViewController {
     
     private lazy var meetingTypeButtons = [self.twoBytwoButton, self.threeBythreeButton, self.fourByfourButton]
     
-    private let registerButton = UIButton().then {
+    private lazy var registerButton = UIButton().then {
         $0.setTitle("등록", for: .normal)
         $0.layer.cornerRadius = 10
         $0.clipsToBounds = true
@@ -126,6 +126,7 @@ final class RegisterRoomVC: UIViewController {
         $0.backgroundColor = UIColor(hexCode: "A8B1CE")
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
+        $0.addTarget(self, action: #selector(registerButtonDidTapped), for: .touchUpInside)
     }
     
     var myViewModel = MyViewModel()
@@ -187,6 +188,24 @@ final class RegisterRoomVC: UIViewController {
     }
     
     //MARK: - Actions
+    
+    @objc func registerButtonDidTapped() {
+        guard let maxParticipants = self.maxParticipants,
+              let title = self.roomTitleTextField.text,
+              let subTitle = self.roomDescriptionTextView.text,
+        let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int else { return }
+        
+        let apiService = APIService.shared
+        apiService.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { response in
+            switch response {
+            case .success(let room_id):
+                print("room_id")
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     @objc func meetingTypeButtonDidTapped(_ sender: UIButton) {
         switch sender.tag {
         case 0:
