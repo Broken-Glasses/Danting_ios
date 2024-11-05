@@ -37,12 +37,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let self = self else { return }
             
             let nextViewController: UIViewController
+            
             if UserDefaults.standard.value(forKey: "user_id") is Int {
                 // user_id가 있는 경우 RoomListController로 이동
                 nextViewController = roomListVC
             } else {
                 // user_id가 없는 경우 LogInController로 이동
-                
                 nextViewController = logInNav
             }
             

@@ -6,12 +6,12 @@
 
 import UIKit
 
-struct Room: Codable {
+struct RoomDetailResponse: Codable {
     let room_id: Int
     let title: String
     let subTitle: String
     let maxParticipants: Int
-    var maleParticipants: [RoomUserResponse]
-    var femaleParticipants: [RoomUserResponse]
+    var maleParticipants: [RoomDetailUserResponse]
+    var femaleParticipants: [RoomDetailUserResponse]
     var ready: Bool = false
 }

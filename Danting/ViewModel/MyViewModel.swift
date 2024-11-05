@@ -12,24 +12,22 @@ final class MyViewModel {
     //MARK: - Model
     
     let apiService = APIService.shared
-
-    var currentUser: User? = User(student_no: "32190956", gender: "male", major: "기계공학과")
-
-    var room: Room? {
+    
+    var room: RoomDetailResponse? {
         didSet {
             guard let room = self.room else { return }
             didFetchRoom?(room)
         }
     }
     
-    var rooms: [Room]? {
+
+    var rooms: [RoomDetailResponse]? {
         didSet {
             guard let rooms = self.rooms else { return }
-            didFetchRooms?(rooms)
         }
     }
     
-    var roomList: [RoomList]? {
+    var roomList: [RoomListItemResponse]? {
         didSet {
             guard let roomList = self.roomList else { return }
             didFetchRoomList?()
@@ -38,14 +36,9 @@ final class MyViewModel {
     
     var didFetchRoomList: (()->(Void))?
 
-    var didFetchRoom: ((Room) ->(Void))?
+    var didFetchRoom: ((RoomDetailResponse) ->(Void))?
     
-    var didFetchRooms: (([Room])->(Void))?
-    
-    func updateCurrentUser(_ currentUser: User) {
-        self.currentUser = currentUser
-    }
-    
+    var didFetchRooms: (([RoomDetailResponse])->(Void))?
     
     
     func getRooms() {
@@ -71,9 +64,8 @@ final class MyViewModel {
                 print(error.localizedDescription)
             }
         }
-        
-        
     }
+
     func createUser(nickName: String, student_no: String, major: String, gender: String, completionHandler: @escaping () -> Void) {
         apiService.createUser(nickName: nickName, student_no: student_no, major: major, gender: gender) { serverResponse in
             switch serverResponse {
@@ -88,10 +80,11 @@ final class MyViewModel {
         }
     }
 
-    func getRoomDetail(roomId: Int, completetionHandler: @escaping (Room) -> Void) {
+    func getRoomDetail(roomId: Int, completetionHandler: @escaping (RoomDetailResponse) -> Void) {
         apiService.getRoom(room_id: roomId, completion: { serverResponse in
             switch serverResponse {
             case .success(let result):
+                self.room = result.result
                 completetionHandler(result.result)
             case .failure(let error):
                 print(error.localizedDescription)

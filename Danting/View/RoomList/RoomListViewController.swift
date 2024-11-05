@@ -85,11 +85,12 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let roomList = self.myViewModel.roomList else { return }
         let room = roomList[indexPath.row]
-        let room_id = room.room_id
+
+        let roomId = room.room_id
         
-        self.myViewModel.getRoomDetail(roomId: room_id) { room in
-            self.myViewModel.room = room
+        myViewModel.getRoomDetail(roomId: roomId) { room in
             let views = self.generateViewsForRoomListPopupVC(room: room)
+            
             let attendingVC = PopupViewController()
             attendingVC.modalPresentationStyle = .overFullScreen
             attendingVC.addSubviewsToStackView(views: views) {
@@ -117,7 +118,7 @@ extension RoomListViewController {
         self.view.bringSubviewToFront(floatingButton)
     }
     
-    private func generateViewsForRoomListPopupVC(room: Room) -> [UIView] {
+    private func generateViewsForRoomListPopupVC(room: RoomDetailResponse) -> [UIView] {
         let meetingType = room.maxParticipants.integerToMeetingType()
 
         let heartImageView1 = UIImageView()

@@ -155,7 +155,7 @@ extension StandbyVC2: StandbyInformation {
         }
     }
     
-    private func configureUIWithData(room: Room) {
+    private func configureUIWithData(room: RoomDetailResponse) {
         let maleParticipants = room.maleParticipants
         let femaleParticipants = room.femaleParticipants
 
@@ -170,7 +170,7 @@ extension StandbyVC2: StandbyInformation {
 //        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
     }
     
-    private func updateInfoView(infoViews: [InfoView], participants: [User]) {
+    private func updateInfoView(infoViews: [InfoView], participants: [RoomDetailUserResponse]) {
         for (index, user) in participants.enumerated() where index < infoViews.count {
             let infoView = infoViews[index]
             infoView.isHidden = false
@@ -182,7 +182,7 @@ extension StandbyVC2: StandbyInformation {
         }
     }
     
-    private func updateUserNameView(nameLabels: [UILabel], users: [User]) {
+    private func updateUserNameView(nameLabels: [UILabel], users: [RoomDetailUserResponse]) {
         for (index, user) in users.enumerated() where index < nameLabels.count {
             let nameLabel = nameLabels[index]
 //            nameLabel.text = user.nickName
