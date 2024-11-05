@@ -123,7 +123,7 @@ final class StandbyVC3: StandbyViewController {
     
     @objc func fetchDataAndRefresh() {
         guard let room = myViewModel.room else { return }
-        APIService.shared.getRoom(room_id: room.room_id) { response in
+        /*APIService.shared.getRoom(room_id: room.room_id) { response in
             switch response {
             case .success(let room):
                 // 받은 데이터를 사용하여 화면 갱신
@@ -131,14 +131,14 @@ final class StandbyVC3: StandbyViewController {
             case .failure(let error):
                 print("Failed to fetch data: \(error)")
             }
-        }
+        }*/
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
         //1안대로 간다면, 준비를 하지 않은 상태에서 준비를 누르면, 바뀐 준비 상태인 isReady == true 의 값을 result로 받음
         guard let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int,
               let room_id = self.myViewModel.room?.room_id else { return }
-        APIService.shared.ready(user_id: user_id, room_id: room_id) { response in
+        /*APIService.shared.ready(user_id: user_id, room_id: room_id) { response in
             switch response {
             case .success(let isReady):
                 print(isReady)
@@ -146,7 +146,7 @@ final class StandbyVC3: StandbyViewController {
             case .failure(let error):
                 print(error)
             }
-        }
+        }*/
     }
 }
 

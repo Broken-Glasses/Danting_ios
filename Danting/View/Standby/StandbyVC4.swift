@@ -147,13 +147,13 @@ final class StandbyVC4: StandbyViewController {
     @objc func fetchDataAndRefresh() {
         guard let room = myViewModel.room else { return }
         APIService.shared.getRoom(room_id: room.room_id) { response in
-            switch response {
+            /*switch response {
             case .success(let room):
                 // 받은 데이터를 사용하여 화면 갱신
-                self.configureUIWithData(room: room)
+                //self.configureUIWithData(room: room)
             case .failure(let error):
                 print("Failed to fetch data: \(error)")
-            }
+            }*/
         }
     }
     
@@ -162,13 +162,13 @@ final class StandbyVC4: StandbyViewController {
         guard let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int,
               let room_id = self.myViewModel.room?.room_id else { return }
         APIService.shared.ready(user_id: user_id, room_id: room_id) { response in
-            switch response {
+            /*switch response {
             case .success(let isReady):
                 print(isReady)
                 self.configureButtonState(sender: sender, isReady: isReady)
             case .failure(let error):
                 print(error)
-            }
+            }*/
         }
     }
 }
