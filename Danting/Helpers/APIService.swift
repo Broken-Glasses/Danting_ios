@@ -1,41 +1,25 @@
-//
-//  API.swift
-//  Danting
-//
-//  Created by 김은상 on 10/28/24.
-//
-
 import UIKit
 import Alamofire
 
-struct ServerResponse: Codable {
-    let isSuccess: Bool
-    let result: ResultData
-}
-
-struct ResultData: Codable {
-    let user_id: String
-    let room_id: String
-    let room: Room
+struct ServerResponse<T: Codable>: Codable {
+    let success: Bool
+    let result: T
 }
 
 enum DantingRouter {
     case getUser(user_id: Int)
     case createUser(nickName: String, student_no: Int, gender: String, major: String)
-    case getRoom(rood_id: Int)
+    case getRoom(room_id: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
     case attendRoom(room_id: Int, user_id: Int)
     case ready(room_id: Int, user_id: Int)
 }
 
-
 extension DantingRouter: URLRequestConvertible {
     
-    
-    
     var baseURL: URL {
-        guard let url = URL(string: "베이스 URL") else { fatalError("baseURL Error") }
+        guard let url = URL(string: "http://49.247.47.0:8080") else { fatalError("baseURL Error") }
         return url
     }
     
@@ -51,7 +35,7 @@ extension DantingRouter: URLRequestConvertible {
             return "/info/\(room_id)"
             
         case .getRooms:
-            return "/rooms"
+            return "/all/list"
             
         case .createRoom(_, _, _, _):
             return "/create"
@@ -72,6 +56,7 @@ extension DantingRouter: URLRequestConvertible {
             return .post
         }
     }
+
     var parameters: Parameters? {
         switch self {
         case .getRoom(let room_id):
@@ -108,90 +93,53 @@ final class APIService {
     static let shared = APIService()
     private init() {}
     
-    //MARK: - GET
-    func getUserInGlobalQueue(user_id: Int, completion: @escaping (Result<User, Error>) -> Void) {
-        AF.request(DantingRouter.getUser(user_id: user_id)).responseDecodable(of: User.self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let user):
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    // MARK: - GET Requests
+    
+    func getUser(user_id: Int, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
+        request(router: .getUser(user_id: user_id), completion: completion)
     }
     
-    func getRoom(room_id: Int, completion: @escaping(Result<Room, Error>) -> Void) {
-        AF.request(DantingRouter.getRoom(rood_id: room_id)).responseDecodable(of: Room.self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let room):
-                completion(.success(room))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func getRoom(room_id: Int, completion: @escaping (Result<ServerResponse<Room>, Error>) -> Void) {
+        request(router: .getRoom(room_id: room_id), completion: completion)
     }
     
-    func getRooms(completion: @escaping(Result<[Room], Error>) -> Void) {
-        AF.request(DantingRouter.getRooms).responseDecodable(of: [Room].self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let rooms):
-                completion(.success(rooms))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func getRooms(completion: @escaping (Result<ServerResponse<[RoomList]>, Error>) -> Void) {
+        request(router: .getRooms, completion: completion)
     }
     
+    // MARK: - POST Requests
     
-    
-    //MARK: - POST
-    
-    func createUser(nickName: String, student_no: Int, major: String, gender: String, completion: @escaping (Result<User, Error>) -> Void) {
-        AF.request(DantingRouter.createUser(nickName: nickName, student_no: student_no, gender: gender, major: major)).responseDecodable(of: User.self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let user):
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func createUser(nickName: String, student_no: Int, major: String, gender: String, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
+        request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
     }
     
-    
-    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<Int, Error>) -> Void) {
-        AF.request(DantingRouter.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max)).responseDecodable(of: Int.self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let room_id):
-                completion(.success(room_id))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
+        request(router: .createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: max), completion: completion)
     }
     
-    func ready(user_id: Int, room_id: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
-        AF.request(DantingRouter.ready(room_id: room_id, user_id: user_id)).responseDecodable(of: Bool.self, queue: .global(qos: .userInitiated)) { response in
-            switch response.result {
-            case .success(let isReady):
-                completion(.success(isReady))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    func ready(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
+        request(router: .ready(room_id: room_id, user_id: user_id), completion: completion)
     }
     
-    func attendRoom(user_id: Int, room_id: Int, completion: @escaping (Result<Int, Error>) -> Void) {
-        AF.request(DantingRouter.attendRoom(room_id: room_id, user_id: user_id)).responseDecodable(of: Int.self, queue: .global(qos: .userInitiated)) { response in
+    func attendRoom(user_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
+        request(router: .attendRoom(room_id: room_id, user_id: user_id), completion: completion)
+    }
+    
+    // Generic request function with improved error handling and debug logging
+    private func request<T: Codable>(router: DantingRouter, completion: @escaping (Result<ServerResponse<T>, Error>) -> Void) {
+        AF.request(router).responseDecodable(of: ServerResponse<T>.self) { response in
             switch response.result {
-            case .success(let room_id):
-                completion(.success(room_id))
+            case .success(let serverResponse):
+                print("Success:  + \(serverResponse)")
+                completion(.success(serverResponse))
             case .failure(let error):
+                // Error occurred, print raw data for debugging
+                if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw JSON Response: \(jsonString)")
+                }
+                print("Error in responseDecodable: \(error)")
                 completion(.failure(error))
             }
         }
     }
 }
-
-
-
-

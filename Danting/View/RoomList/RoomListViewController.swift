@@ -41,7 +41,7 @@ final class RoomListViewController: UIViewController {
     }
     
     //MARK: - Helpers
-    private func fetchRoomList() {
+    /*private func fetchRoomList() {
         let apiService = APIService.shared
         apiService.getRooms { response in
             switch response {
@@ -54,7 +54,7 @@ final class RoomListViewController: UIViewController {
                 print(error)
             }
         }
-    }
+    }*/
         
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {

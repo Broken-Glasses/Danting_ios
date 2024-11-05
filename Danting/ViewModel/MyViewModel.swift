@@ -136,7 +136,7 @@ final class MyViewModel {
        
     }
     
-    func fetchRoomInfo() {
+    /*func fetchRoomInfo() {
         guard let room = self.room else { return }
         let apiService = APIService.shared
         apiService.getRoom(room_id: room.room_id) { response in
@@ -149,6 +149,6 @@ final class MyViewModel {
             }
         }
         
-    }
+    }*/
     
 }
