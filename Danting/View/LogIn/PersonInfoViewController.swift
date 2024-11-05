@@ -3,6 +3,8 @@ import SnapKit
 
 final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
+    var gender: String?
+    
     private let dantingLogoLabel = UILabel().then {
         $0.text = "DANTING"
         $0.font = UIFont(name: "Kodchasan-SemiBold", size: 32)
@@ -111,6 +113,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         $0.backgroundColor = UIColor(hexCode: "A8B1CE")
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 17)
+        $0.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
     }
 
     // 학번 필드의 체크마크와 엑스마크
@@ -201,8 +204,15 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     @objc func confirmButtonDidTapped() {
         print("Debug: Confirm Button did Tapped")
         self.view.endEditing(true) // 다른 곳을 터치하면 키보드를 내림
-        let registerRoomVC = RegisterRoomVC()
-        self.navigationController?.pushViewController(registerRoomVC, animated: true)
+        
+        guard let nickname = self.nickName,
+              let studentNo = self.personIDField.text,
+              let major = self.personMajorField.text,
+              let gender = self.gender else { return }
+        
+        self.myViewModel.createUser(nickname: nickname, student_no: studentNo, major: major, gender: gender) {
+            
+        }
     }
     
     
@@ -213,12 +223,14 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
             femaleButton.backgroundColor = .white
             femaleButton.setTitleColor(.black, for: .normal)
             isGenderSelected = true // 성별 선택 상태 업데이트
+            self.gender = "male"
         } else {
             femaleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             femaleButton.setTitleColor(.black, for: .normal)
             maleButton.backgroundColor = .white
             maleButton.setTitleColor(.black, for: .normal)
             isGenderSelected = true // 성별 선택 상태 업데이트
+            self.gender = "female"
         }
         updateConfirmButtonState() // 상태 업데이트
     }
@@ -319,6 +331,8 @@ extension PersonInfoViewController {
 
     // 상태를 체크하고 버튼 색상 업데이트하는 메서드 추가
     private func updateConfirmButtonState() {
+        print("isIDValid: \(isIDValid), isMajorSelected: \(isMajorSelected), isGenderSelected: \(isGenderSelected)")
+        
         if isIDValid && isMajorSelected && isGenderSelected {
             personInfoConfirmButton.isEnabled = true
             personInfoConfirmButton.backgroundColor = UIColor(hexCode: "5A80FD") // 활성화된 색상
@@ -327,7 +341,6 @@ extension PersonInfoViewController {
             personInfoConfirmButton.backgroundColor = UIColor(hexCode: "A8B1CE") // 비활성화된 색상
         }
     }
-
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == personIDField {
@@ -357,7 +370,7 @@ extension PersonInfoViewController {
 
 
         private func isValidID(_ id: String) -> Bool {
-            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{9}$")
+            let idPredicate = NSPredicate(format: "SELF MATCHES %@", "^[0-9]{8}$")
             return idPredicate.evaluate(with: id)
         }
 }

@@ -8,7 +8,7 @@ struct ServerResponse<T: Codable>: Codable {
 
 enum DantingRouter {
     case getUser(user_id: Int)
-    case createUser(nickName: String, student_no: Int, gender: String, major: String)
+    case createUser(nickname: String, studentNo: String, gender: String, major: String)
     case getRoom(room_id: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, user_id: String, maxParticipants: Int)
@@ -25,12 +25,12 @@ extension DantingRouter: URLRequestConvertible {
     
     var path: String {
         switch self {
+        case .createUser(let nickname, let studentNo, let gender, let major):
+            return "/join"
+            
         case .getUser(let user_id):
             return "/users/\(user_id)"
-            
-        case .createUser(_, _, _, _):
-            return "/users"
-            
+
         case .getRoom(let room_id):
             return "/info/\(room_id)"
             
@@ -52,7 +52,7 @@ extension DantingRouter: URLRequestConvertible {
         switch self {
         case .getRoom, .getRooms, .getUser:
             return .get
-        case .createRoom, .createUser, .ready, .attendRoom:
+        case .createUser, .createRoom, .createUser, .ready, .attendRoom:
             return .post
         }
     }
@@ -93,8 +93,6 @@ final class APIService {
     static let shared = APIService()
     private init() {}
     
-    // MARK: - GET Requests
-    
     func getUser(user_id: Int, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
         request(router: .getUser(user_id: user_id), completion: completion)
     }
@@ -109,8 +107,8 @@ final class APIService {
     
     // MARK: - POST Requests
     
-    func createUser(nickName: String, student_no: Int, major: String, gender: String, completion: @escaping (Result<ServerResponse<User>, Error>) -> Void) {
-        request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
+    func createUser(nickname: String, student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<JoinResponse>, Error>) -> Void) {
+        request(router: .createUser(nickname: nickname, studentNo: student_no, gender: gender, major: major), completion: completion)
     }
     
     func createRoom(user_id: String, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<Int>, Error>) -> Void) {
@@ -125,7 +123,6 @@ final class APIService {
         request(router: .attendRoom(room_id: room_id, user_id: user_id), completion: completion)
     }
     
-    // Generic request function with improved error handling and debug logging
     private func request<T: Codable>(router: DantingRouter, completion: @escaping (Result<ServerResponse<T>, Error>) -> Void) {
         AF.request(router).responseDecodable(of: ServerResponse<T>.self) { response in
             switch response.result {
@@ -133,7 +130,6 @@ final class APIService {
                 print("Success:  + \(serverResponse)")
                 completion(.success(serverResponse))
             case .failure(let error):
-                // Error occurred, print raw data for debugging
                 if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
                     print("Raw JSON Response: \(jsonString)")
                 }
