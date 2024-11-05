@@ -164,6 +164,7 @@ final class PersonInfoViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     //MARK: - Helpers
     private func updateConfirmButtonState() {
         // personIDField가 숫자 8자리인지 확인
@@ -174,7 +175,12 @@ final class PersonInfoViewController: UIViewController {
         let isGenderValid = gender != nil
         
         // 모든 조건을 만족하면 확인 버튼 활성화
-        personInfoConfirmButton.isEnabled = isIDValid && isMajorFieldValid && isGenderValid
+        
+        let isFormValid = isIDValid && isMajorFieldValid && isGenderValid
+        if isFormValid {
+            personInfoConfirmButton.isEnabled = isFormValid
+            personInfoConfirmButton.backgroundColor = UIColor(hexCode: "5A80FD")
+        }
     }
     
     private func isValidID(_ id: String) -> Bool {
@@ -191,17 +197,22 @@ final class PersonInfoViewController: UIViewController {
               let student_no = self.personIDField.text,
               let major = self.personMajorField.text,
               let gender = self.gender else { return }
-        UserDefaults.standard.set(nickName, forKey: "nickName")
-        self.myViewModel.createUser(student_no: student_no, major: major, gender: gender) {
+        self.myViewModel.createUser(nickName: nickName, student_no: student_no, major: major, gender: gender) {
             print("Debug: Successfully created user")
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "user_id")))")
             print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "nickName")))")
+            DispatchQueue.main.async {
+                if let navigationController = self.navigationController {
+                    // RoomListViewController를 루트로 설정하여 뒤로가기 없이 이동
+                    let roomListVC = RoomListViewController()
+                    navigationController.setViewControllers([roomListVC], animated: true)
+                }
+            }
         }
     }
     
     
     @objc func genderButtonTapped(_ sender: UIButton) -> String? {
-        print("Selected gender: \(gender ?? "None")")
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             maleButton.setTitleColor(.black, for: .normal)

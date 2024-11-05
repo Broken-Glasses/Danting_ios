@@ -11,7 +11,7 @@ struct Room: Codable {
     let title: String
     let subTitle: String
     let maxParticipants: Int
-    var maleParticipants: [User]
-    var femaleParticipants: [User]
+    var maleParticipants: [RoomUserResponse]
+    var femaleParticipants: [RoomUserResponse]
     var ready: Bool = false
 }

@@ -163,11 +163,11 @@ extension StandbyVC2: StandbyInformation {
         print("\n")
         print("Debug: 여성 참가자 == \(femaleParticipants)")
         
-        self.updateInfoView(infoViews: self.maleInfoView, participants: maleParticipants)
-        self.updateInfoView(infoViews: self.femaleInfoView, participants: femaleParticipants)
-        
-        self.updateUserNameView(nameLabels: self.maleNameLabel, users: maleParticipants)
-        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
+//        self.updateInfoView(infoViews: self.maleInfoView, participants: maleParticipants)
+//        self.updateInfoView(infoViews: self.femaleInfoView, participants: femaleParticipants)
+//        
+//        self.updateUserNameView(nameLabels: self.maleNameLabel, users: maleParticipants)
+//        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
     }
     
     private func updateInfoView(infoViews: [InfoView], participants: [User]) {
