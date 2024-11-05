@@ -47,7 +47,6 @@ final class MyViewModel {
                 self.roomList = result.result
             case .failure(let error):
                 print(error.localizedDescription)
-                
             }
         }
     }
@@ -88,6 +87,39 @@ final class MyViewModel {
                 print(error.localizedDescription)
             }
         })
+    }
+    
+    func enterRoom(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
+        apiService.enterRoom(member_id: member_id, room_id: room_id) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                completionHandler(result.result)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func ready(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
+        apiService.ready(member_id: member_id, room_id: room_id) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                completionHandler(result.result)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func unready(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
+        apiService.unready(member_id: member_id, room_id: room_id) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                completionHandler(result.result)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func getRoomDetail(roomId: Int, completetionHandler: @escaping (RoomDetailResponse) -> Void) {
