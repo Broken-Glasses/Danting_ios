@@ -8,10 +8,7 @@
 import UIKit
 
 struct User: Codable {
-    let nickName: String
     let student_no: String
     let gender: String
     let major: String
-    var readyState: Bool
-    let user_id: Int?
 }

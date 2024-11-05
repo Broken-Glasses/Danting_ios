@@ -37,24 +37,21 @@ final class RoomListViewController: UIViewController {
         super.viewDidLoad()
         self.myViewModel = MyViewModel()
         self.configureRoomListVC()
+        self.fetchRoomList()
         
     }
     
     //MARK: - Helpers
-    /*private func fetchRoomList() {
-        let apiService = APIService.shared
-        apiService.getRooms { response in
-            switch response {
-            case .success(let rooms):
-                self.myViewModel.rooms = rooms
-                DispatchQueue.main.async {
-                    self.roomListTableView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
+    private func fetchRoomList() {
+        self.myViewModel.getRooms()
+        self.myViewModel.didFetchRoomList = {
+            DispatchQueue.main.async {
+                self.roomListTableView.reloadData()
             }
         }
-    }*/
+    }
+    
+    
         
     //MARK: - Actions
     @objc func floatingButtonTapped(_ sender: UIButton) {
@@ -65,7 +62,7 @@ final class RoomListViewController: UIViewController {
 
 extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let roomlist = self.myViewModel.rooms else { return 0 }
+        guard let roomlist = self.myViewModel.roomList else { return 0 }
         return roomlist.count
     }
     
@@ -73,13 +70,13 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         //prepareForReuse 사용하기
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoomItemCell", for: indexPath) as! RoomItemCell
         cell.selectionStyle = .none
-        guard let rooms = self.myViewModel.rooms else { return cell }
+        guard let rooms = self.myViewModel.roomList else { return cell }
         let room = rooms[indexPath.row]
         let maxParticipants = room.maxParticipants
         cell.roomItemView.titleLabel.text = room.title
         cell.roomItemView.subtitleLabel.text = room.subTitle
-        cell.roomItemView.blueHeartLabel.text = String(room.maleParticipants.count) + "/" + String(maxParticipants/2)
-        cell.roomItemView.redHeartLabel.text = String(room.femaleParticipants.count) + "/" + String(maxParticipants/2)
+        cell.roomItemView.blueHeartLabel.text = String(room.maleParticipants) + "/" + String(maxParticipants/2)
+        cell.roomItemView.redHeartLabel.text = String(room.femaleParticipants) + "/" + String(maxParticipants/2)
 
         
         return cell

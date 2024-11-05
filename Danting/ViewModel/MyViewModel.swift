@@ -10,93 +10,96 @@ import UIKit
 
 final class MyViewModel {
     //MARK: - Model
-    var currentUser: User? = User(nickName: "김기계", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 4)
+    
+    let apiService = APIService.shared
+    
+    var currentUser: User? = User(student_no: "32190956", gender: "male", major: "기계공학과")
     
     lazy var testMaleUser1: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 4),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 4)
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과")
     ]
     lazy var testFemaleUser1: [User] = [
-        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: 4),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 2)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     
     let testMaleUser2: [User] = [
         
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 5),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
     let testFemaleUser2: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "female", major: "기계공학과", readyState: false, user_id: 1),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 68)
+        User(student_no: "32190956", gender: "female", major: "기계공학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser3: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 1),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
     ]
     
     let testFemaleUser3: [User] = [
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 5)
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     let testMaleUser4: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 3),
-        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: 2),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 9),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 12),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
     let testFemaleUser4: [User] = [
-        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: 8),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 10),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 11),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 14)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser5: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 15),
-        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: 17),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 15),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 15),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
     ]
 
     let testFemaleUser5: [User] = [
-        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: 15),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 15),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 15),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 15)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과")
     ]
     
     let testMaleUser6: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 15),
-        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: 14),
-        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: 16),
-        User(nickName: "Alex", student_no: "32180956", gender: "male", major: "전자전기공학과", readyState: false, user_id: 17),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 21),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 25)
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32180956", gender: "male", major: "전자전기공학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     let testFemaleUser6: [User] = [
-        User(nickName: "Jane", student_no: "32200956", gender: "female", major: "경영학과", readyState: false, user_id: 16),
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 21),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 25)
+        User(student_no: "32200956", gender: "female", major: "경영학과"),
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
 
     
     let testMaleUser7: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 16),
-        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: 54),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
     ]
     let testFemaleUser7: [User] = [
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 35),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 85)
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     let testMaleUser8: [User] = [
-        User(nickName: "John", student_no: "32190956", gender: "male", major: "기계공학과", readyState: false, user_id: 26),
-        User(nickName: "Mike", student_no: "32220956", gender: "male", major: "기계공학과", readyState: false, user_id: 29),
+        User(student_no: "32190956", gender: "male", major: "기계공학과"),
+        User(student_no: "32220956", gender: "male", major: "기계공학과"),
 
     ]
     let testFemaleUser8: [User] = [
-        User(nickName: "Lily", student_no: "32240956", gender: "female", major: "화학공학과", readyState: false, user_id: 90),
-        User(nickName: "Emily", student_no: "32230956", gender: "female", major: "경영학과", readyState: false, user_id: 9)
+        User(student_no: "32240956", gender: "female", major: "화학공학과"),
+        User(student_no: "32230956", gender: "female", major: "경영학과")
     ]
     
     lazy var rooms: [Room]? = [Room(room_id: 1, title: "진짜 술고래들만 들어와라", subTitle: "이거 보여주려고 어그로 끌었다 미안하다...", maxParticipants: 6,
@@ -119,36 +122,68 @@ final class MyViewModel {
         }
     }
     
+    var roomList: [RoomList]? {
+        didSet {
+            guard let roomList = self.roomList else { return }
+            didFetchRoomList?()
+        }
+    }
+    
+    var didFetchRoomList: (()->(Void))?
+
     
     var didFetchRoom: ((Room) ->(Void))?
     
     var didFetchRooms: (([Room])->(Void))?
-    
-    
-    
     
     func updateCurrentUser(_ currentUser: User) {
         self.currentUser = currentUser
     }
     
     
-    func makeUserInfo(student_no: String, gender: String, major: String) {
-       
+    
+    func getRooms() {
+        apiService.getRooms { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+                self.roomList = result.result
+            case .failure(let error):
+                print(error.localizedDescription)
+                
+            }
+        }
     }
     
-    /*func fetchRoomInfo() {
-        guard let room = self.room else { return }
-        let apiService = APIService.shared
-        apiService.getRoom(room_id: room.room_id) { response in
-            switch response {
-            case .success(let room):
-                self.room = room
-                
+    
+    func createUser(student_no: String, major: String, gender: String, completionHandler: @escaping(()->Void)) {
+        apiService.createUser(student_no: student_no, major: major, gender: gender) { serverResponse in
+            switch serverResponse {
+            case .success(let result):
+//                guard let user_id = result.result.user_id else { return }
+//                UserDefaults.standard.setValue(user_id, forKey: "user_id")
+                completionHandler()
             case .failure(let error):
-                print("Debug: Error : \(error)")
+                print(error.localizedDescription)
+                
+            }
+        }
+    }
+    
+    
+    func createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int, completionHandler: @escaping(()->Void)) {
+        
+        APIService.shared.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { serverResponse in
+            switch serverResponse {
+            case .success(let room_id):
+                print("rood_id= \(room_id)")
+            case .failure(let error):
+                print(error.localizedDescription)
             }
         }
         
-    }*/
+        
+    }
+    
+    
     
 }
