@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let splashVC = SplashViewController()
         window?.rootViewController = splashVC
         window?.makeKeyAndVisible()
+    
         
         let logInVC = LoginViewController()
         let logInNav = UINavigationController(rootViewController: logInVC)

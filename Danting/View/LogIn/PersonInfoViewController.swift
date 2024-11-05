@@ -166,6 +166,8 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
         maleButton.setTitleColor(.black, for: .normal)
         femaleButton.setTitleColor(.black, for: .normal)
         
+        personInfoConfirmButton.addTarget(self, action: #selector(confirmButtonDidTapped), for: .touchUpInside)
+        
         // mark표시 설정
         personIDField.rightView = UIStackView(arrangedSubviews: [personIDCheckmarkImageView, personIDXmarkImageView]).then {
             $0.axis = .horizontal
@@ -216,7 +218,8 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     }
     
     
-    @objc func genderButtonTapped(_ sender: UIButton) {
+    @objc func genderButtonTapped(_ sender: UIButton) -> String? {
+        print("Selected gender: \(gender ?? "None")")
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             maleButton.setTitleColor(.black, for: .normal)
@@ -233,6 +236,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
             self.gender = "female"
         }
         updateConfirmButtonState() // 상태 업데이트
+        return gender
     }
         }
 
