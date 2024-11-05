@@ -136,6 +136,7 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
 
     
     var nickName: String?
+    var gender: String?
     
     let myViewModel = MyViewModel()
     
@@ -208,21 +209,25 @@ final class PersonInfoViewController: UIViewController, UIPickerViewDelegate, UI
     }
     
     
-    @objc func genderButtonTapped(_ sender: UIButton) {
+    @objc func genderButtonTapped(_ sender: UIButton) -> String? {
+        print("Selected gender: \(gender ?? "None")")
         if sender == maleButton {
             maleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             maleButton.setTitleColor(.black, for: .normal)
             femaleButton.backgroundColor = .white
             femaleButton.setTitleColor(.black, for: .normal)
             isGenderSelected = true // 성별 선택 상태 업데이트
+            gender = "male";
         } else {
             femaleButton.backgroundColor = UIColor(hexCode: "CEDEFF")
             femaleButton.setTitleColor(.black, for: .normal)
             maleButton.backgroundColor = .white
             maleButton.setTitleColor(.black, for: .normal)
             isGenderSelected = true // 성별 선택 상태 업데이트
+            gender = "female";
         }
         updateConfirmButtonState() // 상태 업데이트
+        return gender
     }
         }
 
