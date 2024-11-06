@@ -114,12 +114,12 @@ final class StandbyVC4: StandbyViewController {
     private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
     private var willRepeat: Bool?
 
-//    var myViewModel = MyViewModel() {
-//        didSet {
-//            guard let room = self.myViewModel.room else { return }
-//            self.configureUIWithData(room: room)
-//        }
-//    }
+    var myViewModel = MyViewModel() {
+        didSet {
+            guard let room = self.myViewModel.room else { return }
+            self.configureUIWithData(room: room)
+        }
+    }
 
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -148,7 +148,7 @@ final class StandbyVC4: StandbyViewController {
     
     @objc func fetchDataAndRefresh() {
         guard let room = myViewModel.room else { return }
-        APIService.shared.getRoom(room_id: room.room_id) { response in
+        APIService.shared.getRoom(roomId: room.room_id) { response in
             /*switch response {
             case .success(let room):
                 // 받은 데이터를 사용하여 화면 갱신
@@ -194,7 +194,7 @@ extension StandbyVC4: RequestForOpenKakao {
             }
     }
     func requestReadyState(roomId: Int) {
-        self.myViewModel.apiService.getRoom(room_id: roomId) { roomDetailResponse in
+        self.myViewModel.apiService.getRoom(roomId: roomId) { roomDetailResponse in
             switch roomDetailResponse {
             case .success(let detailResponse):
                 print("success")

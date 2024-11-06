@@ -9,14 +9,13 @@ import UIKit
 
 
 final class MyViewModel {
-    //MARK: - Model
-    
     let apiService = APIService.shared
+    
     
     var room: RoomDetailResponse? {
         didSet {
             guard let room = self.room else { return }
-            didFetchRoom?(room)
+            self.didFetchRoom?(room)
         }
     }
     
@@ -24,13 +23,13 @@ final class MyViewModel {
     var rooms: [RoomDetailResponse]? {
         didSet {
             guard let rooms = self.rooms else { return }
+            self.didFetchRooms?(rooms)
         }
     }
     
     var roomList: [RoomListItemResponse]? {
         didSet {
-            guard let roomList = self.roomList else { return }
-            didFetchRoomList?()
+            self.didFetchRoomList?()
         }
     }
     
@@ -41,6 +40,18 @@ final class MyViewModel {
     var didFetchRooms: (([RoomDetailResponse])->(Void))?
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //MARK: - Get
     func getRooms() {
         apiService.getRooms { serverResponse in
             switch serverResponse {
@@ -53,6 +64,7 @@ final class MyViewModel {
     }
     
     
+    //MARK: - Post
     func createRoom(title: String, subTitle: String, user_id: Int, maxParticipants: Int, completionHandler: @escaping((Int)->Void)) {
         
         APIService.shared.createRoom(user_id: user_id, title: title, subTitle: subTitle, max: maxParticipants) { serverResponse in
@@ -97,26 +109,29 @@ final class MyViewModel {
                 completionHandler(result.result.room_id)
             case .failure(let error):
                 print(error.localizedDescription)
+                completionHandler(-1)
             }
         }
     }
 
-    func ready(users_id: Int, room_id: Int, completionHandler: @escaping (Int) -> Void) {
-        apiService.ready(users_id: users_id, room_id: room_id) { serverResponse in
+    func ready(users_id: Int, roomId: Int, completionHandler: @escaping (Bool) -> Void) {
+        apiService.ready(users_id: users_id, room_id: roomId) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                completionHandler(users_id)
+                let buttonState = result.result
+                completionHandler(buttonState)
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
 
-    func unready(users_id: Int, room_id: Int, completionHandler: @escaping (Int) -> Void) {
+    func unready(users_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
         apiService.unready(users_id: users_id, room_id: room_id) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                completionHandler(users_id)
+                let buttonState = result.result
+                completionHandler(buttonState)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -124,7 +139,7 @@ final class MyViewModel {
     }
     
     func getRoomDetail(roomId: Int, completetionHandler: @escaping (RoomDetailResponse) -> Void) {
-        apiService.getRoom(room_id: roomId, completion: { serverResponse in
+        apiService.getRoom(roomId: roomId, completion: { serverResponse in
             switch serverResponse {
             case .success(let result):
                 self.room = result.result

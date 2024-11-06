@@ -67,15 +67,15 @@ final class StandbyVC2: StandbyViewController {
                                          self.thirdUserImageButton, self.fourthUserImageButton]
         
     private var refreshTimer: Timer?
-    private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
+    private let interval: TimeInterval = 2 // 2초마다 GET 요청을 보냅니다.
     private var willRepeat: Bool? = true
     
-//    var myViewModel = MyViewModel() {
-//        didSet {
-//            guard let room = self.myViewModel.room else { return }
-//            self.configureUIWithData(room: room)
-//        }
-//    }
+    var myViewModel = MyViewModel() {
+        didSet {
+            guard let room = self.myViewModel.room else { return }
+            self.configureUIWithData(roomDetailResponse: room)
+        }
+    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -85,7 +85,7 @@ final class StandbyVC2: StandbyViewController {
         self.settingUserStackView()
         self.repeatRequest()
         //self.updateUI()
-        // 서버로 주기적으로 변경사항을 요청
+        // 서버로 주기적으로 변경사항을 요청 주석 풀면 작동
     }
     
     override func viewDidLayoutSubviews() {
@@ -108,89 +108,32 @@ final class StandbyVC2: StandbyViewController {
     
     @objc func fetchDataAndRefresh() {
         guard let room = myViewModel.room else { return }
-        /*APIService.shared.getRoom(room_id: room.room_id) { response in
-            switch response {
-            case .success(let room):
-                // 받은 데이터를 사용하여 화면 갱신
-                self.configureUIWithData(room: room)
+        let roomId = room.room_id
+        
+        self.myViewModel.apiService.getRoom(roomId: roomId) { serverResponse in
+            switch serverResponse {
+            case .success(let roomDetailResponse):
+                let roomDetailResponse = roomDetailResponse.result
+                self.configureUIWithData(roomDetailResponse: roomDetailResponse)
             case .failure(let error):
-                print("Failed to fetch data: \(error)")
+                print(error.localizedDescription)
             }
-        }*/
-
+        }
     }
     
     override func readyButtonDidTapped(_ sender: UIButton) {
 
         //1안대로 간다면, 준비를 하지 않은 상태에서 준비를 누르면, 바뀐 준비 상태인 isReady == true 의 값을 result로 받음
 
-              let room_id = self.myViewModel.room?.room_id else { return }
-        APIService.shared.ready(user_id:user_id, room_id: room_id ) { serverResponse in
-            switch serverResponse {
-            case .success(let result):
-                print(result)
-                let isReady = result.result
-                self.myViewModel.apiService.getRoom(room_id: room_id) { serverResponse in
-                    switch serverResponse {
-                    case .success(let response):
-                        let female = response.result.femaleParticipants
-                        let male = response.result.maleParticipants
-                    
-                        self.myViewModel.apiService.getUser(user_id: user_id) { serverResponse in
-                            switch serverResponse {
-                            case .success(let userResponse):
-                                let myGender = userResponse.result.gender
-                                if myGender == "male" {
-                                    let index = male.firstIndex(where: { $0.user_id == user_id })
-                                    
-                                    let integerIndex = Int(index ?? 0) + 1
-                                    
-                                    self.userImageButtons[integerIndex].setImage(UIImage(named: "ready"), for: .normal)
-                                    
-                                } else {
-                                    
-                                }
-                                
-                                
-                                
-                                
-                                
-                            case .failure(let error):
-                                print(error.localizedDescription)
-                            }
-                        }
-                        
-                        
-                        
-                        
-                        
-                    
-                    
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                    
-                }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                self.configureButtonState(sender: sender, isReady: isReady)
-            case .failure(let error):
-                print(error)
-            }
+        guard let rooId = self.myViewModel.room?.room_id,
+              let users_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else { return }
+        
+        self.myViewModel.ready(users_id: users_id, roomId: rooId) { buttonState in
+            self.configureButtonState(sender: sender, isReady: buttonState)
         }
+        
+        
     }
-    
-    
 }
 
 
@@ -212,7 +155,7 @@ extension StandbyVC2: RequestForOpenKakao {
             }
     }
     func requestReadyState(roomId: Int) {
-        self.myViewModel.apiService.getRoom(room_id: roomId) { roomDetailResponse in
+        self.myViewModel.apiService.getRoom(roomId: roomId) { roomDetailResponse in
             switch roomDetailResponse {
             case .success(let detailResponse):
                 print("success")
@@ -257,19 +200,15 @@ extension StandbyVC2: StandbyInformation {
         }
     }
     
-    private func configureUIWithData(room: RoomDetailResponse) {
-        let maleParticipants = room.maleParticipants
-        let femaleParticipants = room.femaleParticipants
-
-        print("Debug: 남성 참가자 == \(maleParticipants)")
-        print("\n")
-        print("Debug: 여성 참가자 == \(femaleParticipants)")
+    private func configureUIWithData(roomDetailResponse: RoomDetailResponse) {
+        let maleParticipants = roomDetailResponse.maleParticipants
+        let femaleParticipants = roomDetailResponse.femaleParticipants
         
-//        self.updateInfoView(infoViews: self.maleInfoView, participants: maleParticipants)
-//        self.updateInfoView(infoViews: self.femaleInfoView, participants: femaleParticipants)
-//        
-//        self.updateUserNameView(nameLabels: self.maleNameLabel, users: maleParticipants)
-//        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
+        self.updateInfoView(infoViews: self.maleInfoView, participants: maleParticipants)
+        self.updateInfoView(infoViews: self.femaleInfoView, participants: femaleParticipants)
+        
+        self.updateUserNameView(nameLabels: self.maleNameLabel, users: maleParticipants)
+        self.updateUserNameView(nameLabels: self.femaleNameLabel, users: femaleParticipants)
     }
     
     private func updateInfoView(infoViews: [InfoView], participants: [RoomDetailUserResponse]) {
@@ -287,8 +226,7 @@ extension StandbyVC2: StandbyInformation {
     private func updateUserNameView(nameLabels: [UILabel], users: [RoomDetailUserResponse]) {
         for (index, user) in users.enumerated() where index < nameLabels.count {
             let nameLabel = nameLabels[index]
-//            nameLabel.text = user.nickName
-
+            nameLabel.text = user.nickName
             nameLabel.isHidden = false
         }
         

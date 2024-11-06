@@ -9,7 +9,7 @@ struct ServerResponse<T: Codable>: Codable {
 enum DantingRouter {
     case getUser(user_id: Int)
     case createUser(nickName: String, student_no: String, major: String, gender: String)
-    case getRoom(room_id: Int)
+    case getRoom(roomId: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, users_id: Int, maxParticipants: Int)
     case enterRoom(users_id: Int, room_id: Int)
@@ -115,8 +115,8 @@ final class APIService {
         request(router: .getUser(user_id: user_id), completion: completion)
     }
     
-    func getRoom(room_id: Int, completion: @escaping (Result<ServerResponse<RoomDetailResponse>, Error>) -> Void) {
-        request(router: .getRoom(room_id: room_id), completion: completion)
+    func getRoom(roomId: Int, completion: @escaping (Result<ServerResponse<RoomDetailResponse>, Error>) -> Void) {
+        request(router: .getRoom(roomId: roomId), completion: completion)
     }
     
     func getRooms(completion: @escaping (Result<ServerResponse<[RoomListItemResponse]>, Error>) -> Void) {
@@ -142,12 +142,13 @@ final class APIService {
         request(router: .ready(users_id: users_id, room_id: room_id), completion: completion)
     }
     
+    
     func unready(users_id: Int, room_id: Int, completion: @escaping (Result<ServerResponse<Bool>, Error>) -> Void) {
         request(router: .unready(users_id: users_id, room_id: room_id), completion: completion)
     }
     
     private func request<T: Codable>(router: DantingRouter, completion: @escaping (Result<ServerResponse<T>, Error>) -> Void) {
-        AF.request(router).responseDecodable(of: ServerResponse<T>.self) { response in
+        AF.request(router).responseDecodable(of: ServerResponse<T>.self, queue: .global(qos: .userInitiated)) { response in
             switch response.result {
             case .success(let serverResponse):
                 print("Success:  + \(serverResponse)")

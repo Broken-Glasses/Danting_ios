@@ -73,26 +73,22 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         //prepareForReuse 사용하기
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoomItemCell", for: indexPath) as! RoomItemCell
         cell.selectionStyle = .none
-        guard let rooms = self.myViewModel.roomList else { return cell }
-        let room = rooms[indexPath.row]
+        guard let roomList = self.myViewModel.roomList else { return cell }
+        let room = roomList[indexPath.row]
         let maxParticipants = room.maxParticipants
         cell.roomItemView.titleLabel.text = room.title
         cell.roomItemView.subtitleLabel.text = room.subTitle
         cell.roomItemView.blueHeartLabel.text = String(room.maleParticipants) + "/" + String(maxParticipants/2)
         cell.roomItemView.redHeartLabel.text = String(room.femaleParticipants) + "/" + String(maxParticipants/2)
-
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let roomList = self.myViewModel.roomList else { return }
-        let room = roomList[indexPath.row]
-
-        let roomId = room.room_id
+        let roomId = roomList[indexPath.row].room_id
         
-        myViewModel.getRoomDetail(roomId: roomId) { room in
-            let views = self.generateViewsForRoomListPopupVC(room: room)
+        self.myViewModel.getRoomDetail(roomId: roomId) { roomDetailResponse in
+            let views = self.generateViewsForRoomListPopupVC(roomDetailReponse: roomDetailResponse)
             
             let attendingVC = PopupViewController()
             attendingVC.modalPresentationStyle = .overFullScreen
@@ -121,8 +117,8 @@ extension RoomListViewController {
         self.view.bringSubviewToFront(floatingButton)
     }
     
-    private func generateViewsForRoomListPopupVC(room: RoomDetailResponse) -> [UIView] {
-        let meetingType = room.maxParticipants.integerToMeetingType()
+    private func generateViewsForRoomListPopupVC(roomDetailReponse: RoomDetailResponse) -> [UIView] {
+        let meetingType = roomDetailReponse.maxParticipants.integerToMeetingType()
 
         let heartImageView1 = UIImageView()
         let heartImageView2 = UIImageView()
@@ -134,9 +130,10 @@ extension RoomListViewController {
             $0.widthAnchor.constraint(equalToConstant: 20).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
+        
 
         let titleLabel = UILabel().then {
-            $0.text = room.title
+            $0.text = roomDetailReponse.title
             $0.textAlignment = .left
             $0.textColor = .black
             $0.numberOfLines = 1
@@ -145,7 +142,7 @@ extension RoomListViewController {
         }
         
         let descriptionLabel = UILabel().then {
-            $0.text = room.subTitle
+            $0.text = roomDetailReponse.subTitle
             $0.textAlignment = .left
             
             $0.textColor = .black
@@ -169,10 +166,10 @@ extension RoomListViewController {
             $0.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
 
-                
+        
         lazy var participantsView = ParticipantsView()
-        //participantsView.maleParticipants = room.maleParticipants
-        //participantsView.femaleParticipants = room.femaleParticipants
+        participantsView.maleParticipants = roomDetailReponse.maleParticipants
+        participantsView.femaleParticipants = roomDetailReponse.femaleParticipants
         participantsView.meetingType = meetingType
         
         let heightValue = self.getHeightValueFromMeetingType(meetingType: meetingType)
@@ -208,48 +205,24 @@ extension RoomListViewController {
     }
     
     @objc func attendButtonDidTapped(_ sender: UIButton) {
-        guard let room = self.myViewModel.room
-                //,let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int
-        else { return }
+        guard let room = self.myViewModel.room,
+              let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else { return }
         let maxParticipants = room.maxParticipants
         let meetingType = maxParticipants.integerToMeetingType()
         let room_id = room.room_id
         self.dismiss(animated: true)
         
-        guard let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else {
-            return
-        }
         myViewModel.enterRoom(users_id: user_id, room_id: room_id) { roomId in
-            self.pushStandbyVC(meetingType: meetingType)
+            if roomId < 0 {
+                // 방이 가득 찬 경우
+                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
+                let confirm = UIAlertAction(title: "확인", style: .default)
+                alert.addAction(confirm)
+                self.present(alert, animated: true)
+            } else {
+                self.pushStandbyVC(meetingType: meetingType)
+            }
         }
-        
-//        let apiService = APIService.shared
-//        apiService.attendRoom(user_id: user_id, room_id: room_id) { response in
-//            switch response {
-//            case .success(let room_id):
-//                print("Debug: Room ID: \(room_id)")
-//                self.dismiss(animated: true)
-//                
-//                apiService.getRoom(room_id: room.room_id) { response in
-//                    switch response {
-//                    case .success(let room):
-//                        self.myViewModel.room = room
-//                        self.pushStandbyVC(meetingType: meetingType)
-//                    case.failure(let error):
-//                        print("Debug: Error :\(error)")
-//                    }
-//                }
-//                
-//            case .failure(let error):
-//                self.dismiss(animated: true)
-//                print("Debug: There is no place to attend")
-//                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
-//                let confirm = UIAlertAction(title: "확인", style: .default)
-//                alert.addAction(confirm)
-//                self.present(alert, animated: true)
-//                print("Error: \(error)")
-//            }
-//        }
     }
     
     private func pushStandbyVC(meetingType: MeetingType) {

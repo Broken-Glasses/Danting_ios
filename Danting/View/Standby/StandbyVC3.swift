@@ -89,12 +89,12 @@ final class StandbyVC3: StandbyViewController {
     private let interval: TimeInterval = 10 // 10초마다 GET 요청을 보냅니다.
     private var willRepeat: Bool?
     
-//    var myViewModel = MyViewModel() {
-//        didSet {
-//            guard let room = self.myViewModel.room else { return }
-//            self.configureUIWithData(room: room)
-//        }
-//    }
+    var myViewModel = MyViewModel() {
+        didSet {
+            guard let room = self.myViewModel.room else { return }
+            self.configureUIWithData(room: room)
+        }
+    }
 
     
     //MARK: - LifeCycle
@@ -171,7 +171,7 @@ extension StandbyVC3: RequestForOpenKakao {
             }
     }
     func requestReadyState(roomId: Int) {
-        self.myViewModel.apiService.getRoom(room_id: roomId) { roomDetailResponse in
+        self.myViewModel.apiService.getRoom(roomId: roomId) { roomDetailResponse in
             switch roomDetailResponse {
             case .success(let detailResponse):
                 print("success")

@@ -7,9 +7,9 @@
 
 struct RoomDetailUserResponse: Codable {
     let student_no: String
-    let nickname: String
+    let nickName: String
     let gender: String
     let major: String
-    let user_id: Int
+    let users_id: Int
     let ready: Bool
 }

@@ -73,9 +73,7 @@ class StandbyViewController: UIViewController {
     private var currentDotCount = 0
     
     private let dotSequence = [0, 1, 2, 3, 2, 1, 0] // 점의 수 배열
-    
-    var myViewModel = MyViewModel()
-    
+        
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
