@@ -185,22 +185,47 @@ final class RegisterRoomVC: UIViewController {
         guard let maxParticipants = self.maxParticipants,
               let title = self.roomTitleTextField.text,
               let subTitle = self.roomDescriptionTextView.text,
-        let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else { return }
+              let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else { return }
         
         print("Debug: Room Register Button Tapped")
         
         self.myViewModel.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: maxParticipants) { roomId in
-            self.myViewModel.enterRoom(users_id: user_id, room_id: roomId) { enteredRoomId in
-                DispatchQueue.main.async {
-                    if let navigationController = self.navigationController {
-                        if let roomListViewController = navigationController.viewControllers.first(where: { $0 is RoomListViewController }) {
-                            let standByViewController = StandbyViewController()
-                            navigationController.setViewControllers([roomListViewController, standByViewController], animated: true)
-                        }
-                    }
-                }
+            
+            self.myViewModel.getRoomDetail(roomId: roomId) { roomDetailResponse in
+                self.myViewModel.room = roomDetailResponse
                 
+                DispatchQueue.main.async {
+                    let meetingType = maxParticipants.integerToMeetingType()
+                    self.pushStandbyVC(meetingType: meetingType)
+                }
             }
+           
+        }
+    }
+
+    private func pushStandbyVC(meetingType: MeetingType) {
+        var standbyVC: UIViewController?
+        
+        switch meetingType {
+        case .twoBytwo:
+            print("Debug: 2대2 미팅")
+            let standbyVC2 = StandbyVC2()
+            standbyVC2.myViewModel = self.myViewModel
+            standbyVC = standbyVC2
+        case .threeBythree:
+            print("Debug: 3대3 미팅")
+            let standbyVC3 = StandbyVC3()
+            standbyVC3.myViewModel = self.myViewModel
+            standbyVC = standbyVC3
+        case .fourByfour:
+            print("Debug: 4대4 미팅")
+            let standbyVC4 = StandbyVC4()
+            standbyVC4.myViewModel = self.myViewModel
+            standbyVC = standbyVC4
+        }
+        
+        if let standbyVC = standbyVC, let roomListViewController = navigationController?.viewControllers.first(where: { $0 is RoomListViewController }) {
+            navigationController?.setViewControllers([roomListViewController, standbyVC], animated: true)
         }
     }
     

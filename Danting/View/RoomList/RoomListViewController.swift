@@ -88,13 +88,15 @@ extension RoomListViewController: UITableViewDelegate, UITableViewDataSource {
         let roomId = roomList[indexPath.row].room_id
         
         self.myViewModel.getRoomDetail(roomId: roomId) { roomDetailResponse in
-            let views = self.generateViewsForRoomListPopupVC(roomDetailReponse: roomDetailResponse)
-            
-            let attendingVC = PopupViewController()
-            attendingVC.modalPresentationStyle = .overFullScreen
-            attendingVC.addSubviewsToStackView(views: views) {
-                attendingVC.myViewModel = self.myViewModel
-                self.present(attendingVC, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                let views = self.generateViewsForRoomListPopupVC(roomDetailReponse: roomDetailResponse)
+                
+                let attendingVC = PopupViewController()
+                attendingVC.modalPresentationStyle = .overFullScreen
+                attendingVC.addSubviewsToStackView(views: views) {
+                    attendingVC.myViewModel = self.myViewModel
+                    self.present(attendingVC, animated: true, completion: nil)
+                }
             }
         }
     }
@@ -213,14 +215,16 @@ extension RoomListViewController {
         self.dismiss(animated: true)
         
         myViewModel.enterRoom(users_id: user_id, room_id: room_id) { roomId in
-            if roomId < 0 {
-                // 방이 가득 찬 경우
-                let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
-                let confirm = UIAlertAction(title: "확인", style: .default)
-                alert.addAction(confirm)
-                self.present(alert, animated: true)
-            } else {
-                self.pushStandbyVC(meetingType: meetingType)
+            DispatchQueue.main.async {
+                if roomId < 0 {
+                    // 방이 가득 찬 경우
+                    let alert = UIAlertController(title: "알림", message: "방이 가득 찼습니다!", preferredStyle: .actionSheet)
+                    let confirm = UIAlertAction(title: "확인", style: .default)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true)
+                } else {
+                    self.pushStandbyVC(meetingType: meetingType)
+                }
             }
         }
     }
@@ -230,14 +234,17 @@ extension RoomListViewController {
         
         switch meetingType {
         case .twoBytwo:
+            print("Debug: 2대2 미팅")
             let standbyVC2 = StandbyVC2()
             standbyVC2.myViewModel = self.myViewModel
             standbyVC = standbyVC2
         case .threeBythree:
+            print("Debug: 3대3 미팅")
             let standbyVC3 = StandbyVC3()
             standbyVC3.myViewModel = self.myViewModel
             standbyVC = standbyVC3
         case .fourByfour:
+            print("Debug: 4대4 미팅")
             let standbyVC4 = StandbyVC4()
             standbyVC4.myViewModel = self.myViewModel
             standbyVC = standbyVC4

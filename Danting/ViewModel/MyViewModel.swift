@@ -39,18 +39,6 @@ final class MyViewModel {
     
     var didFetchRooms: (([RoomDetailResponse])->(Void))?
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     //MARK: - Get
     func getRooms() {
         apiService.getRooms { serverResponse in
@@ -114,8 +102,8 @@ final class MyViewModel {
         }
     }
 
-    func ready(users_id: Int, roomId: Int, completionHandler: @escaping (Bool) -> Void) {
-        apiService.ready(users_id: users_id, room_id: roomId) { serverResponse in
+    func ready(users_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
+        apiService.ready(users_id: users_id, room_id: room_id) { serverResponse in
             switch serverResponse {
             case .success(let result):
                 let buttonState = result.result
