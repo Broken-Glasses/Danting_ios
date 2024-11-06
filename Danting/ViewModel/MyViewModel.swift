@@ -90,33 +90,33 @@ final class MyViewModel {
         })
     }
     
-    func enterRoom(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
-        apiService.enterRoom(member_id: member_id, room_id: room_id) { serverResponse in
+    func enterRoom(users_id: Int, room_id: Int, completionHandler: @escaping (Int) -> Void) {
+        apiService.enterRoom(users_id: users_id, room_id: room_id) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                completionHandler(result.result)
+                completionHandler(result.result.room_id)
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
 
-    func ready(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
-        apiService.ready(member_id: member_id, room_id: room_id) { serverResponse in
+    func ready(users_id: Int, room_id: Int, completionHandler: @escaping (Int) -> Void) {
+        apiService.ready(users_id: users_id, room_id: room_id) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                completionHandler(result.result)
+                completionHandler(users_id)
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
 
-    func unready(member_id: Int, room_id: Int, completionHandler: @escaping (Bool) -> Void) {
-        apiService.unready(member_id: member_id, room_id: room_id) { serverResponse in
+    func unready(users_id: Int, room_id: Int, completionHandler: @escaping (Int) -> Void) {
+        apiService.unready(users_id: users_id, room_id: room_id) { serverResponse in
             switch serverResponse {
             case .success(let result):
-                completionHandler(result.result)
+                completionHandler(users_id)
             case .failure(let error):
                 print(error.localizedDescription)
             }
