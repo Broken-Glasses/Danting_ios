@@ -37,8 +37,11 @@ final class RoomListViewController: UIViewController {
         super.viewDidLoad()
         self.myViewModel = MyViewModel()
         self.configureRoomListVC()
-        self.fetchRoomList()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchRoomList()
     }
     
     //MARK: - Helpers
@@ -211,7 +214,14 @@ extension RoomListViewController {
         let meetingType = maxParticipants.integerToMeetingType()
         let room_id = room.room_id
         self.dismiss(animated: true)
-        self.pushStandbyVC(meetingType: meetingType)
+        
+        guard let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else {
+            return
+        }
+        myViewModel.enterRoom(users_id: user_id, room_id: room_id) { roomId in
+            self.pushStandbyVC(meetingType: meetingType)
+        }
+        
 //        let apiService = APIService.shared
 //        apiService.attendRoom(user_id: user_id, room_id: room_id) { response in
 //            switch response {

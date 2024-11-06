@@ -38,7 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             let nextViewController: UIViewController
             
-            if UserDefaults.standard.value(forKey: "user_id") is Int {
+            if UserDefaults.standard.value(forKey: userIdKey) is Int {
                 // user_id가 있는 경우 RoomListController로 이동
                 nextViewController = roomListVC
             } else {

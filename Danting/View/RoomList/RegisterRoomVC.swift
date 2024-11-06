@@ -174,6 +174,7 @@ final class RegisterRoomVC: UIViewController {
         let isMeetingTypeSelected = maxParticipants != nil
         
         let isFormComplete = isTitleEntered && isDescriptionEntered && isMeetingTypeSelected
+        print("Form Complete: \(isFormComplete)")
         self.registerButton.isEnabled = isFormComplete
         self.registerButton.backgroundColor = isFormComplete ? UIColor(hexCode: "5A80FD") : UIColor(hexCode: "A8B1CE")
     }
@@ -184,9 +185,12 @@ final class RegisterRoomVC: UIViewController {
         guard let maxParticipants = self.maxParticipants,
               let title = self.roomTitleTextField.text,
               let subTitle = self.roomDescriptionTextView.text,
-        let user_id = UserDefaults.standard.value(forKey: "user_id") as? Int else { return }
+        let user_id = UserDefaults.standard.value(forKey: userIdKey) as? Int else { return }
         
-        myViewModel.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: maxParticipants) { roomId in
+        print("Debug: Room Register Button Tapped")
+        
+        self.myViewModel.createRoom(title: title, subTitle: subTitle, user_id: user_id, maxParticipants: maxParticipants) { roomId in
+            self.myViewModel.enterRoom(users_id: user_id, room_id: roomId) { enteredRoomId in
                 DispatchQueue.main.async {
                     if let navigationController = self.navigationController {
                         if let roomListViewController = navigationController.viewControllers.first(where: { $0 is RoomListViewController }) {
@@ -195,7 +199,9 @@ final class RegisterRoomVC: UIViewController {
                         }
                     }
                 }
+                
             }
+        }
     }
     
     @objc func meetingTypeButtonDidTapped(_ sender: UIButton) {

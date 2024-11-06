@@ -194,8 +194,7 @@ final class PersonInfoViewController: UIViewController {
               let gender = self.gender else { return }
         self.myViewModel.createUser(nickName: nickName, student_no: student_no, major: major, gender: gender) {
             print("Debug: Successfully created user")
-            print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "user_id")))")
-            print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: "nickName")))")
+            print("Debug: User_id = \(String(describing: UserDefaults.standard.value(forKey: userIdKey)))")
             DispatchQueue.main.async {
                 if let navigationController = self.navigationController {
                     // RoomListViewController를 루트로 설정하여 뒤로가기 없이 이동
