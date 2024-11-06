@@ -8,7 +8,7 @@ struct ServerResponse<T: Codable>: Codable {
 
 enum DantingRouter {
     case getUser(user_id: Int)
-    case createUser(nickName: String, student_no: String, gender: String, major: String)
+    case createUser(nickName: String, student_no: String, major: String, gender: String)
     case getRoom(room_id: Int)
     case getRooms
     case createRoom(title: String, subTitle: String, users_id: Int, maxParticipants: Int)
@@ -126,7 +126,7 @@ final class APIService {
     // MARK: - POST Requests
     
     func createUser(nickName: String, student_no: String, major: String, gender: String, completion: @escaping (Result<ServerResponse<JoinResponse>, Error>) -> Void) {
-        request(router: .createUser(nickName: nickName, student_no: student_no, gender: gender, major: major), completion: completion)
+        request(router: .createUser(nickName: nickName, student_no: student_no, major: major, gender: gender), completion: completion)
     }
     
     func createRoom(user_id: Int, title: String, subTitle: String, max: Int, completion: @escaping (Result<ServerResponse<RoomListItemResponse>, Error>) -> Void) {
